@@ -123,7 +123,7 @@
 
 
 
-  <title>SIG MESH 核心协议与技术框架 | IoT Wireless Connectivity</title>
+  <title>CC2541 SweynTooth BLE漏洞实测 | IoT Wireless Connectivity</title>
   
 
 
@@ -274,7 +274,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.iotbzw.com/2020/05/16/SIG%20MESH%20%E6%A0%B8%E5%BF%83%E5%8D%8F%E8%AE%AE%E4%B8%8E%E6%8A%80%E6%9C%AF%E6%A1%86%E6%9E%B6/">
+    <link itemprop="mainEntityOfPage" href="http://www.iotbzw.com/2020/05/17/CC2541%20SweynTooth%20BLE%E6%BC%8F%E6%B4%9E%E5%AE%9E%E6%B5%8B/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Xcoder">
@@ -291,7 +291,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">SIG MESH 核心协议与技术框架</h1>
+          <h1 class="post-title" itemprop="name headline">CC2541 SweynTooth BLE漏洞实测</h1>
         
 
         <div class="post-meta">
@@ -303,7 +303,7 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-05-16T14:44:53+08:00">2020-05-16</time>
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-05-17T11:22:15+08:00">2020-05-17</time>
             
 
             
@@ -324,8 +324,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/SIG-MESH/" itemprop="url" rel="index">
-                    <span itemprop="name">SIG MESH</span>
+                  <a href="/categories/%E8%93%9D%E7%89%99%E5%8D%8F%E8%AE%AE/" itemprop="url" rel="index">
+                    <span itemprop="name">蓝牙协议</span>
                   </a>
                 </span>
 
@@ -362,48 +362,45 @@
 
       
         <p><img src="640.png" alt=""></p>
-<p>终于开启了SIG MESH组网这个话题，本文作为MESH系列的第一篇，介绍Bluetooth mesh 1.0协议的体系结构和功能。</p>
+<p>SweynTooth hacker攻击蓝牙SoC时，人为设置错误的LL链路层CONNECT_REQ数据包回复给从机设备，导致从机设备蓝牙controller和host端处理异常。本文利用CC2541EVM，亲测蓝牙漏洞Invalid Connection Request (CVE-2019-19193)。<br><img src="1.jpeg" alt=""></p>
 <a id="more"></a>
 
-<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>Bluetooth Mesh协议作为蓝牙低功耗协议的补充协议，独立于蓝牙5.0，该协议首次将开放标准的网状网络引入低功耗蓝牙设备。</p>
-<p>MESH网络是针对面向智能家居和楼宇自动化应用应用而生的低功耗无线技术， 但是由于蓝牙联盟之前缺乏对MESH网络支持，使得使用低功耗蓝牙的工程师不得不选择其他技术（例如Zigbee和Thread）用于智能家居应用的开发，直到2017年中蓝牙MESH的规范公之于众。现在蓝牙SIG通过引入蓝牙5.0补充规范-蓝牙网状网络1.0解决了MESH组网这一欠缺。该规范不需要其他硬件支持，可以通过刷新固件在目前已有蓝牙低功耗芯片（v4.0、4.1、4.2和5）上运行。一些芯片厂家已经可以支持Bluetooth Mesh 1.0协议。</p>
-<h1 id="SIG-MESH市场现状"><a href="#SIG-MESH市场现状" class="headerlink" title="SIG MESH市场现状"></a>SIG MESH市场现状</h1><p>到目前为止，全球已经在SIG联盟认证的BLE MESH的企业共有73家，认证的产品数量高达461个，该数据包括终端产品和芯片的认证总数，下表罗列出认证企业和其产品认证的数量，其中国的互联网巨头认证的终端产品不少。</p>
-<p><img src="1.jpg" alt=""></p>
-<h1 id="SIG-MESH网络的优势"><a href="#SIG-MESH网络的优势" class="headerlink" title="SIG MESH网络的优势"></a>SIG MESH网络的优势</h1><p>低功耗蓝牙最初旨在通过将无线技术扩展到电池供电的设备，补充“经典”蓝牙低功耗的不足。比如低功耗蓝牙在心率带或无线控制的玩具应用，这些设备都通过低功耗蓝牙与主机设备（例如手机）进行通信，，甚至一个主机设备控制多个从机设备，形成星形网络拓扑。</p>
-<p>低功耗蓝牙由于其与手机的互操作性在一定程度上帮助其迅速扩展到其他领域应用，包括照明控制，智能家居等。在这些类型的应用中，星形网络的缺点就变得很明显。例如，蓝牙低功耗解决方案只能应付有限数量的同时连接（通常为八个），灯泡数量超过该数量的照明设备无法通过单个命令进行控制，从而导致控制延迟。其次，在大房子，远处的灯泡可能不在中央控制器的范围内，需要有路由功能的节点转接。</p>
-<p>在网状网络中，不是通过Gateway与各个外围设备进行通信，而是通过跨连接多个节点的双向通道进行转发，将消息从网络中的一个点中继到其他任何点。这样，网状网络带来了显着的优势，因为它允许同时控制多个连接设备，克服了范围限制。</p>
-<p><img src="2.png" alt=""></p>
-<h1 id="SIG-MESH核心协议"><a href="#SIG-MESH核心协议" class="headerlink" title="SIG MESH核心协议"></a>SIG MESH核心协议</h1><p>自从推出Bluetooth LE以来，低功耗蓝牙已推出版本4.1、4.2、5.0，和5.1版本，协议中增加了比如传输范围、吞吐量、广播数据载核、AoA、AoD定位，以及共存方面的改进（当然，这些新特性有些属于可选，可选的意思是不支持这些新功能的芯片也可以是蓝牙5.0的芯片）。 </p>
-<p><strong>Bluetooth Mesh 1.0不是简单的Bluetooth 5的升级，他是独立与蓝牙协议之外的一套协议，任何旧版（4.0、4.1、4.2、5）低功耗蓝牙芯片产品都可以进行修改升级，仅需进行固件升级即可运行蓝牙网格，前提是flash和ram资源足够。</strong></p>
-<p><strong>BLE MESH核心协议向蓝牙协议兼容的特点在于，蓝牙MESH网络并不是蓝牙BLE协议栈中不可或缺的一部分，而是一个由七个层组成的单独的新实体，其中的某些节点可以和蓝牙协议进行数据交互。</strong></p>
+<h1 id="平台搭建"><a href="#平台搭建" class="headerlink" title="平台搭建"></a>平台搭建</h1><ul>
+<li><p>CC2541EVM (烧录SimplePeripheral固件, BLE-CC254x-1.5.0.16)</p>
+</li>
+<li><p>Nordic52840 usb dongle</p>
+</li>
+<li><p>Python2.7</p>
+</li>
+<li><p>Pycharm（选配）</p>
+</li>
+<li><p>Wireshark </p>
+</li>
+</ul>
+<p><img src="2.jpeg" alt=""></p>
+<h1 id="Master-python环境搭建"><a href="#Master-python环境搭建" class="headerlink" title="Master python环境搭建"></a>Master python环境搭建</h1><p>安装python2.7，配置环境变量（过程忽略，Bing搜索）。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pip install --upgrade pyserial</span><br><span class="line">pip install --upgrade nrfutil</span><br></pre></td></tr></table></figure>
+
 <p><img src="3.png" alt=""></p>
-<p>当蓝牙MESH节点收到消息时，它将消息从底层蓝牙低功耗协议中获取的数据传递给承载层，蓝牙数据再通过承载层再传递到网络层。网络层应用各种检查来决定是将消息传递到传输层还是将其丢弃。</p>
-<p>蓝牙MESH规范定义了一个全新的核心协议，该核心协议的部分层与蓝牙低功耗核心协议层共享一些概念，但两者不完全兼容。这与Zigbee和Thread等技术有些不同，Zigbee和Thread从一开始就被设计为MESH网络，其底层规范基于802.15.4，但并未考虑其他主流协议的兼容性（近两年Zigbee在顶层考虑使用dotdot以兼容其他网络协议，到达互联互通，详见<a href="https://zigbeealliance.org/solution/dotdot/）。" target="_blank" rel="noopener">https://zigbeealliance.org/solution/dotdot/）。</a></p>
-<h1 id="SIG-MESH架构"><a href="#SIG-MESH架构" class="headerlink" title="SIG MESH架构"></a>SIG MESH架构</h1><p>蓝牙网状网使用“泛洪”技术在网络上发送消息（说人话：病毒传播方式）。每个数据包都转发广播到网络中的其他节点，直到消息送达目标节点为止。消息广播可以针对单个节点，一组节点或所有节点。举个例子，我们可以把单个房间所有的灯定义为一个组地址。蓝牙mesh规范定义了四个固定组地址：<strong>“所有代理节点”，“所有好友节点”，“所有中继节点”和“所有节点”</strong>以专门针对节点类型。（LPN不具备转发消息功能，因为他要保持低功耗，就是这么高冷）。</p>
-<p><strong>泛洪网状mesh架构</strong>和<strong>组地址的选择</strong>增强了蓝牙MESH网络对于智能家居应用支持。例如，MESH网络中的Gateway设备收到“ ON” 命令，可以通过MESH网络快速把该指令广播到整个网络，每个网络中的节点设备都接收该命令并据此采取行动，目标组中的灯可以几乎立即点亮。</p>
-<p>相比于星型网络而言，MESH网络节点平均接收数据的最小等待时间比星形网络的最小等待时间低得多，因为在星形网络中，要求中央设备向每个连接的灯传输单独的命令，中央处理器需要分时下达指令到所以子设备。</p>
-<p>蓝牙MESH有一个和传统蓝牙不一致的地方，所有的mesh数据只会在37，38，39三广播信道传输，这种数据传输策略有好有坏，好的地方是效率高，信道传输策略简单；缺点是减少了网络带宽，增加了拥塞风险。</p>
-<p><strong>MESH网络处理拥塞的机制有两种</strong>：第一个是<strong>“生存时间”（TTL）计数器</strong>，它定义特定数据包可以中继多少次（典型值为三个步骤）。第二个是<strong>广播数据包缓存</strong>，设备捕获一帧转发的数据包后只会广播一次，下次接收到其他设备广播的相同信息数据包时，该设备不需要进一步转发。</p>
-<p>开发人员还可以采用可选的组传递路线，以及保留中继功能，这样设置后，节点可以接收数据包，但不能将其传递，节点的灵活性会变差。</p>
-<h1 id="SIG-MESH网状节点"><a href="#SIG-MESH网状节点" class="headerlink" title="SIG MESH网状节点"></a>SIG MESH网状节点</h1><p>蓝牙网格使用四种类型的网络节点：</p>
-<p><strong>中继节点（Relay Nodes ）</strong>中继节点通过网络层接收和转发数据包。中继节点的缺点是它们必须始终保持警报状态，这会大大增加功耗。这对于诸如智能照明之类的主电源供电的应用程序不是不利的，但是对于诸如被并入网络中的交换机之类的非主电源供电的节点则是一个问题。</p>
-<p><strong>低功耗节点（LPN）</strong>低功耗节点采用蓝牙低功耗的标准节电特性（即：长时间处于睡眠状态），因此可以通过电池或能量收集来长期运行。每个LPN都连接到由市电供电的Friend Node，该Friend Node保持唤醒状态并缓存指向LPN的所有消息。当LPN进入接收模式（按照预定的时间表）时，它接受缓存的消息，按照指示进行操作，然后返回节能睡眠模式。</p>
-<p><strong>友邻节点（Friend Nodes）</strong>友邻特性收听网络中转发的任何消息，友邻节点会存储这些消息，当低功耗节点唤醒并Polling友邻节点时，将这些消息传送给相关的低功耗节点。由于友邻节点需要为一个或多个低功耗节点存储消息，因此友邻节点会比其他类型的节点多占用存储器。所需的存储器大小取决于需要存放在友邻节点、并在轮询操作中传送给低功耗节点的数据/命令数量。</p>
-<p><strong>代理节点（Proxy Nodes）</strong>代理节点是非BLE MESH设备（手机）连接到BLE MESH网络的唯一入口。对于不直接支持蓝牙的Mesh设备，具备代理特性的节点是它们登入Mesh网络的入口。代理特性支持节点在GATT（通用属性）层和广播承载层之间转发消息，而在蓝牙Mesh网络中，消息是通过广播承载层转发。例如，当用户希望使用传统智能手机来控制智能照明网络时，此功能很有用。交互是通过节点和设备的通用属性配置文件（GATT）数据传输实现。</p>
-<p><img src="4.png" alt=""></p>
-<p>举个例子，如图所示的温度传感器是电池供电的LPN，设备定期从灯泡友邻节点（最左端长供电的灯泡）接收发送温度消息，温度消息通过灯泡间的传递，最后智能手机通过BLE的GATT层和代理节点的灯泡进行数据传递（左上）。</p>
-<p>另外，在新节点加入MESH网络前，必须进行入网配置，用于保证该新设备可访问网络中所有节点，是一个受信任的设备。进入网络后，MESH网络为新节点分配地址，以及设备类型和设备密钥。设置后，设备密钥用于建立安全通道以配置新节点使用，理论上蓝牙MESH网络可以支持多达32,000个节点。</p>
-<h1 id="SIG-MESH模型"><a href="#SIG-MESH模型" class="headerlink" title="SIG MESH模型"></a>SIG MESH模型</h1><p>MESH MODE的概念类似蓝牙的profile概念，该模型规定一个公共信息结构体，内部可以包含一个或者多个服务（MODE的概念是用于定义终端设备）。</p>
-<p>模型包含节点特定的行为或服务，并定义了一组状态以及对这些状态起作用的消息。标准模型涵盖了典型的使用场景，例如设备配置，传感器读数和照明控制。 开发者还可以创建自定义模型。</p>
-<p>节点中的模型按元素排列；每个元素都充当具有唯一地址的网格中的虚拟实体。每个传入消息都由元素中的模型处理。</p>
+<p>烧录NORDIC52840 USB固件（更新前请按下USB设备上的复位按键，引导bootloader）</p>
 <p><img src="5.png" alt=""></p>
-<p>不同的模型间通过 “<strong>发布和订阅</strong>”方式相互交谈。发布节点发送一条消息，配置为订阅的节点接收到消息后会进行处理。</p>
-<p>在下图中，最左边的灯开关（开关1）指令发布到Kitchen组地址，假设节点Light 1，Light 2和Light 3（灯的顺序从左往右）订阅了Kitchen地址，因此它们会接收处理并根据发布到该地址的消息（例如“ on”和“ off”命令）进行操作。Light 3也预订了饭厅地址，因此可以从Switch 2以及Switch 1进行操作。</p>
+<p>测试平台已经就绪，在Windows命令行下运行脚本CC_connection_req_crash.py，需要设置usb设备的串口号，以及需要攻击的从机设备mac地址，如图所示。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python CC_connection_req_crash.py com13 78:04:73:B5:C7:28</span><br></pre></td></tr></table></figure>
+
+<p><img src="4.png" alt=""></p>
+<p>可以看到红色字体已经提示从机出现了问题，从此再扫描不到该从机设备。</p>
+<h1 id="实现过程"><a href="#实现过程" class="headerlink" title="实现过程"></a>实现过程</h1><p>设置主机端请求从机设备连接的connection interval值为0，该设置是SIG SPEC规范CONNECT_REQ数据包不允许的操作方式，通过python脚本模拟ble CONNECT_REQ数据包攻击从机广播设备。</p>
+<p>脚本中用到scapy模块（不要与爬虫的scrapy混淆），该模块用于生成BLE协议数据包。</p>
 <p><img src="6.png" alt=""></p>
-<h1 id="SUIG-MESH配入网流程"><a href="#SUIG-MESH配入网流程" class="headerlink" title="SUIG MESH配入网流程"></a>SUIG MESH配入网流程</h1><p>下图是一个完整的配网订阅的例子，该流程是蓝牙MESH配网注册设备的标准流程，灯泡首先向MESH网络发送信号，告知其正在寻找要加入的网络。配置节点会验证灯泡的信标，并邀请其加入网络。如果身份验证成功，则会为设备提供必要的密钥和地址，以加入网络并为配置做准备。接下来，为灯泡提供“家庭自动化”应用程序密钥。设置“ OnOff服务器”（控制灯泡）的发布状态，最后添加对“灯组”的订阅。</p>
-<p><img src="8.png" alt=""></p>
-<h1 id="SIG-MESH应用"><a href="#SIG-MESH应用" class="headerlink" title="SIG MESH应用"></a>SIG MESH应用</h1><p>对SIG认证的产品进行初略统计发现，BLE MESH的应用主要集中在智能家居和灯控场合，灯控占6成，智能家具设备占3成，还有一成属于原厂的芯片认证以及小众市场应用，BLE MESH无疑已经是Zigbee最大的竞争对手，后续慢慢分析。</p>
-<p><img src="13.png" alt=""></p>
+<p>通过wrpcap(‘CC2540_connection_req_crash.pcap’, conn_request)保存CONNECT_REQ攻击包，我们用wireshark打开，可以看到连接CC2541的CONNECT_REQ数据包参数interval被人为设置为0，回复给CC2541。</p>
+<p><img src="7.png" alt=""></p>
+<h1 id="攻击效果"><a href="#攻击效果" class="headerlink" title="攻击效果"></a>攻击效果</h1><p><img src="8.png" alt=""><br><img src="9.png" alt=""></p>
+<p>（lcd显示的Adv 变为Disconnect状态，并未像蓝牙正常或异常断开后自动恢复到adv状态，此时CC2541已处于非广播模式）</p>
+<p>在BLE连接的初始阶段，主机设备扫描从机设备的广播数据包，并发送一个连接请求数据包，其中包含诸如连接间隔和超时之类的相关参数。这两个参数分别控制从设备和主设备之间的数据包交换和超时。SIG规定它们的值必须为一个非零时间段（以毫秒为单位）。</p>
+<p>但是，如果主设备发送无效的连接请求，且其字段间隔或超时都为零时，从设备将停止通告。在接收到无效的连接请求期间，BLE协议栈将连接请求失败事件发送到应用程序代码（bleGAPConnNotAcceptable），并且在收到该失败状态后，协议框架默认程序进入空闲状态，从而停止广播。</p>
+<p>这就是该漏洞的攻击原理，同样，我们可以设置CONNECT_REQ timeout设置为0进行攻击，一样会造成设备停止广播。</p>
+<h1 id="漏洞影响"><a href="#漏洞影响" class="headerlink" title="漏洞影响"></a>漏洞影响</h1><p>设备虽然受到攻击后不能再广播，但内置mcu功能不受影响，设备依然能按照设计的功能工作，只是蓝牙无法再工作。由于该漏洞攻击实施起来非常方便，该问题有可能被用于散播恶意诋毁竞品，达到打击竞品品牌的效应。</p>
+<p><strong>此次漏洞暴露了蓝牙测试认证的缺陷，攻击者采用非</strong>规范数据包对蓝牙设备进行欺诈攻击；不按规矩出牌，往往能取得意想不到的效果。</p>
 
       
     </div>
@@ -424,7 +421,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="http://www.iotbzw.com/2020/05/16/SIG%20MESH%20%E6%A0%B8%E5%BF%83%E5%8D%8F%E8%AE%AE%E4%B8%8E%E6%8A%80%E6%9C%AF%E6%A1%86%E6%9E%B6/" title="SIG MESH 核心协议与技术框架">http://www.iotbzw.com/2020/05/16/SIG%20MESH%20%E6%A0%B8%E5%BF%83%E5%8D%8F%E8%AE%AE%E4%B8%8E%E6%8A%80%E6%9C%AF%E6%A1%86%E6%9E%B6/</a>
+    <a href="http://www.iotbzw.com/2020/05/17/CC2541%20SweynTooth%20BLE%E6%BC%8F%E6%B4%9E%E5%AE%9E%E6%B5%8B/" title="CC2541 SweynTooth BLE漏洞实测">http://www.iotbzw.com/2020/05/17/CC2541%20SweynTooth%20BLE%E6%BC%8F%E6%B4%9E%E5%AE%9E%E6%B5%8B/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>
@@ -439,11 +436,13 @@
       
         <div class="post-tags">
           
-            <a href="/tags/MESH/" rel="tag"># MESH</a>
+            <a href="/tags/cc2541%E6%BC%8F%E6%B4%9E/" rel="tag"># cc2541漏洞</a>
           
-            <a href="/tags/MESH%E6%8A%80%E6%9C%AF/" rel="tag"># MESH技术</a>
+            <a href="/tags/ti-cc2541/" rel="tag"># ti cc2541</a>
           
-            <a href="/tags/MESH%E5%B8%82%E5%9C%BA/" rel="tag"># MESH市场</a>
+            <a href="/tags/python/" rel="tag"># python</a>
+          
+            <a href="/tags/SweynTooth/" rel="tag"># SweynTooth</a>
           
         </div>
       
@@ -456,15 +455,15 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
+              <a href="/2020/05/16/SweynTooth%E8%93%9D%E7%89%99%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/" rel="next" title="SweynTooth 蓝牙漏洞分析">
+                <i class="fa fa-chevron-left"></i> SweynTooth 蓝牙漏洞分析
+              </a>
+            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2020/05/16/SweynTooth%E7%88%86%E5%87%BA%E6%9C%80%E6%96%B0%E4%BD%8E%E5%8A%9F%E8%80%97%E8%93%9D%E7%89%99%E6%BC%8F%E6%B4%9E%EF%BC%8C%E5%A4%9A%E5%AE%B6%E7%9F%A5%E5%90%8D%E8%93%9D%E7%89%99%E8%8A%AF%E7%89%87%E6%A6%9C%E4%B8%8A%E6%9C%89%E5%90%8D/" rel="prev" title="SweynTooth爆出最新低功耗蓝牙漏洞，多家知名蓝牙芯片榜上有名">
-                SweynTooth爆出最新低功耗蓝牙漏洞，多家知名蓝牙芯片榜上有名 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -613,7 +612,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SIG-MESH市场现状"><span class="nav-text">SIG MESH市场现状</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SIG-MESH网络的优势"><span class="nav-text">SIG MESH网络的优势</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SIG-MESH核心协议"><span class="nav-text">SIG MESH核心协议</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SIG-MESH架构"><span class="nav-text">SIG MESH架构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SIG-MESH网状节点"><span class="nav-text">SIG MESH网状节点</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SIG-MESH模型"><span class="nav-text">SIG MESH模型</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SUIG-MESH配入网流程"><span class="nav-text">SUIG MESH配入网流程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SIG-MESH应用"><span class="nav-text">SIG MESH应用</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#平台搭建"><span class="nav-text">平台搭建</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Master-python环境搭建"><span class="nav-text">Master python环境搭建</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#实现过程"><span class="nav-text">实现过程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#攻击效果"><span class="nav-text">攻击效果</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#漏洞影响"><span class="nav-text">漏洞影响</span></a></li></ol></div>
             
 
           </div>

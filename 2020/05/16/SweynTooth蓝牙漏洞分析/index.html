@@ -402,6 +402,7 @@
 <p>Session Key Diversifier（SKD）是一个随机的16字节数字，通过加密请求/响应交换获得。因此，主机拥有正确的LTK即可发送带有有效SK的加密响应。</p>
 <p><strong>影响：</strong>攻击者可以利用此漏洞完全绕过BLE产品的安全性，而BLE产品依赖安全连接配对来保护用户隐私。简而言之，此漏洞使攻击者可以对受保护的BLE应用程序进行完全的通信控制。</p>
 <p><img src="10.png" alt=""></p>
+<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>下一篇文章我们利用python实测漏洞</p>
 
       
     </div>
@@ -463,6 +464,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/05/17/CC2541%20SweynTooth%20BLE%E6%BC%8F%E6%B4%9E%E5%AE%9E%E6%B5%8B/" rel="prev" title="CC2541 SweynTooth BLE漏洞实测">
+                CC2541 SweynTooth BLE漏洞实测 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -546,7 +551,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-count">4</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -568,7 +573,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-count">11</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -611,7 +616,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#蓝牙连接流程"><span class="nav-text">蓝牙连接流程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#漏洞分析"><span class="nav-text">漏洞分析</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Link-Layer-溢出攻击-CVE-2019-16336-CVE-2019-17519"><span class="nav-text">Link Layer 溢出攻击 (CVE-2019-16336, CVE-2019-17519)**</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Link-Layer-LLID-死锁-CVE-2019-17061-CVE-2019-17060"><span class="nav-text">Link Layer LLID 死锁 (CVE-2019-17061, CVE-2019-17060)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Silent-Length-Overflow-CVE-2019-17518"><span class="nav-text">Silent Length Overflow (CVE-2019-17518)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Invalid-Connection-Request-CVE-2019-19193"><span class="nav-text">Invalid Connection Request (CVE-2019-19193)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Unexpected-Public-Key-Crash-CVE-2019-17520"><span class="nav-text">Unexpected Public Key Crash (CVE-2019-17520)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Sequential-ATT-Deadlock-CVE-2019-19192"><span class="nav-text">Sequential ATT Deadlock (CVE-2019-19192)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Key-Size-Overflow-CVE-2019-19196"><span class="nav-text">Key Size Overflow (CVE-2019-19196)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Zero-LTK-Installation"><span class="nav-text">Zero LTK Installation</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#蓝牙连接流程"><span class="nav-text">蓝牙连接流程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#漏洞分析"><span class="nav-text">漏洞分析</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Link-Layer-溢出攻击-CVE-2019-16336-CVE-2019-17519"><span class="nav-text">Link Layer 溢出攻击 (CVE-2019-16336, CVE-2019-17519)**</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Link-Layer-LLID-死锁-CVE-2019-17061-CVE-2019-17060"><span class="nav-text">Link Layer LLID 死锁 (CVE-2019-17061, CVE-2019-17060)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Silent-Length-Overflow-CVE-2019-17518"><span class="nav-text">Silent Length Overflow (CVE-2019-17518)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Invalid-Connection-Request-CVE-2019-19193"><span class="nav-text">Invalid Connection Request (CVE-2019-19193)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Unexpected-Public-Key-Crash-CVE-2019-17520"><span class="nav-text">Unexpected Public Key Crash (CVE-2019-17520)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Sequential-ATT-Deadlock-CVE-2019-19192"><span class="nav-text">Sequential ATT Deadlock (CVE-2019-19192)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Key-Size-Overflow-CVE-2019-19196"><span class="nav-text">Key Size Overflow (CVE-2019-19196)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Zero-LTK-Installation"><span class="nav-text">Zero LTK Installation</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#后记"><span class="nav-text">后记</span></a></li></ol></div>
             
 
           </div>
