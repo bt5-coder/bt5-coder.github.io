@@ -123,7 +123,7 @@
 
 
 
-  <title>categories | IoT Wireless Connectivity</title>
+  <title>SweynTooth爆出最新低功耗蓝牙漏洞，多家知名蓝牙芯片榜上有名 | IoT Wireless Connectivity</title>
   
 
 
@@ -262,40 +262,218 @@
 
   <div id="posts" class="posts-expand">
     
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.iotbzw.com/2020/05/16/SweynTooth%E7%88%86%E5%87%BA%E6%9C%80%E6%96%B0%E4%BD%8E%E5%8A%9F%E8%80%97%E8%93%9D%E7%89%99%E6%BC%8F%E6%B4%9E%EF%BC%8C%E5%A4%9A%E5%AE%B6%E7%9F%A5%E5%90%8D%E8%93%9D%E7%89%99%E8%8A%AF%E7%89%87%E6%A6%9C%E4%B8%8A%E6%9C%89%E5%90%8D/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Xcoder">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/20140820.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="IoT Wireless Connectivity">
+    </span>
+
     
-    
-    <div class="post-block page">
       <header class="post-header">
 
-	<h1 class="post-title" itemprop="name headline">categories</h1>
-
-
-
-</header>
-
-      
-      
-      
-      <div class="post-body">
         
         
-          <div class="category-all-page">
-            <div class="category-all-title">
-                目前共计 3 个分类
-            </div>
-            <div class="category-all">
-              <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Bluetooth/">Bluetooth</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/SIG-MESH/">SIG MESH</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%93%9D%E7%89%99%E5%8D%8F%E8%AE%AE/">蓝牙协议</a><span class="category-list-count">1</span></li></ul>
-            </div>
-          </div>
+          <h1 class="post-title" itemprop="name headline">SweynTooth爆出最新低功耗蓝牙漏洞，多家知名蓝牙芯片榜上有名</h1>
         
-      </div>
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-05-16T18:00:01+08:00">2020-05-16</time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Bluetooth/" itemprop="url" rel="index">
+                    <span itemprop="name">Bluetooth</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
       
       
+
+      
+        <p><img src="640.png" alt=""></p>
+<p>SWEYNTOOTH机构最近发布一篇报告，该报告指出，针对BLE SOC芯片的SDK进行测试发现，攻击者可以根据情况触发BLE SOC芯片协议栈死锁，崩溃，缓冲区溢出，或者完全绕过安全性。根据原厂的授权，截止到今天为止，TI，NXP，Cypress，Dialog，ST和Telink半导体已全部在列，但绝非所有SoC供应商列表都受SWEYNTOOTH影响，我们一起来看一下。</p>
+<a id="more"></a>
+
+<h1 id="漏洞类型"><a href="#漏洞类型" class="headerlink" title="漏洞类型"></a>漏洞类型</h1><p><strong>崩溃：</strong>此类漏洞可以通过故意触发硬故障中断使设备软件崩溃。这是由于SDK框架中某些不正确的代码行为或存储器溢出而造成，比如BLE接收缓冲区发生缓冲区溢出。崩溃发生时，软件通常会进行重新启动。但是，这种重启功能取决于BLE SoC的协议栈中是否考虑硬故障处理机制。</p>
+<p><strong>死锁：</strong>死锁是会影响BLE连接，不会引起硬故障或内存损坏的漏洞。通常，它们是由于用户APP代码与SoC SDK固件之间的某些不正确同步造成用户代码陷于某个死锁等待状态。如果正确不当，则可能会导致死锁。在大多数情况下，当发生死锁时，用户手动关闭设备电源并重新打开设备电源以重新建立正确的BLE通信。</p>
+<p><strong>配对安全：</strong>此漏洞是最严重的漏洞。该漏洞允许无攻击者设备绕过BLE的最新安全配对模式。绕过后，攻击者可以对设备功能进行任意读取或写入访问。而这些功能原来只能由正确交换密钥的授权用户访问。</p>
+<p><img src="2.jpeg" alt=""></p>
+<p>目前各大原厂已经公开发布各自的补丁修改问题。 部分终端产品也因该问题被陆续曝光，包括知名手环厂商FITBIT，北美智能锁制造商August等，但是只要产品支持BLE OTA升级功能，受影响的BLE SoC可通过软件升级方式更新原厂固件。</p>
+<h1 id="高风险设备"><a href="#高风险设备" class="headerlink" title="高风险设备"></a>高风险设备</h1><p><strong>可穿戴设备：</strong>Fitbit Inspire  FitBit 2018年最新智能手表使用赛普拉斯PSoC 6作为主处理器。通过测试，它们容易受到链路层溢出和LLID死锁的影响，为了验证利用这两个问题时可穿戴设备会发生什么，我们已通过BLE主设备将恶意数据包发送到Fitbit Inspire智能手表，恶意数据包发送到设备后，有可能触发设备内存中的缓冲区溢出或使蓝牙堆栈死锁。前者的攻击（利用链路层溢出）可立即重启设备，而后者的攻击（利用LLID死锁）可禁用蓝牙广告约27秒钟，然后使智能手表重启。</p>
+<p>总而言之，这些漏洞似乎只是暂时阻止了Fitbit手表的可用性。但是，链路层长度溢出本身就是一个威胁。特别是，一旦攻击者通过对固件进行反向工程来了解固件的内存布局，这种溢出就可能成为远程执行的潜在大门。在Fitbit Charge 3和Ace 2中预也会遇到同样问题(赛普拉斯PSoC 6处理器)。</p>
+<p><strong>智能家居：</strong>Eve Systems的许多智能家居产品由于依赖Dialog DA14680作为主处理器。例如，Eve电灯开关，Eve Motion MKII，Eve Aqua，Eve Thermo MKII，Eve Room，Eve Lock等都容易出现溢出攻击。具体来说，有可能通过发送溢出设备接收缓冲区的特定数据包来使此类设备崩溃。当发生攻击时，用户可以立即体验其智能产品重新启动或变得不稳定。例如，对Eve Energy进行溢出攻击，当智能插头的处理器崩溃并重新启动时，智能插头上的电源就会切断。因此，我们只需在智能插座的蓝牙接收范围内发送恶意数据包，就可以暂时切断与插座电源。此外，攻击者可以使用这种简单的攻击，通过间断地切断其电源，对连接到插头的某些设备造成物理损害。</p>
+<p><strong>智能锁：</strong>TheeGeeTouch是一种智能行李箱锁，可以通过手机APP进行远程锁定或解锁。该设备使用TI CC2540 SoC，在漏洞测试过程中，利用“无效连接请求”漏洞能将智能锁置于死锁状态。进行攻击时，设备会挂起，用户需要手动按下智能锁上的开机按钮才能与其进行交互，最严重的时，必须重新插入其电池以重新启动其处理器并使功能恢复正常。</p>
+<p><img src="4.png" alt=""></p>
+<p><img src="1.jpeg" alt=""></p>
+<p>尽管很难确定存在漏洞风险的产品数量，但我们从SIG联盟的蓝牙认证清单上搜索到多款可能受影响的产品类型。下图记录了截至2020年2月8日使用受影响的产品列表总数。</p>
+<p><img src="9.png" alt=""></p>
+<p>物流，医疗，消费电子，智能家居，可穿戴设备和其他领域的产品也应该高度重视，我们概述了一些在SIG Bluetooth Listing上认证过的产品。</p>
+<p><img src="10.png" alt=""></p>
+<p>生产血糖仪的VivaCheck  Lab有很多产品都使用来DA14580。这些产品都可能容易受到L2CAP恶意数据攻击。更糟糕的是，Medtronic最新的起搏器相关的产品可能也会受到影响，为了避免使用任何可能对使用相应医疗产品的患者造成生命危险的情况，强烈建议此类公司更新固件。</p>
+<p>另外恩智浦半导体的SoC KW41Z 电池供电自动包裹储物柜，KW41Z LLID死锁漏洞非常容易复现，攻击者可以简单地阻止任何人连接到包裹储物柜（除非包裹储物柜自动重启）。恩智浦已经发布了影响KW41Z的两个漏洞的补丁程序。</p>
+<p>上表并不详尽，因此建议每个产品供应商将其产品的SDK固件更新到最新（如果有），或者联系其SoC供应商以查询补丁状态。</p>
+<p>大多数芯片厂家已为其SoC发布了补丁包，通过下载下表中引用的供应商的最新SDK，即可获得最新补丁。另一方面，每个SoC供应商都独立联系产品供应商（使用受影响的SoC），以告知有关安全补丁的信息 。</p>
+<p>在我们与Dialog联系期间，他们已经确认计划在下一个SDK版本中为受影响的SoC修补一个补丁。</p>
+<p><img src="6.png" alt=""></p>
+<h1 id="深入调查"><a href="#深入调查" class="headerlink" title="深入调查"></a>深入调查</h1><p>近年来，由于一些安全机制的考虑不周（例如KNOB，BlueBorne 和Invalid ECC Attack）蓝牙连接一直会受到不同程度攻击。每个SoC BLE SDK都必须先经过蓝牙认证，然后才能投放市场。但我们的发现表明，认证过程应该进行改进。我们按照Core Specification规范测试蓝牙SoC，往往会上收到了截然不同的响应，说明蓝牙芯片供应商并未严格遵循协议规范，比如，Telink的设备多次响应版本请求，这违反了核心规范[13]的[Vol 6] B部分第5.1.5节，该部分定义了HOST设备在接收主机发送的HCI指令中应仅响应一次版本请求。同样，我们测试过的所有设备都可以接受“ hopIncrement”字段值小于5的连接请求，此举违反了[Vol 6] B部分第2.3.3.1节的规定，该部分规定该字段的有效范围在5-16。此外，我们发现的所有漏洞都与[Vol 1] E部分的2.7节（对格式错误的响应）相关，该部分的说明其实已经提供了指令和一些示例来处理无效或格式错误的数据包。希望蓝牙SIG改进并显着扩展第2.7节，并向蓝牙认证中添加更多基本测试，以避免以上漏洞。</p>
+<h1 id="附录：蓝牙连接全过程"><a href="#附录：蓝牙连接全过程" class="headerlink" title="附录：蓝牙连接全过程"></a>附录：<strong>蓝牙连接全过程</strong></h1><p><img src="11.jpeg" alt=""></p>
+
       
     </div>
     
     
     
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    Xcoder
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://www.iotbzw.com/2020/05/16/SweynTooth%E7%88%86%E5%87%BA%E6%9C%80%E6%96%B0%E4%BD%8E%E5%8A%9F%E8%80%97%E8%93%9D%E7%89%99%E6%BC%8F%E6%B4%9E%EF%BC%8C%E5%A4%9A%E5%AE%B6%E7%9F%A5%E5%90%8D%E8%93%9D%E7%89%99%E8%8A%AF%E7%89%87%E6%A6%9C%E4%B8%8A%E6%9C%89%E5%90%8D/" title="SweynTooth爆出最新低功耗蓝牙漏洞，多家知名蓝牙芯片榜上有名">http://www.iotbzw.com/2020/05/16/SweynTooth%E7%88%86%E5%87%BA%E6%9C%80%E6%96%B0%E4%BD%8E%E5%8A%9F%E8%80%97%E8%93%9D%E7%89%99%E6%BC%8F%E6%B4%9E%EF%BC%8C%E5%A4%9A%E5%AE%B6%E7%9F%A5%E5%90%8D%E8%93%9D%E7%89%99%E8%8A%AF%E7%89%87%E6%A6%9C%E4%B8%8A%E6%9C%89%E5%90%8D/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/SweynTooth/" rel="tag"># SweynTooth</a>
+          
+            <a href="/tags/%E8%93%9D%E7%89%99%E6%BC%8F%E6%B4%9E/" rel="tag"># 蓝牙漏洞</a>
+          
+            <a href="/tags/ti/" rel="tag"># ti</a>
+          
+            <a href="/tags/dialog/" rel="tag"># dialog</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/05/16/SIG%20MESH%20%E6%A0%B8%E5%BF%83%E5%8D%8F%E8%AE%AE%E4%B8%8E%E6%8A%80%E6%9C%AF%E6%A1%86%E6%9E%B6/" rel="next" title="谈谈SIG MESH【市场及技术框架】">
+                <i class="fa fa-chevron-left"></i> 谈谈SIG MESH【市场及技术框架】
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/05/16/SweynTooth%E8%93%9D%E7%89%99%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/" rel="prev" title="SweynTooth 蓝牙漏洞分析">
+                SweynTooth 蓝牙漏洞分析 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
   </div>
 
 
@@ -331,8 +509,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -406,6 +593,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#漏洞类型"><span class="nav-text">漏洞类型</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#高风险设备"><span class="nav-text">高风险设备</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#深入调查"><span class="nav-text">深入调查</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#附录：蓝牙连接全过程"><span class="nav-text">附录：蓝牙连接全过程</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
