@@ -3,8 +3,7 @@
   <entry>
     <title>CC2541 SweynTooth BLE漏洞实测</title>
     <url>/2020/05/17/CC2541%20SweynTooth%20BLE%E6%BC%8F%E6%B4%9E%E5%AE%9E%E6%B5%8B/</url>
-    <content><![CDATA[<p><img src="640.png" alt=""></p>
-<p>SweynTooth hacker攻击蓝牙SoC时，人为设置错误的LL链路层CONNECT_REQ数据包回复给从机设备，导致从机设备蓝牙controller和host端处理异常。本文利用CC2541EVM，亲测蓝牙漏洞Invalid Connection Request (CVE-2019-19193)。<br><img src="1.jpeg" alt=""></p>
+    <content><![CDATA[<p>SweynTooth hacker攻击蓝牙SoC时，人为设置错误的LL链路层CONNECT_REQ数据包回复给从机设备，导致从机设备蓝牙controller和host端处理异常。本文利用CC2541EVM，亲测蓝牙漏洞Invalid Connection Request (CVE-2019-19193)。<br><img src="1.jpeg" alt=""></p>
 <a id="more"></a>
 
 <h1 id="平台搭建"><a href="#平台搭建" class="headerlink" title="平台搭建"></a>平台搭建</h1><ul>
@@ -43,6 +42,7 @@
 <p>这就是该漏洞的攻击原理，同样，我们可以设置CONNECT_REQ timeout设置为0进行攻击，一样会造成设备停止广播。</p>
 <h1 id="漏洞影响"><a href="#漏洞影响" class="headerlink" title="漏洞影响"></a>漏洞影响</h1><p>设备虽然受到攻击后不能再广播，但内置mcu功能不受影响，设备依然能按照设计的功能工作，只是蓝牙无法再工作。由于该漏洞攻击实施起来非常方便，该问题有可能被用于散播恶意诋毁竞品，达到打击竞品品牌的效应。</p>
 <p><strong>此次漏洞暴露了蓝牙测试认证的缺陷，攻击者采用非</strong>规范数据包对蓝牙设备进行欺诈攻击；不按规矩出牌，往往能取得意想不到的效果。</p>
+<p><img src="640.png" alt=""></p>
 ]]></content>
       <categories>
         <category>蓝牙协议</category>
@@ -57,8 +57,7 @@
   <entry>
     <title>SIG MESH 核心协议与技术框架</title>
     <url>/2020/05/16/SIG%20MESH%20%E6%A0%B8%E5%BF%83%E5%8D%8F%E8%AE%AE%E4%B8%8E%E6%8A%80%E6%9C%AF%E6%A1%86%E6%9E%B6/</url>
-    <content><![CDATA[<p><img src="640.png" alt=""></p>
-<p>终于开启了SIG MESH组网这个话题，本文作为MESH系列的第一篇，介绍Bluetooth mesh 1.0协议的体系结构和功能。</p>
+    <content><![CDATA[<p>终于开启了SIG MESH组网这个话题，本文作为MESH系列的第一篇，介绍Bluetooth mesh 1.0协议的体系结构和功能。</p>
 <a id="more"></a>
 
 <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>Bluetooth Mesh协议作为蓝牙低功耗协议的补充协议，独立于蓝牙5.0，该协议首次将开放标准的网状网络引入低功耗蓝牙设备。</p>
@@ -100,6 +99,7 @@
 <p><img src="8.png" alt=""></p>
 <h1 id="SIG-MESH应用"><a href="#SIG-MESH应用" class="headerlink" title="SIG MESH应用"></a>SIG MESH应用</h1><p>对SIG认证的产品进行初略统计发现，BLE MESH的应用主要集中在智能家居和灯控场合，灯控占6成，智能家具设备占3成，还有一成属于原厂的芯片认证以及小众市场应用，BLE MESH无疑已经是Zigbee最大的竞争对手，后续慢慢分析。</p>
 <p><img src="13.png" alt=""></p>
+<p><img src="640.png" alt=""></p>
 ]]></content>
       <categories>
         <category>SIG MESH</category>
@@ -113,8 +113,7 @@
   <entry>
     <title>SweynTooth爆出最新低功耗蓝牙漏洞，多家知名蓝牙芯片榜上有名</title>
     <url>/2020/05/16/SweynTooth%E7%88%86%E5%87%BA%E6%9C%80%E6%96%B0%E4%BD%8E%E5%8A%9F%E8%80%97%E8%93%9D%E7%89%99%E6%BC%8F%E6%B4%9E%EF%BC%8C%E5%A4%9A%E5%AE%B6%E7%9F%A5%E5%90%8D%E8%93%9D%E7%89%99%E8%8A%AF%E7%89%87%E6%A6%9C%E4%B8%8A%E6%9C%89%E5%90%8D/</url>
-    <content><![CDATA[<p><img src="640.png" alt=""></p>
-<p>SWEYNTOOTH机构最近发布一篇报告，该报告指出，针对BLE SOC芯片的SDK进行测试发现，攻击者可以根据情况触发BLE SOC芯片协议栈死锁，崩溃，缓冲区溢出，或者完全绕过安全性。根据原厂的授权，截止到今天为止，TI，NXP，Cypress，Dialog，ST和Telink半导体已全部在列，但绝非所有SoC供应商列表都受SWEYNTOOTH影响，我们一起来看一下。</p>
+    <content><![CDATA[<p>SWEYNTOOTH机构最近发布一篇报告，该报告指出，针对BLE SOC芯片的SDK进行测试发现，攻击者可以根据情况触发BLE SOC芯片协议栈死锁，崩溃，缓冲区溢出，或者完全绕过安全性。根据原厂的授权，截止到今天为止，TI，NXP，Cypress，Dialog，ST和Telink半导体已全部在列，但绝非所有SoC供应商列表都受SWEYNTOOTH影响，我们一起来看一下。</p>
 <a id="more"></a>
 
 <h1 id="漏洞类型"><a href="#漏洞类型" class="headerlink" title="漏洞类型"></a>漏洞类型</h1><p><strong>崩溃：</strong>此类漏洞可以通过故意触发硬故障中断使设备软件崩溃。这是由于SDK框架中某些不正确的代码行为或存储器溢出而造成，比如BLE接收缓冲区发生缓冲区溢出。崩溃发生时，软件通常会进行重新启动。但是，这种重启功能取决于BLE SoC的协议栈中是否考虑硬故障处理机制。</p>
@@ -140,6 +139,7 @@
 <p><img src="6.png" alt=""></p>
 <h1 id="深入调查"><a href="#深入调查" class="headerlink" title="深入调查"></a>深入调查</h1><p>近年来，由于一些安全机制的考虑不周（例如KNOB，BlueBorne 和Invalid ECC Attack）蓝牙连接一直会受到不同程度攻击。每个SoC BLE SDK都必须先经过蓝牙认证，然后才能投放市场。但我们的发现表明，认证过程应该进行改进。我们按照Core Specification规范测试蓝牙SoC，往往会上收到了截然不同的响应，说明蓝牙芯片供应商并未严格遵循协议规范，比如，Telink的设备多次响应版本请求，这违反了核心规范[13]的[Vol 6] B部分第5.1.5节，该部分定义了HOST设备在接收主机发送的HCI指令中应仅响应一次版本请求。同样，我们测试过的所有设备都可以接受“ hopIncrement”字段值小于5的连接请求，此举违反了[Vol 6] B部分第2.3.3.1节的规定，该部分规定该字段的有效范围在5-16。此外，我们发现的所有漏洞都与[Vol 1] E部分的2.7节（对格式错误的响应）相关，该部分的说明其实已经提供了指令和一些示例来处理无效或格式错误的数据包。希望蓝牙SIG改进并显着扩展第2.7节，并向蓝牙认证中添加更多基本测试，以避免以上漏洞。</p>
 <h1 id="附录：蓝牙连接全过程"><a href="#附录：蓝牙连接全过程" class="headerlink" title="附录：蓝牙连接全过程"></a>附录：<strong>蓝牙连接全过程</strong></h1><p><img src="11.jpeg" alt=""></p>
+<p><img src="640.png" alt=""></p>
 ]]></content>
       <categories>
         <category>Bluetooth</category>
@@ -152,10 +152,102 @@
       </tags>
   </entry>
   <entry>
+    <title>细说蓝牙5三大新特性</title>
+    <url>/2020/05/30/%E7%BB%86%E8%AF%B4%E8%93%9D%E7%89%995%E4%B8%89%E5%A4%A7%E6%96%B0%E7%89%B9%E6%80%A7/</url>
+    <content><![CDATA[<h1 id="蓝牙5特性一-2X-数据吞吐量"><a href="#蓝牙5特性一-2X-数据吞吐量" class="headerlink" title="蓝牙5特性一  2X 数据吞吐量"></a>蓝牙5特性一  2X 数据吞吐量</h1><p>Bluetooth LE 4.2来说，蓝牙5的速率可以提升一倍是因为PHY层可以支持2Mbps数据传输率。在蓝牙5之前，LE只支持1Mbps PHY的速率。在此强调一点，PHY的速率只为蓝牙往空中丢数据的速率，并不等同于点对点设备的主端蓝牙芯片的应用层传到从端蓝牙芯片应用层的数据吞吐量。</p>
+<a id="more"></a>
+<p><img src="5.png" alt=""></p>
+<h2 id="蓝牙单包数据结构"><a href="#蓝牙单包数据结构" class="headerlink" title="蓝牙单包数据结构"></a>蓝牙单包数据结构</h2><h3 id="蓝牙4-2一下数据结构"><a href="#蓝牙4-2一下数据结构" class="headerlink" title="蓝牙4.2一下数据结构"></a>蓝牙4.2一下数据结构</h3><p>先看Bluetooth 4.0/4.1 BLE数据传输率数据推演，设置主机Master端传输20个字节数据，其需要用时328us，从机响应80us，加上发射机发完一包数据至少需要休息150us，一个完整周期为328us + 150us + 80us + 150us，有效数据20字节，数据传输率226kbps。</p>
+<p><img src="8.png" alt=""></p>
+<h3 id="蓝牙4-2数据结构"><a href="#蓝牙4-2数据结构" class="headerlink" title="蓝牙4.2数据结构"></a>蓝牙4.2数据结构</h3><p>Bluetooth 4.2 LE部分扩充了单包数据载荷，每包可传输244字节，同理可以算出蓝牙4.2的数据传输率为781kbps。</p>
+<p><img src="9.png" alt=""></p>
+<h3 id="蓝牙5数据结构"><a href="#蓝牙5数据结构" class="headerlink" title="蓝牙5数据结构"></a>蓝牙5数据结构</h3><p>Bluetooth 5 BLE增加了2M PHY，传输244字节数据时间从2120us将为1060us，从机响应时间也从80us下降到40us，数据传输率提升一倍，到1.39Mbps。</p>
+<p><img src="10.png" alt=""></p>
+<h2 id="蓝牙5大数据传输应用场景"><a href="#蓝牙5大数据传输应用场景" class="headerlink" title="蓝牙5大数据传输应用场景"></a>蓝牙5大数据传输应用场景</h2><p>蓝牙5 PHY层支持2M的速率可以说明两个问题 :<br><strong>单位时间内可传输的数据吞吐量提升一倍。</strong><br><strong>传输相同数据量的数据蓝牙5的时间可降低一倍，从而使得蓝牙芯片可以更长时间的处于休眠模式，以降低蓝牙整体功耗。</strong></p>
+<p><img src="6.png" alt=""></p>
+<p>更快的数据传输率可以用来做什么呢？<br><strong>OTA空中升级</strong>，想必大家都有尝试过自己的智能穿戴设备升级工具，那体验，真的是非常糟糕，现在数量提升了，肯定马上把该速率用在OTA上，另外，在测试市面手环产品的过程中我们自己也看到一个非常糟糕的设计，大多数客户都还停留在使用BLE4.1产品，即使 使用了BLE4.2也很少有客户用到大PDU来改善OTA升级，这里希望各位工程师好好考虑该如何优化自己的产品，合理利用大数据传输提升OTA速度。下面从蓝牙SPEC上摘录几代BLE的规范和计算得来极限数据传输率供大家参考使用。<br><strong>语音图片传输</strong>，2M PHY的应用方向还有大块加密数据的瞬时传输，语音数据的传输，图片传输。<br><strong>IOS SPP 透传</strong>，经典蓝牙与ISO通过SPP传输需要额外mfi芯片，有了2M PHY，无需MFI芯片支持可以提高手机和蓝牙的数据通讯速率。</p>
+<h1 id="蓝牙5特性一-8X-大广播包数据传输"><a href="#蓝牙5特性一-8X-大广播包数据传输" class="headerlink" title="蓝牙5特性一  8X 大广播包数据传输"></a>蓝牙5特性一  8X 大广播包数据传输</h1><h2 id="蓝牙4-x广播特性"><a href="#蓝牙4-x广播特性" class="headerlink" title="蓝牙4.x广播特性"></a>蓝牙4.x广播特性</h2><h3 id="蓝牙广播"><a href="#蓝牙广播" class="headerlink" title="蓝牙广播"></a>蓝牙广播</h3><p>蓝牙从机设备正常工作时会以一定频率发送广播包，告知周围设备可以来连接自己(connectable)，或者单纯发送广播数据(non-connectable)给到周围主设备。从机广播中可能包含设备的相关信息，设备名称，设备具有的服务uuid 等，SIG有明确规定。<br><strong>广播包类型</strong><br>广播包可以拆分为两种，一种是从机设备的广播的数据，一种是主机设备扫描到从机的广播包后响应返回给冲击设备的数据。<br><strong>广播包</strong> （Advertising Data):设备端主动发送的周期数据。<br><strong>响应包</strong> （Scan Response):主机主动扫描的情况下， 发送扫描请求给从机， 从机返回扫描响应数据。</p>
+<h3 id="4-x广播包格式"><a href="#4-x广播包格式" class="headerlink" title="4.x广播包格式"></a>4.x广播包格式</h3><p>有效数据（significant）和无效数据（non-significant）两部分。<br>有效数据部分包含若干个广播数据单元，称为 AD Structure 。如图所示，AD Structure 的组成是：<br>长度 Len ，表示这个 AD Structure 的长度（除去 Len本身 1）<br><strong>类型 AD Type</strong><br>标记这段广播数据代表什么， 比如设备名， uuid 等。<br><strong>数据 AD data</strong><br>无效数据部分广播包的长度必须是 31 个 byte，如果有效数据部分不到 31 自己，剩下的就用 0 补全。这部分的数据是无效的。</p>
+<p><img src="11.png" alt=""></p>
+<p>以一个例子说明广播包和他的作用：<br>下图为CC2540 BLE抓包工具抓包的截图，右边AdvData内的数据即为广播数据，该广播数据由工程师自己设计，最大支持的字节为31个直接，两横条之间Time的差值即为广播间隔。</p>
+<p><img src="12.jpg" alt=""></p>
+<h3 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h3><p>通常情况，广播包的作用如下：</p>
+<ul>
+<li>作为可连接设备时，广播包内带有产品信息，比如品牌logo，MAC地址等。</li>
+<li>作为beacon设备时，可能携带传感器数据上报给集中器，可以携带beacon编号信息，MAC地址，特殊编码数据。</li>
+<li>作为可连接设备的广播。<br>但对应Beacon应用来说，广播数据和可传输的数据长度就显得尤为重要。beacon广播结合Scan端集中器(Broadcaster and Observer)可以用于智能家具节点数据上报，工厂自动化设备数据上传，人员管控，冷链物流监控，特殊区域布防等多种应用场景；beacon广播结合地图亦可以作为室内导航定位的辅助工具，为室内定位提供良好的解决方案(目前已经相继出现好几家机场，医院，商城实现手机室内导航，其原理即依靠大量布置beacon点和手机地图匹配，利用手机扫描周围beacon广播信息，实现定位与导航，但定位精度存在偏差，不如UWB精度高)。<br>BLE的低功耗纽扣电池供电特性，小体积，可以和手机互联互通，使得beacon在上述应用呈爆发式增长。但其中会存在一个棘手的问题，31字节的广播包太短，每次广播能携带的有效数据太少，另外广播通道太少，只有37,38,39三个通道广播，可能存在多设备上报数据信道的干扰问题。</li>
+</ul>
+<h2 id="蓝牙5广播特性"><a href="#蓝牙5广播特性" class="headerlink" title="蓝牙5广播特性"></a>蓝牙5广播特性</h2><p>蓝牙5扩展了广播数据的有效载荷，提升了广播通道数，为上述应用和新的应用提供了更多技术储备。下面我们就来看看蓝牙5的8x 大广播包。</p>
+<h3 id="蓝牙5广播包格式"><a href="#蓝牙5广播包格式" class="headerlink" title="蓝牙5广播包格式"></a>蓝牙5广播包格式</h3><p>蓝牙4.x协议规定蓝牙广播数据包每包数据最大只支持31字节数据传输，广播信道限制在37,38,39三个信道。在原有的用于传输广播数据的PDU（ADV_IND、ADV_DIRECT_IND、ADV_NONCONN_IND以及ADV_SCAN_IND，称作legacy PDUs）的基础上，蓝牙5增加了扩展的PDU（ADV_EXT_IND、AUX_ADV_IND、AUX_SYNC_IND以及AUX_CHAIN_IND，称作extended advertising PDUs)，同时也允许蓝牙在除开37,38,39三个通道之外的其他37个信道上发送长度介于0-255字节的数据。</p>
+<p><img src="13.png" alt=""></p>
+<p>蓝牙5.0把广播信道抽象为两类，一种叫主广播信道(primary advertisement channels)，另一种叫次广播信道，或者第二广播信道（Secondary Advertising Packets）。<br>主广播信道只工作在37，38，39三个信道，最大广播字节为31字节，广播的数据类型增加了一个ADV_EXT_IND指令，ADV_EXT_IND指令即为告知监听设备，我要广播大数据包广播了。<br>ADV_EXT_IND指令包含要在第二类次广播信道上发送的内容，第二广播信道发送广播数据的信道，物理PHY层，1M PHY，Coded PHY，2M PHY 等。<br>其示意如下图所示，首先在主广播信道广播ADV_EXT_IND信息，然后利用次广播信道(0-36 channel)广播255byte 数据。</p>
+<p><img src="17.png" alt=""></p>
+<p>如果我们有大于255字节的数据需要发送，蓝牙5.0广播协议栈中已经定义了AUX_CHAIN_IND，用于在第二广播信道上连续传输255字节数据，这样我们可以利用它发送超过255字节的大数据包数据。</p>
+<p><img src="14.png" alt=""></p>
+<p>第二广播信道（Secondary Advertising Packets）中的 AUX_ADV_IND、以及AUX_CHAIN_IND已经介绍，下面再看看AUX_SYNC_IND指令。</p>
+<p><img src="15.png" alt=""></p>
+<p>AUX_SYNC_IND指令用于大广播包数据的周期发送，广播者可随时修改其广播数据，但其他监听者依然可以监听到其周期性的广播内容，AUX_SYNC_IND指令包含广播间隔，调频序列，广播数据，广播者MAC地址等信息。</p>
+<p><img src="16.png" alt=""></p>
+<p>主机扫描过程中会首先监听到37,38,39，如果为大广播包，广播数据帧会携带大广播信道，主机会调频到相应信道进行数据监听。</p>
+<p><img src="19.png" alt=""></p>
+<h2 id="蓝牙5大广播包应用场景"><a href="#蓝牙5大广播包应用场景" class="headerlink" title="蓝牙5大广播包应用场景"></a>蓝牙5大广播包应用场景</h2><p>蓝牙4.2的广播数据31字节，蓝牙5.0的广播数据255字节，提升了8倍之多，由于使用了更多的广播信道，多个设备上报数据的抗信道干扰能力得到提升，另外由于多信道的使用，可以同步广播多种不同制式的信息，比如同时广播ibeacon和eddstone。结合蓝牙5 long range mode远距离传输模式，蓝牙的远距离beacon可以用在冷链物流，gps追踪器，工业自动化等在之前距离场合。</p>
+<h1 id="蓝牙5特性一-4X-远距离数据传输"><a href="#蓝牙5特性一-4X-远距离数据传输" class="headerlink" title="蓝牙5特性一  4X 远距离数据传输"></a>蓝牙5特性一  4X 远距离数据传输</h1><h2 id="链结预算Link-Budget"><a href="#链结预算Link-Budget" class="headerlink" title="链结预算Link Budget"></a>链结预算Link Budget</h2><h3 id="传输距离理论"><a href="#传输距离理论" class="headerlink" title="传输距离理论"></a>传输距离理论</h3><p>在部署无线电通信时，链路预算(Link Budget)就是指从发射机开始通过射频媒介直到接收机之间的所有增益和衰减的总和。链路预算计算的目的是确保最终的接收信号强度处于接收机的接收灵敏阈值之上。简单来说，链路预算越大，发送端和接收端的距离越远。<br><code>Link budget [dB]= TX Power [dBm]- Sensitivity level [dBm]</code></p>
+<ul>
+<li>举例说明:<br>以TI CC2640R2F芯片为例，最大TX Power 5dbm, 最大接收灵敏度 -97dBm,根据上述公式，5 dBm - (-97 dBm) = 102 dB。<br>以Nordic Nrf52840芯片为例，最大TX Power 8dbm, 最大接收灵敏度 -96dBm,根据上述公式，8 dBm - (-96 dBm) = 104 dB。</li>
+<li>结论:<br>链结预算值越大，传输距离越远。</li>
+</ul>
+<h3 id="无线电传输损耗"><a href="#无线电传输损耗" class="headerlink" title="无线电传输损耗"></a>无线电传输损耗</h3><h4 id="自由空间损耗"><a href="#自由空间损耗" class="headerlink" title="自由空间损耗"></a>自由空间损耗</h4><p>顾名思义，即为无线信号在空气中传播的损耗，可以由以下公式得到</p>
+<p><img src="21.png" alt=""></p>
+<p>F为频率，单位为G hz,D为发射端与接收端距离，单位为千米。由该公式可知路损的相关因素分为以下两个:<br>1).发射天线与接收天线间的距离。<br>2).频率， 频率越高路损越大。</p>
+<h4 id="现实中无线电对地平面损失"><a href="#现实中无线电对地平面损失" class="headerlink" title="现实中无线电对地平面损失"></a>现实中无线电对地平面损失</h4><p>自由空间损耗是理想状态下无线电的损耗，实现当中还有两个考虑的因数，第一，天线损耗；第二，地表对无线的吸收和反射。<br>在考虑天线损耗和地表对无线的吸收和反射，我们可以概括得出下列公式。</p>
+<p><img src="22.png" alt=""></p>
+<p>h1和h2为发射端和接收端对地距离，k为自由空间波数，r是发射端和接收端的天线。<br>绘制自由空间损耗和地平面损失和距离关系的图如下所示：<br><img src="20.png" alt=""></p>
+<p>在外界条件一致的情况下可以简化得到下面非常有意义的公式：<br><img src="23.png" alt=""></p>
+<p>该公式的结论如下：<br>无线电传输距离和发射端，接收端对地距离成正比，距离地面越高，传输越远。</p>
+<h2 id="蓝牙5-4X-远距离"><a href="#蓝牙5-4X-远距离" class="headerlink" title="蓝牙5 4X 远距离"></a>蓝牙5 4X 远距离</h2><p>在4.2及以前的版本中蓝牙低功耗在信道传输中未使用纠错编码技术，标准规定的基准灵敏度为-70dBm(基本上每一家蓝牙芯片厂商都可以做到-90dBm)。 蓝牙5引入了卷积前向纠错编码(Convolutional Forward Error Correction Coding) 技术，提高了接收机的抗干扰能力，将接收机的参考灵敏度分别提高到-75dBm (S=2编码)和-82dBm (S=4编码), 同时提高了接收机的载干比(载干比：C/I=载波信号强度/干扰信号强度)性能。使得在保持TX相同功耗情况下，蓝牙的距离提升了4倍，下面来说说如何做到提高接收灵敏度,依靠的就是编码PHY。</p>
+<h3 id="BLE编码PHY"><a href="#BLE编码PHY" class="headerlink" title="BLE编码PHY"></a>BLE编码PHY</h3><p>蓝牙5除硬件支持1M,2M PHY，还支持两种编码方式的PHY，这两种编码方式的PHY是基于1M PHY的基础，使用1M PHY的物理通道。新的编码分为两种，一种编码PHY为500kbps(S=2)，另外一种编码PHY是125kbps(S=8)。<br>编码PHY的数据包类型和1M PHY/2M PHY 数据包类型略有不同，增加了CI(coding indicator)和TERM1和TERM2。CI和TERMx构成了FEC(Forward Error Correction)区块，利用FEC恢复在传输过程中的错误数据位，以提升接收灵敏度。</p>
+<p><img src="30.png" alt=""></p>
+<p>经过S=2或者S=8的编码，接收灵敏度可以提升4-6dBm，距离相应提升2-4被。但是进化出一种新的能力必然会牺牲自己一项能力，和1M PHY相比，传输的距离提升了，但传输相同数据包，编码PHY的功耗比1M PHY就要高出一节 (BLE 规定的包长一致，部分payload变为FEC data，实际有效的传输数据减少)。</p>
+<p><img src="29.png" alt=""></p>
+<h3 id="数据流传递方式"><a href="#数据流传递方式" class="headerlink" title="数据流传递方式"></a>数据流传递方式</h3><ul>
+<li><strong>1M/2M PHY</strong><br>在没有编码方式下，TX数据包数据bit流通过加密(可选项)，CRC效验，白化之后发送出去；RX端接收到数据流解调后校验CRC，解密，得到原始数据包数据。</li>
+</ul>
+<p><img src="25.png" alt=""></p>
+<ul>
+<li><strong>500kbps,125kbps 编码PHY</strong><br>相对 1M/2M 未编码PHY的数据流，500k PHY, 125K phy多出两个部分：FEC(前向错误纠错) 编码和模式映射，大家肯定要问如何实现FEC，我们以编码PHY的流程来完整讲述一下数据流的编码和传输过程。</li>
+</ul>
+<p><img src="26.png" alt=""></p>
+<ul>
+<li><p><strong>错误检验 — CRC效验错误</strong><br>接收机首先会检测接收到的Access Adrees是否正确，如果Access Adrees错误，丢弃该数据包，检测完Access Adrees，接收机会去效验整个数据包，判断24位CRC是否完全吻合。</p>
+</li>
+<li><p><strong>白化</strong><br>数据白化的目的是在传输数据遇到连续000000，或者连续111111序列时，进行合理编码，减少传输长串重复序列数据。</p>
+</li>
+<li><p><strong>编码 — 前向错误编码</strong><br>前向错误编码算法使得接收机有能比恢复该数据包中的传输错误数据位，通过把原始数据进行编码得到新的数据流，即使新的数据流在传输过程中有个别位数据错误，FEC解码也能恢复原始数据，从而提高了传输的误码率。BT5.0使用的如下编码算法:</p>
+</li>
+</ul>
+<p><img src="27.png" alt=""></p>
+<p>G0(a0)先进行传输，G1(a1)在G0传输完成之后传输。</p>
+<p><img src="28.png" alt=""></p>
+<ul>
+<li><strong>模式映射 — Pattern Mapper</strong><br>模式映射的目的是整理输出前向错误编码数据，输出的方式分为两种模式(P symbols)，一种P=1(S=2)，一种P=4(S=8)，两种模式下把前向错误编码数据进行加工，然后输出。由下面的表格所示，当P=1时，输出的data和输入保持不变，1位输入，1为输出；当P=4时，编码为4位再输出，所以可以看到P=4(S=8)时，输出的data数据量会更多，更进一部压缩实际可以传输的有效payload数据。</li>
+</ul>
+<h3 id="蓝牙远距离应用场景"><a href="#蓝牙远距离应用场景" class="headerlink" title="蓝牙远距离应用场景"></a>蓝牙远距离应用场景</h3><p>得益于前向错误编码和模式映射，使得蓝牙数据在传输过程中，RX端对整个payload数据包解码纠错能力有不同提升(简单说即为提高RX端接收灵敏度)，蓝牙5的传输距离才有显著的提升。125kbps使用S=8模式，传输距离相对传统BLE提升4倍，相应牺牲的数据传输率最多，500kbps使用S=2模式，传输距离相对传统BLE提升2倍。长距离模式可以有效可以支持到400-500米范围内BLE通讯。</p>
+<p><img src="640.png" alt=""></p>
+]]></content>
+      <categories>
+        <category>蓝牙协议</category>
+      </categories>
+      <tags>
+        <tag>蓝牙 5</tag>
+        <tag>远距离</tag>
+        <tag>大广播</tag>
+        <tag>2M PHY</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>SweynTooth 蓝牙漏洞分析</title>
     <url>/2020/05/16/SweynTooth%E8%93%9D%E7%89%99%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/</url>
-    <content><![CDATA[<p><img src="640.png" alt=""></p>
-<p>近年由于SIG蓝牙安全机制的考虑不周（例如KNOB，BlueBorne 和Invalid ECC Attack），蓝牙连接一直在受到不同程度攻击。每个SoC BLE SDK理应先经过蓝牙认证，然后才能投放市场，但SweynTooth机构的发现表明，蓝牙认证过程并未认真对待，因为大部分漏洞，在测试阶段可以被发现。SweynTooth按照Core Specification规范测试蓝牙SoC芯片时，往往会在被测设备上收到出乎意料的响应，说明蓝牙芯片供应商并未严格遵循协议规范，而测试机构的测试并对此进行严格把关。<a id="more"></a>比如，Telink的设备多次响应版本请求，这违反了核心规范[13]的[Vol 6] B部分第5.1.5节，该部分定义了HOST设备在接收主机发送的HCI指令中应仅响应一次版本请求。同样，SweynTooth测试过的所有设备都可以接受“ hopIncrement”字段值小于5的连接请求，此举违反了[Vol 6] B部分第2.3.3.1节的规定，该部分规定该字段的有效范围在5-16。SweynTooth发现的所有漏洞都与[Vol 1] E部分的2.7节（对格式错误的响应）相关，该部分的说明其实已经提供了指令和一些示例来处理无效或格式错误的数据包。今天我们从技术角度一一分析上文所诉的漏洞。</p>
+    <content><![CDATA[<p>近年由于SIG蓝牙安全机制的考虑不周（例如KNOB，BlueBorne 和Invalid ECC Attack），蓝牙连接一直在受到不同程度攻击。每个SoC BLE SDK理应先经过蓝牙认证，然后才能投放市场，但SweynTooth机构的发现表明，蓝牙认证过程并未认真对待，因为大部分漏洞，在测试阶段可以被发现。SweynTooth按照Core Specification规范测试蓝牙SoC芯片时，往往会在被测设备上收到出乎意料的响应，说明蓝牙芯片供应商并未严格遵循协议规范，而测试机构的测试并对此进行严格把关。<a id="more"></a>比如，Telink的设备多次响应版本请求，这违反了核心规范[13]的[Vol 6] B部分第5.1.5节，该部分定义了HOST设备在接收主机发送的HCI指令中应仅响应一次版本请求。同样，SweynTooth测试过的所有设备都可以接受“ hopIncrement”字段值小于5的连接请求，此举违反了[Vol 6] B部分第2.3.3.1节的规定，该部分规定该字段的有效范围在5-16。SweynTooth发现的所有漏洞都与[Vol 1] E部分的2.7节（对格式错误的响应）相关，该部分的说明其实已经提供了指令和一些示例来处理无效或格式错误的数据包。今天我们从技术角度一一分析上文所诉的漏洞。</p>
 <p><img src="0.png" alt=""></p>
 <h1 id="蓝牙连接流程"><a href="#蓝牙连接流程" class="headerlink" title="蓝牙连接流程"></a>蓝牙连接流程</h1><p>下图是一个完整的蓝牙扫描发现从机设备，连接从机设备，建立数据交互通道，分发密钥，建立安全连接，profile发现，以及数据交互过程，牢记这张图表的配对流程，下面针对漏洞一一展开。</p>
 <p><img src="1.png" alt=""></p>
@@ -196,6 +288,7 @@
 <p><strong>影响：</strong>攻击者可以利用此漏洞完全绕过BLE产品的安全性，而BLE产品依赖安全连接配对来保护用户隐私。简而言之，此漏洞使攻击者可以对受保护的BLE应用程序进行完全的通信控制。</p>
 <p><img src="10.png" alt=""></p>
 <h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>下一篇文章我们利用python实测漏洞</p>
+<p><img src="640.png" alt=""></p>
 ]]></content>
       <categories>
         <category>蓝牙协议</category>
@@ -209,8 +302,7 @@
   <entry>
     <title>蓝牙协议框架梳理</title>
     <url>/2020/05/24/%E8%93%9D%E7%89%99%E5%8D%8F%E8%AE%AE%E6%A1%86%E6%9E%B6%E6%A2%B3%E7%90%86/</url>
-    <content><![CDATA[<p><img src="640.png" alt=""></p>
-<h1 id="蓝牙基本概念"><a href="#蓝牙基本概念" class="headerlink" title="蓝牙基本概念"></a>蓝牙基本概念</h1><h2 id="Piconet"><a href="#Piconet" class="headerlink" title="Piconet"></a>Piconet</h2><p>在蓝牙设备没有跟其他蓝牙设备连线的时候，它自己属于一个piconet。当有连线后，piconet里有两种角色：master 和 slave。发起连线的一方是master，被连接的一方是slave。slave会以master的时钟为参照，以625us为时间单位，与master进行数据收发。每一个piconet里，一个master最多有7个slave。</p>
+    <content><![CDATA[<h1 id="蓝牙基本概念"><a href="#蓝牙基本概念" class="headerlink" title="蓝牙基本概念"></a>蓝牙基本概念</h1><h2 id="Piconet"><a href="#Piconet" class="headerlink" title="Piconet"></a>Piconet</h2><p>在蓝牙设备没有跟其他蓝牙设备连线的时候，它自己属于一个piconet。当有连线后，piconet里有两种角色：master 和 slave。发起连线的一方是master，被连接的一方是slave。slave会以master的时钟为参照，以625us为时间单位，与master进行数据收发。每一个piconet里，一个master最多有7个slave。</p>
 <a id="more"></a>
 <p><img src="1.png" alt=""></p>
 <h2 id="PHY-Mode"><a href="#PHY-Mode" class="headerlink" title="PHY Mode"></a>PHY Mode</h2><p><strong>LE</strong>： LE采用频分多址（FDMA）和时分多址（TDMA），在FDMA中使用了40个（40）物理信道，相隔2 MHz。37,38,39用作主要广播，而另外37个通道用作数据渠道或者次要广播通道。</p>
@@ -299,6 +391,7 @@
 </blockquote>
 <h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>弄清楚了基本概念，弄清楚了框架和数据流向和软件实施办法，就基本对蓝牙协议有了一个宏观认识，对于理解软件代码有一定帮助。</p>
 <h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="https://wnnwoo.github.io/2019/07/27/bluetooth-baseband/" target="_blank" rel="noopener">蓝牙基带介绍</a><br><a href="http://www.wowotech.net/bluetooth/bt_protocol_arch.html" target="_blank" rel="noopener">蓝牙协议分析</a><br>蓝牙5.2规范</p>
+<p><img src="640.png" alt=""></p>
 ]]></content>
       <categories>
         <category>蓝牙协议</category>

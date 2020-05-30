@@ -77,13 +77,13 @@
 
 <meta name="description" content="微信公众号 无线技术联盟">
 <meta property="og:type" content="website">
-<meta property="og:title" content="categories">
-<meta property="og:url" content="http://www.iotbzw.com/categories/index.html">
+<meta property="og:title" content="tags">
+<meta property="og:url" content="http://www.iotbzw.com/tags/index.html">
 <meta property="og:site_name" content="IoT Wireless Connectivity">
 <meta property="og:description" content="微信公众号 无线技术联盟">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2020-05-09T08:04:11.000Z">
-<meta property="article:modified_time" content="2020-05-09T08:04:43.428Z">
+<meta property="article:published_time" content="2020-05-09T08:01:23.000Z">
+<meta property="article:modified_time" content="2020-05-09T08:02:37.593Z">
 <meta property="article:author" content="Xcoder">
 <meta property="article:tag" content="ble 无线 蓝牙 zigbee">
 <meta name="twitter:card" content="summary">
@@ -118,7 +118,7 @@
 
 
 
-  <link rel="canonical" href="http://www.iotbzw.com/categories/"/>
+  <link rel="canonical" href="http://www.iotbzw.com/tags/"/>
 
 
 
@@ -362,8 +362,7 @@
       
 
       
-        <p><img src="640.png" alt=""></p>
-<p>SWEYNTOOTH机构最近发布一篇报告，该报告指出，针对BLE SOC芯片的SDK进行测试发现，攻击者可以根据情况触发BLE SOC芯片协议栈死锁，崩溃，缓冲区溢出，或者完全绕过安全性。根据原厂的授权，截止到今天为止，TI，NXP，Cypress，Dialog，ST和Telink半导体已全部在列，但绝非所有SoC供应商列表都受SWEYNTOOTH影响，我们一起来看一下。</p>
+        <p>SWEYNTOOTH机构最近发布一篇报告，该报告指出，针对BLE SOC芯片的SDK进行测试发现，攻击者可以根据情况触发BLE SOC芯片协议栈死锁，崩溃，缓冲区溢出，或者完全绕过安全性。根据原厂的授权，截止到今天为止，TI，NXP，Cypress，Dialog，ST和Telink半导体已全部在列，但绝非所有SoC供应商列表都受SWEYNTOOTH影响，我们一起来看一下。</p>
 <a id="more"></a>
 
 <h1 id="漏洞类型"><a href="#漏洞类型" class="headerlink" title="漏洞类型"></a>漏洞类型</h1><p><strong>崩溃：</strong>此类漏洞可以通过故意触发硬故障中断使设备软件崩溃。这是由于SDK框架中某些不正确的代码行为或存储器溢出而造成，比如BLE接收缓冲区发生缓冲区溢出。崩溃发生时，软件通常会进行重新启动。但是，这种重启功能取决于BLE SoC的协议栈中是否考虑硬故障处理机制。</p>
@@ -389,6 +388,7 @@
 <p><img src="6.png" alt=""></p>
 <h1 id="深入调查"><a href="#深入调查" class="headerlink" title="深入调查"></a>深入调查</h1><p>近年来，由于一些安全机制的考虑不周（例如KNOB，BlueBorne 和Invalid ECC Attack）蓝牙连接一直会受到不同程度攻击。每个SoC BLE SDK都必须先经过蓝牙认证，然后才能投放市场。但我们的发现表明，认证过程应该进行改进。我们按照Core Specification规范测试蓝牙SoC，往往会上收到了截然不同的响应，说明蓝牙芯片供应商并未严格遵循协议规范，比如，Telink的设备多次响应版本请求，这违反了核心规范[13]的[Vol 6] B部分第5.1.5节，该部分定义了HOST设备在接收主机发送的HCI指令中应仅响应一次版本请求。同样，我们测试过的所有设备都可以接受“ hopIncrement”字段值小于5的连接请求，此举违反了[Vol 6] B部分第2.3.3.1节的规定，该部分规定该字段的有效范围在5-16。此外，我们发现的所有漏洞都与[Vol 1] E部分的2.7节（对格式错误的响应）相关，该部分的说明其实已经提供了指令和一些示例来处理无效或格式错误的数据包。希望蓝牙SIG改进并显着扩展第2.7节，并向蓝牙认证中添加更多基本测试，以避免以上漏洞。</p>
 <h1 id="附录：蓝牙连接全过程"><a href="#附录：蓝牙连接全过程" class="headerlink" title="附录：蓝牙连接全过程"></a>附录：<strong>蓝牙连接全过程</strong></h1><p><img src="11.jpeg" alt=""></p>
+<p><img src="640.png" alt=""></p>
 
       
     </div>
@@ -539,7 +539,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-count">6</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -561,7 +561,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-count">19</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
