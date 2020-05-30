@@ -124,7 +124,7 @@
 
 
 
-  <title>蓝牙协议框架梳理 | IoT Wireless Connectivity</title>
+  <title>SIG MESH 核心协议与技术框架 | IoT Wireless Connectivity</title>
   
 
 
@@ -275,7 +275,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.iotbzw.com/2020/05/24/%E8%93%9D%E7%89%99%E5%8D%8F%E8%AE%AE%E6%A1%86%E6%9E%B6%E6%A2%B3%E7%90%86/">
+    <link itemprop="mainEntityOfPage" href="http://www.iotbzw.com/title.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Xcoder">
@@ -292,7 +292,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">蓝牙协议框架梳理</h1>
+          <h1 class="post-title" itemprop="name headline">SIG MESH 核心协议与技术框架</h1>
         
 
         <div class="post-meta">
@@ -304,7 +304,7 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建时间" itemprop="dateCreated datePublished" datetime="2020-05-24T01:54:21+08:00">2020-05-24</time>
+              <time title="创建时间" itemprop="dateCreated datePublished" datetime="2020-05-16T14:44:53+08:00">2020-05-16</time>
             
 
             
@@ -325,8 +325,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%93%9D%E7%89%99%E5%8D%8F%E8%AE%AE/" itemprop="url" rel="index">
-                    <span itemprop="name">蓝牙协议</span>
+                  <a href="/categories/SIG-MESH/" itemprop="url" rel="index">
+                    <span itemprop="name">SIG MESH</span>
                   </a>
                 </span>
 
@@ -362,95 +362,48 @@
       
 
       
-        <h1 id="蓝牙基本概念"><a href="#蓝牙基本概念" class="headerlink" title="蓝牙基本概念"></a>蓝牙基本概念</h1><h2 id="Piconet"><a href="#Piconet" class="headerlink" title="Piconet"></a>Piconet</h2><p>在蓝牙设备没有跟其他蓝牙设备连线的时候，它自己属于一个piconet。当有连线后，piconet里有两种角色：master 和 slave。发起连线的一方是master，被连接的一方是slave。slave会以master的时钟为参照，以625us为时间单位，与master进行数据收发。每一个piconet里，一个master最多有7个slave。</p>
+        <p>终于开启了SIG MESH组网这个话题，本文作为MESH系列的第一篇，介绍Bluetooth mesh 1.0协议的体系结构和功能。</p>
 <a id="more"></a>
-<p><img src="1.png" alt=""></p>
-<h2 id="PHY-Mode"><a href="#PHY-Mode" class="headerlink" title="PHY Mode"></a>PHY Mode</h2><p><strong>LE</strong>： LE采用频分多址（FDMA）和时分多址（TDMA），在FDMA中使用了40个（40）物理信道，相隔2 MHz。37,38,39用作主要广播，而另外37个通道用作数据渠道或者次要广播通道。</p>
-<p><strong>Basic Rate</strong>: 最基本的一种模式，采用GFSK，传输速率是 1Mb/s。</p>
-<p><img src="12.png" alt=""></p>
-<p><strong>Enhanced Data rate</strong>: 增强模式，传输速率是 2Mb/s （π/4-DQPSK）或 3Mb/s（8DPSK），这种模式有两种编码。</p>
-<h2 id="BT-clock"><a href="#BT-clock" class="headerlink" title="BT clock"></a>BT clock</h2><p>Clock是蓝牙通信最最基础的一个概念，clock定义了通信的时空范围，定义了这个Piconet时空的坐标系，只有在同一个坐标系里，网络内的各个角色才能相互了解对方的时间线，才知道什么时候发包，什么时候收包。<br>BT clock是个28bit的计数器，每tick一次是312.5us，所以总共有 (2^28 -1)个tick，算一下大约是(2^28-1)*312.5us/10^6/3600 = 23.3个小时后clock会翻转。</p>
-<p>针对Clock有几个重要概念：</p>
-<blockquote>
-<p>CLK0, 312.5us，是一个tick<br>CLK1, 625us, 是一个slot<br>CLK2, 1.25ms, 是一个frame（做一次TX 和 RX）<br>CLK12, 1.28s.<br>Clock的精确度要求为 +/-250ppm 和 +/-20ppm</p>
-</blockquote>
-<p>蓝牙tx,rx会按时隙为节拍通信，数据以625us一个时隙作为最小单元，有些数据包会超过一个时隙，最多可持续5个时隙。</p>
-<p><img src="11.png" alt=""></p>
-<p>对于一个连接中的两个设备中，对于主设备，slave_offset应为零，因为CLK与其自身的本地时钟CLKN相同。每个从机应在其CLKN上添加一个适当的slave_offset，以使CLK对应于主机的CLKN，使得主从时钟保持同步尽管设备中的所有CLKN均以相同的标称速率运行，但相互漂移会导致CLK不准确。因此，必须定期更新从机中的偏移，以使CLK大约等于主机的CLKN</p>
-<p><img src="4.png" alt=""></p>
-<h2 id="Physical-Channel（信道）"><a href="#Physical-Channel（信道）" class="headerlink" title="Physical Channel（信道）"></a>Physical Channel（信道）</h2><p>Spec总共有定义如下5种channel</p>
-<blockquote>
-<ul>
-<li>Basic piconet physical channel</li>
-<li>Adapted piconet physical channel</li>
-<li>Page scan physical channel</li>
-<li>Inquiry scan physical channel</li>
-<li>Synchronization scan physical channel</li>
-</ul>
-</blockquote>
-<p>以Basic piconet physical channel为例，在建立连线后，Slave会以Mater的clock为准。Master和Slave以一个slot为单位进行Tx和Rx，Master在clock为偶数时发包，Slave在clock为偶数时收包，如下图所示</p>
+
+<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>Bluetooth Mesh协议作为蓝牙低功耗协议的补充协议，独立于蓝牙5.0，该协议首次将开放标准的网状网络引入低功耗蓝牙设备。</p>
+<p>MESH网络是针对面向智能家居和楼宇自动化应用应用而生的低功耗无线技术， 但是由于蓝牙联盟之前缺乏对MESH网络支持，使得使用低功耗蓝牙的工程师不得不选择其他技术（例如Zigbee和Thread）用于智能家居应用的开发，直到2017年中蓝牙MESH的规范公之于众。现在蓝牙SIG通过引入蓝牙5.0补充规范-蓝牙网状网络1.0解决了MESH组网这一欠缺。该规范不需要其他硬件支持，可以通过刷新固件在目前已有蓝牙低功耗芯片（v4.0、4.1、4.2和5）上运行。一些芯片厂家已经可以支持Bluetooth Mesh 1.0协议。</p>
+<h1 id="SIG-MESH市场现状"><a href="#SIG-MESH市场现状" class="headerlink" title="SIG MESH市场现状"></a>SIG MESH市场现状</h1><p>到目前为止，全球已经在SIG联盟认证的BLE MESH的企业共有73家，认证的产品数量高达461个，该数据包括终端产品和芯片的认证总数，下表罗列出认证企业和其产品认证的数量，其中国的互联网巨头认证的终端产品不少。</p>
+<p><img src="1.jpg" alt=""></p>
+<h1 id="SIG-MESH网络的优势"><a href="#SIG-MESH网络的优势" class="headerlink" title="SIG MESH网络的优势"></a>SIG MESH网络的优势</h1><p>低功耗蓝牙最初旨在通过将无线技术扩展到电池供电的设备，补充“经典”蓝牙低功耗的不足。比如低功耗蓝牙在心率带或无线控制的玩具应用，这些设备都通过低功耗蓝牙与主机设备（例如手机）进行通信，，甚至一个主机设备控制多个从机设备，形成星形网络拓扑。</p>
+<p>低功耗蓝牙由于其与手机的互操作性在一定程度上帮助其迅速扩展到其他领域应用，包括照明控制，智能家居等。在这些类型的应用中，星形网络的缺点就变得很明显。例如，蓝牙低功耗解决方案只能应付有限数量的同时连接（通常为八个），灯泡数量超过该数量的照明设备无法通过单个命令进行控制，从而导致控制延迟。其次，在大房子，远处的灯泡可能不在中央控制器的范围内，需要有路由功能的节点转接。</p>
+<p>在网状网络中，不是通过Gateway与各个外围设备进行通信，而是通过跨连接多个节点的双向通道进行转发，将消息从网络中的一个点中继到其他任何点。这样，网状网络带来了显着的优势，因为它允许同时控制多个连接设备，克服了范围限制。</p>
+<p><img src="2.png" alt=""></p>
+<h1 id="SIG-MESH核心协议"><a href="#SIG-MESH核心协议" class="headerlink" title="SIG MESH核心协议"></a>SIG MESH核心协议</h1><p>自从推出Bluetooth LE以来，低功耗蓝牙已推出版本4.1、4.2、5.0，和5.1版本，协议中增加了比如传输范围、吞吐量、广播数据载核、AoA、AoD定位，以及共存方面的改进（当然，这些新特性有些属于可选，可选的意思是不支持这些新功能的芯片也可以是蓝牙5.0的芯片）。 </p>
+<p><strong>Bluetooth Mesh 1.0不是简单的Bluetooth 5的升级，他是独立与蓝牙协议之外的一套协议，任何旧版（4.0、4.1、4.2、5）低功耗蓝牙芯片产品都可以进行修改升级，仅需进行固件升级即可运行蓝牙网格，前提是flash和ram资源足够。</strong></p>
+<p><strong>BLE MESH核心协议向蓝牙协议兼容的特点在于，蓝牙MESH网络并不是蓝牙BLE协议栈中不可或缺的一部分，而是一个由七个层组成的单独的新实体，其中的某些节点可以和蓝牙协议进行数据交互。</strong></p>
 <p><img src="3.png" alt=""></p>
-<h1 id="蓝牙核心框架"><a href="#蓝牙核心框架" class="headerlink" title="蓝牙核心框架"></a>蓝牙核心框架</h1><h2 id="核心架构"><a href="#核心架构" class="headerlink" title="核心架构"></a>核心架构</h2><p><img src="5.png" alt=""></p>
-<p>蓝牙核心框架信息量非常大，基本把蓝牙的构架和数据传输方向描述的非常清楚，绿色框图部分是Radio, 蓝牙射频，基带和链路管理放在该部分完成，红色部分称为Host端，俗称蓝牙协议。</p>
-<p>Radio分为经典蓝牙，低功耗蓝牙和AMP。我们主要看LE Controller，顺带提一下BR/EDR。</p>
-<p><strong>Controller和Host直接的数据传输有几种方式：C/E，SCO，ACL，ISO。</strong></p>
-<blockquote>
-<p>• Synchronous Connection-Oriented (SCO) logical transport<br>• Extended Synchronous Connection-Oriented (eSCO) logical transport<br>• Asynchronous Connection-Oriented (ACL) logical transport<br>• Active Slave Broadcast (ASB) logical transport<br>• Connectionless Slave Broadcast (CSB) logical transport.</p>
-</blockquote>
-<p>简单来说C/E是HOST和Controller通信方式之一，Command用于下发指令，Event是Host用于接收controller上报指令，SCO和eSCO是经典蓝牙下用于音频传输，ACL为异步数据传输（没有严格同步时间要求的数据传输方式），ISO是蓝牙5.2的最新规范的大数据传输通道，分为基于连接的数据流传输和基于广播的数据流传输。上图中灰色的箭头表示控制指令的传输路径，黑体箭头表示数据流向。</p>
-<blockquote>
-<p>Synchronous Connection Oriented (SCO)</p>
-<ul>
-<li>Circuit switched typically used for voice</li>
-<li>Symmetric, synchronous service</li>
-<li>Slot reservation at fixed intervals</li>
-<li>Point-to-point</li>
-</ul>
-<p>Asynchronous Connectionless Link (ACL)</p>
-<ul>
-<li>Packet switched</li>
-<li>Symmetric or asymmetric, asynchronous service<br>Polling mechanism between master and slave(s)</li>
-<li>Point-to-point and point-to-multipoint</li>
-</ul>
-</blockquote>
-<p>以设置LE设备广播为例，LE 设备上电后，host发送reset command重启蓝牙设备，发送广播参数command，配置广播内容，使能广播command，完成蓝牙设备的广播设置command。</p>
-<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">(```)</span><br><span class="line">########################################################</span><br><span class="line">## Legacy Adv Command</span><br><span class="line">########################################################</span><br><span class="line">#reset</span><br><span class="line">Send_HCI_Reset</span><br><span class="line">Wait_HCI_Command_Complete_Reset_Event <span class="number">5000</span>, any, HCI_Reset, <span class="number">0x00</span></span><br><span class="line"></span><br><span class="line"># <span class="keyword">set</span> Adv parameter</span><br><span class="line">Send_HCI_LE_Set_Advertising_Parameters <span class="number">800</span>, <span class="number">800</span>, <span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x00</span>, <span class="string">"01:02:03:04:05:06"</span>, <span class="string">"0x07"</span>, <span class="string">"0x00"</span></span><br><span class="line">Wait_HCI_Command_Complete_LE_Set_Advertising_Parameters_Event <span class="number">5000</span>, any, HCI_LE_Set_Advertising_Parameters, </span><br><span class="line"></span><br><span class="line"># <span class="keyword">set</span> Adv <span class="keyword">data</span> Payload</span><br><span class="line">Send_HCI_LE_Set_Advertising_Data <span class="number">0x10</span>, <span class="string">"00:01:02:03:04:05:06:07:08:09:0A:0B:0C:0D:0E:0F"</span></span><br><span class="line">Wait_HCI_Command_Complete_LE_Set_Advertising_Data_Event <span class="number">5000</span>, any, HCI_LE_Set_Advertising_Data, </span><br><span class="line"></span><br><span class="line"># <span class="keyword">set</span> Scan rsp <span class="keyword">data</span> Payload</span><br><span class="line">Send_HCI_LE_Set_Scan_Response_Data <span class="number">0x10</span>, <span class="string">"00:01:02:03:04:05:06:07:08:09:0A:0B:0C:0D:0E:0F"</span></span><br><span class="line">Wait_HCI_Command_Complete_LE_Set_Scan_Response_Data_Event <span class="number">5000</span>, any, HCI_LE_Set_Scan_Response_Data, </span><br><span class="line"></span><br><span class="line"># enable adv</span><br><span class="line">Send_HCI_LE_Set_Advertise_Enable <span class="number">0x01</span></span><br><span class="line">Wait_HCI_Command_Complete_LE_Set_Advertise_Enable_Event <span class="number">5000</span>, any, HCI_LE_Set_Advertise_Enable, </span><br><span class="line">(```)</span><br></pre></td></tr></table></figure>
-
-<p>完整的Command/Event交互LOG如下:</p>
-<blockquote>
-<p>20:23:26.378 <strong>* Script Started: “C:\Users\xcoder\Documents\Texas Instruments\HCI TESTER\hci_tester\controller scripts\adv.txt” *</strong><br>20:23:26.378 –<br>20:23:26.378 Packet “HCI_Reset”, Opcode 0x0c03<br>20:23:26.378 –<br>20:23:26.378 Outgoing Dump:<br>20:23:26.378     0000: 01 03 0c 00                                     ….<br>20:23:26.398 Incoming Dump:<br>20:23:26.398     0000: 04 0e 04 01 03 0c 00                            …….<br>20:23:26.398 –<br>20:23:26.398 Packet “HCI_Command_Complete_Reset_Event”, Opcode 0x0c03<br>20:23:26.398 Parameters:<br>20:23:26.398 | Number HCI commands : 0x01<br>20:23:26.398 | Command Opcode      : 0x0c03<br>20:23:26.398 | Status              : 0x00 (Success)<br>20:23:26.398 –<br>20:23:26.398 –<br>20:23:26.398 Packet “HCI_LE_Set_Advertising_Parameters”, Opcode 0x2006<br>20:23:26.398 Parameters:<br>20:23:26.398 | Advertise Min Interval    : 800<br>20:23:26.398 | Advertise Max Interval    : 800<br>20:23:26.398 | Advertising Type          : 0x00 (Connectable Undirected Event)<br>20:23:26.398 | Own Address Type          : 0x00 (Public Device Address)<br>20:23:26.398 | Direct Address Type       : 0x00 (Public Device Address)<br>20:23:26.398 | Direct Address            : “01:02:03:04:05:06”<br>20:23:26.398 | Advertising Channel Map   : 0x07<br>20:23:26.398 | Advertising Filter Policy : 0x00<br>20:23:26.398 –<br>20:23:26.398 Outgoing Dump:<br>20:23:26.398     0000: 01 06 20 0f 20 03 20 03 00 00 00 06 05 04 03 02 .. . . ………<br>20:23:26.398     0010: 01 07 00                                        …<br>20:23:26.418 Incoming Dump:<br>20:23:26.418     0000: 04 0e 04 01 06 20 00                            ….. .<br>20:23:26.418 –<br>20:23:26.418 Packet “HCI_Command_Complete_LE_Set_Advertising_Parameters_Event”, Opcode 0x2006<br>20:23:26.418 Parameters:<br>20:23:26.418 | Number HCI commands : 0x01<br>20:23:26.418 | Command Opcode      : 0x2006<br>20:23:26.418 | Status              : 0x00 (Success)<br>20:23:26.418 –<br>20:23:26.418 –<br>20:23:26.418 Packet “HCI_LE_Set_Advertising_Data”, Opcode 0x2008<br>20:23:26.418 Parameters:<br>20:23:26.418 | Data Length      : 0x10<br>20:23:26.418 | Advertising data : “00:01:02:03:04:05:06:07:08:09:0A:0B:0C:0D:0E:0F”<br>20:23:26.418 –<br>20:23:26.418 Outgoing Dump:<br>20:23:26.418     0000: 01 08 20 11 10 00 01 02 03 04 05 06 07 08 09 0a .. ………….<br>20:23:26.418     0010: 0b 0c 0d 0e 0f                                  …..<br>20:23:26.428 Incoming Dump:<br>20:23:26.428     0000: 04 0e 04 01 08 20 00                            ….. .<br>20:23:26.428 –<br>20:23:26.428 Packet “HCI_Command_Complete_LE_Set_Advertising_Data_Event”, Opcode 0x2008<br>20:23:26.428 Parameters:<br>20:23:26.428 | Number HCI commands : 0x01<br>20:23:26.428 | Command Opcode      : 0x2008<br>20:23:26.428 | Status              : 0x00 (Success)<br>20:23:26.428 –<br>20:23:26.428 –<br>20:23:26.428 Packet “HCI_LE_Set_Scan_Response_Data”, Opcode 0x2009<br>20:23:26.428 Parameters:<br>20:23:26.428 | Data Length : 0x10<br>20:23:26.428 | Data        : “00:01:02:03:04:05:06:07:08:09:0A:0B:0C:0D:0E:0F”<br>20:23:26.428 –<br>20:23:26.428 Outgoing Dump:<br>20:23:26.428     0000: 01 09 20 11 10 00 01 02 03 04 05 06 07 08 09 0a .. ………….<br>20:23:26.428     0010: 0b 0c 0d 0e 0f                                  …..<br>20:23:26.448 Incoming Dump:<br>20:23:26.448     0000: 04 0e 04 01 09 20 00                            ….. .<br>20:23:26.448 –<br>20:23:26.448 Packet “HCI_Command_Complete_LE_Set_Scan_Response_Data_Event”, Opcode 0x2009<br>20:23:26.448 Parameters:<br>20:23:26.448 | Number HCI commands : 0x01<br>20:23:26.448 | Command Opcode      : 0x2009<br>20:23:26.448 | Status              : 0x00 (Success)<br>20:23:26.448 –<br>20:23:26.448 –<br>20:23:26.448 Packet “HCI_LE_Set_Advertise_Enable”, Opcode 0x200a<br>20:23:26.448 Parameters:<br>20:23:26.448 | Advertise Enable : 0x01 (Enable)<br>20:23:26.448 –<br>20:23:26.448 Outgoing Dump:<br>20:23:26.448     0000: 01 0a 20 01 01                                  .. ..<br>20:23:26.468 Incoming Dump:<br>20:23:26.468     0000: 04 0e 04 01 0a 20 00                            ….. .<br>20:23:26.468 –<br>20:23:26.468 Packet “HCI_Command_Complete_LE_Set_Advertise_Enable_Event”, Opcode 0x200a<br>20:23:26.468 Parameters:<br>20:23:26.468 | Number HCI commands : 0x01<br>20:23:26.468 | Command Opcode      : 0x200a<br>20:23:26.468 | Status              : 0x00 (Success)<br>20:23:26.468 –<br>20:23:26.468 –<br>20:23:26.468 <strong>* Script End *</strong></p>
-</blockquote>
-<p>蓝牙Host和controller层通过HCI Command/Event交互数据，在早期的BR/EDR蓝牙中，Controller和Host会分开两颗芯片，再蓝牙4.x以后，芯片原厂已经把两颗芯片集成到一颗SOC中，hci层只有在蓝牙测试时候会单独用到，工程中，往往已经看不到hci层（已经打包在lib里），这一章有了一个层级间数据传输的感性认识，下面了解蓝牙协议的全貌。</p>
-<h2 id="蓝牙协议架构"><a href="#蓝牙协议架构" class="headerlink" title="蓝牙协议架构"></a>蓝牙协议架构</h2><p><img src="7.png" alt=""></p>
-<p>从OSI（Open System Interconnection）模型的角度看，蓝牙是一个比较简单的协议，它仅仅提供了物理层（Physical Layer）和数据链路层（Data Link Layer ）两个OSI层次，细化可分为如图所示的物理层（Physical Layer）、逻辑层（Logical Layer）、L2CAP Layer。</p>
-<blockquote>
-<p><strong>物理层</strong>，负责提供数据传输的物理通道（通常称为信道）。通常情况下，一个通信系统中存在几种不同类型的信道，如控制信道、数据信道、语音信道等等。<br><strong>逻辑层</strong>，在物理层的基础上，提供两个或多个设备之间、和物理无关的逻辑传输通道（也称作逻辑链路）。<br><strong>L2CAP层</strong>，L2CAP是逻辑链路控制和适配协议（Logical Link Control and Adaptation Protocol）的缩写，负责管理逻辑层提供的逻辑链路。基于该协议，不同Application可共享同一个逻辑链路。类似TCP/IP中端口（port）的概念。</p>
-</blockquote>
-<p>在l2cap之上还可以有profile层，理解蓝牙协议的profile，基于L2CAP提供的channel，实现各种各样的应用功能。Profile是蓝牙协议的特有概念，为了实现不同平台下的不同设备的互联互通，蓝牙协议不止规定了核心规范（称作Bluetooth core），也为各种不同的应用场景，定义了各种Application规范。</p>
-<p>数据和指令的传输通过C/E，SCO，ACL，ISO几个通道穿梭在不同层协议，既保证了蓝牙协议层级间的独立，又完成了蓝牙数据的交互。</p>
-<h2 id="蓝牙层级间的数据交互"><a href="#蓝牙层级间的数据交互" class="headerlink" title="蓝牙层级间的数据交互"></a>蓝牙层级间的数据交互</h2><p><img src="8.png" alt=""></p>
-<p>蓝牙协议层级间的指令数据传输需要靠通道相互连接，操作系统消息传递机制以及callback函承担了实现层级间的数据通信和交互的桥梁。</p>
-<p>我们以TI CC2541(真的很老了)的软件架构来讲述数据传输方式，工程内有多个线程同时工作：LL，HAL，HCI，L2CAP，GAP，SM，GATT，GAPROLE，GAPBondMgr，GATTServApp，SimpleBLEPeripheral。线程之间采用command/event方式交互数据。</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">(<span class="string">``</span><span class="string">`)</span></span><br><span class="line"><span class="string">void osalInitTasks( void )</span></span><br><span class="line"><span class="string">&#123;</span></span><br><span class="line"><span class="string">  uint8 taskID = 0;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">  tasksEvents = (uint16 *)osal_mem_alloc( sizeof( uint16 ) * tasksCnt);</span></span><br><span class="line"><span class="string">  osal_memset( tasksEvents, 0, (sizeof( uint16 ) * tasksCnt));</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">  /* LL Task */</span></span><br><span class="line"><span class="string">  LL_Init( taskID++ );</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">  /* Hal Task */</span></span><br><span class="line"><span class="string">  Hal_Init( taskID++ );</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">  /* HCI Task */</span></span><br><span class="line"><span class="string">  HCI_Init( taskID++ );</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">#if defined ( OSAL_CBTIMER_NUM_TASKS )</span></span><br><span class="line"><span class="string">  /* Callback Timer Tasks */</span></span><br><span class="line"><span class="string">  osal_CbTimerInit( taskID );</span></span><br><span class="line"><span class="string">  taskID += OSAL_CBTIMER_NUM_TASKS;</span></span><br><span class="line"><span class="string">#endif</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">  /* L2CAP Task */</span></span><br><span class="line"><span class="string">  L2CAP_Init( taskID++ );</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">  /* GAP Task */</span></span><br><span class="line"><span class="string">  GAP_Init( taskID++ );</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">  /* SM Task */</span></span><br><span class="line"><span class="string">  SM_Init( taskID++ );</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">  /* GATT Task */</span></span><br><span class="line"><span class="string">  GATT_Init( taskID++ );</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">  /* Profiles */</span></span><br><span class="line"><span class="string">  GAPRole_Init( taskID++ );</span></span><br><span class="line"><span class="string">  GAPBondMgr_Init( taskID++ );</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">  GATTServApp_Init( taskID++ );</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">  /* Application */</span></span><br><span class="line"><span class="string">  SimpleBLEPeripheral_Init( taskID );</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string">(`</span><span class="string">``</span>)</span><br></pre></td></tr></table></figure>
-
-<p><img src="9.png" alt=""></p>
-<p>HOST端层级之间数据交互通道</p>
-<p><img src="10.png" alt=""></p>
-<p>HCI下层和controller的部分逻辑和上层host一样，只是在hci层做了一层数据传输的task，HCI_task作为host和controller的衔接，进行发送，解析指令，传输数据。</p>
-<blockquote>
-<p>​HCI command packet format:  cmd</p>
-<ul>
-<li>Packet Type + Command opcode + lengh + command payload</li>
-<li>| 1 octet          |              2            |          1            |      n        |</li>
-</ul>
-<p>HCI data packet format:  eco acl</p>
-<ul>
-<li>Packet Type +   Conn Handle  + lengh +  data payload</li>
-<li>| 1 octet             |      2        |            2           |      n      |</li>
-</ul>
-</blockquote>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>弄清楚了基本概念，弄清楚了框架和数据流向和软件实施办法，就基本对蓝牙协议有了一个宏观认识，对于理解软件代码有一定帮助。</p>
-<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="https://wnnwoo.github.io/2019/07/27/bluetooth-baseband/" target="_blank" rel="noopener">蓝牙基带介绍</a><br><a href="http://www.wowotech.net/bluetooth/bt_protocol_arch.html" target="_blank" rel="noopener">蓝牙协议分析</a><br>蓝牙5.2规范</p>
+<p>当蓝牙MESH节点收到消息时，它将消息从底层蓝牙低功耗协议中获取的数据传递给承载层，蓝牙数据再通过承载层再传递到网络层。网络层应用各种检查来决定是将消息传递到传输层还是将其丢弃。</p>
+<p>蓝牙MESH规范定义了一个全新的核心协议，该核心协议的部分层与蓝牙低功耗核心协议层共享一些概念，但两者不完全兼容。这与Zigbee和Thread等技术有些不同，Zigbee和Thread从一开始就被设计为MESH网络，其底层规范基于802.15.4，但并未考虑其他主流协议的兼容性（近两年Zigbee在顶层考虑使用dotdot以兼容其他网络协议，到达互联互通，详见<a href="https://zigbeealliance.org/solution/dotdot/）。" target="_blank" rel="noopener">https://zigbeealliance.org/solution/dotdot/）。</a></p>
+<h1 id="SIG-MESH架构"><a href="#SIG-MESH架构" class="headerlink" title="SIG MESH架构"></a>SIG MESH架构</h1><p>蓝牙网状网使用“泛洪”技术在网络上发送消息（说人话：病毒传播方式）。每个数据包都转发广播到网络中的其他节点，直到消息送达目标节点为止。消息广播可以针对单个节点，一组节点或所有节点。举个例子，我们可以把单个房间所有的灯定义为一个组地址。蓝牙mesh规范定义了四个固定组地址：<strong>“所有代理节点”，“所有好友节点”，“所有中继节点”和“所有节点”</strong>以专门针对节点类型。（LPN不具备转发消息功能，因为他要保持低功耗，就是这么高冷）。</p>
+<p><strong>泛洪网状mesh架构</strong>和<strong>组地址的选择</strong>增强了蓝牙MESH网络对于智能家居应用支持。例如，MESH网络中的Gateway设备收到“ ON” 命令，可以通过MESH网络快速把该指令广播到整个网络，每个网络中的节点设备都接收该命令并据此采取行动，目标组中的灯可以几乎立即点亮。</p>
+<p>相比于星型网络而言，MESH网络节点平均接收数据的最小等待时间比星形网络的最小等待时间低得多，因为在星形网络中，要求中央设备向每个连接的灯传输单独的命令，中央处理器需要分时下达指令到所以子设备。</p>
+<p>蓝牙MESH有一个和传统蓝牙不一致的地方，所有的mesh数据只会在37，38，39三广播信道传输，这种数据传输策略有好有坏，好的地方是效率高，信道传输策略简单；缺点是减少了网络带宽，增加了拥塞风险。</p>
+<p><strong>MESH网络处理拥塞的机制有两种</strong>：第一个是<strong>“生存时间”（TTL）计数器</strong>，它定义特定数据包可以中继多少次（典型值为三个步骤）。第二个是<strong>广播数据包缓存</strong>，设备捕获一帧转发的数据包后只会广播一次，下次接收到其他设备广播的相同信息数据包时，该设备不需要进一步转发。</p>
+<p>开发人员还可以采用可选的组传递路线，以及保留中继功能，这样设置后，节点可以接收数据包，但不能将其传递，节点的灵活性会变差。</p>
+<h1 id="SIG-MESH网状节点"><a href="#SIG-MESH网状节点" class="headerlink" title="SIG MESH网状节点"></a>SIG MESH网状节点</h1><p>蓝牙网格使用四种类型的网络节点：</p>
+<p><strong>中继节点（Relay Nodes ）</strong>中继节点通过网络层接收和转发数据包。中继节点的缺点是它们必须始终保持警报状态，这会大大增加功耗。这对于诸如智能照明之类的主电源供电的应用程序不是不利的，但是对于诸如被并入网络中的交换机之类的非主电源供电的节点则是一个问题。</p>
+<p><strong>低功耗节点（LPN）</strong>低功耗节点采用蓝牙低功耗的标准节电特性（即：长时间处于睡眠状态），因此可以通过电池或能量收集来长期运行。每个LPN都连接到由市电供电的Friend Node，该Friend Node保持唤醒状态并缓存指向LPN的所有消息。当LPN进入接收模式（按照预定的时间表）时，它接受缓存的消息，按照指示进行操作，然后返回节能睡眠模式。</p>
+<p><strong>友邻节点（Friend Nodes）</strong>友邻特性收听网络中转发的任何消息，友邻节点会存储这些消息，当低功耗节点唤醒并Polling友邻节点时，将这些消息传送给相关的低功耗节点。由于友邻节点需要为一个或多个低功耗节点存储消息，因此友邻节点会比其他类型的节点多占用存储器。所需的存储器大小取决于需要存放在友邻节点、并在轮询操作中传送给低功耗节点的数据/命令数量。</p>
+<p><strong>代理节点（Proxy Nodes）</strong>代理节点是非BLE MESH设备（手机）连接到BLE MESH网络的唯一入口。对于不直接支持蓝牙的Mesh设备，具备代理特性的节点是它们登入Mesh网络的入口。代理特性支持节点在GATT（通用属性）层和广播承载层之间转发消息，而在蓝牙Mesh网络中，消息是通过广播承载层转发。例如，当用户希望使用传统智能手机来控制智能照明网络时，此功能很有用。交互是通过节点和设备的通用属性配置文件（GATT）数据传输实现。</p>
+<p><img src="4.png" alt=""></p>
+<p>举个例子，如图所示的温度传感器是电池供电的LPN，设备定期从灯泡友邻节点（最左端长供电的灯泡）接收发送温度消息，温度消息通过灯泡间的传递，最后智能手机通过BLE的GATT层和代理节点的灯泡进行数据传递（左上）。</p>
+<p>另外，在新节点加入MESH网络前，必须进行入网配置，用于保证该新设备可访问网络中所有节点，是一个受信任的设备。进入网络后，MESH网络为新节点分配地址，以及设备类型和设备密钥。设置后，设备密钥用于建立安全通道以配置新节点使用，理论上蓝牙MESH网络可以支持多达32,000个节点。</p>
+<h1 id="SIG-MESH模型"><a href="#SIG-MESH模型" class="headerlink" title="SIG MESH模型"></a>SIG MESH模型</h1><p>MESH MODE的概念类似蓝牙的profile概念，该模型规定一个公共信息结构体，内部可以包含一个或者多个服务（MODE的概念是用于定义终端设备）。</p>
+<p>模型包含节点特定的行为或服务，并定义了一组状态以及对这些状态起作用的消息。标准模型涵盖了典型的使用场景，例如设备配置，传感器读数和照明控制。 开发者还可以创建自定义模型。</p>
+<p>节点中的模型按元素排列；每个元素都充当具有唯一地址的网格中的虚拟实体。每个传入消息都由元素中的模型处理。</p>
+<p><img src="5.png" alt=""></p>
+<p>不同的模型间通过 “<strong>发布和订阅</strong>”方式相互交谈。发布节点发送一条消息，配置为订阅的节点接收到消息后会进行处理。</p>
+<p>在下图中，最左边的灯开关（开关1）指令发布到Kitchen组地址，假设节点Light 1，Light 2和Light 3（灯的顺序从左往右）订阅了Kitchen地址，因此它们会接收处理并根据发布到该地址的消息（例如“ on”和“ off”命令）进行操作。Light 3也预订了饭厅地址，因此可以从Switch 2以及Switch 1进行操作。</p>
+<p><img src="6.png" alt=""></p>
+<h1 id="SUIG-MESH配入网流程"><a href="#SUIG-MESH配入网流程" class="headerlink" title="SUIG MESH配入网流程"></a>SUIG MESH配入网流程</h1><p>下图是一个完整的配网订阅的例子，该流程是蓝牙MESH配网注册设备的标准流程，灯泡首先向MESH网络发送信号，告知其正在寻找要加入的网络。配置节点会验证灯泡的信标，并邀请其加入网络。如果身份验证成功，则会为设备提供必要的密钥和地址，以加入网络并为配置做准备。接下来，为灯泡提供“家庭自动化”应用程序密钥。设置“ OnOff服务器”（控制灯泡）的发布状态，最后添加对“灯组”的订阅。</p>
+<p><img src="8.png" alt=""></p>
+<h1 id="SIG-MESH应用"><a href="#SIG-MESH应用" class="headerlink" title="SIG MESH应用"></a>SIG MESH应用</h1><p>对SIG认证的产品进行初略统计发现，BLE MESH的应用主要集中在智能家居和灯控场合，灯控占6成，智能家具设备占3成，还有一成属于原厂的芯片认证以及小众市场应用，BLE MESH无疑已经是Zigbee最大的竞争对手，后续慢慢分析。</p>
+<p><img src="13.png" alt=""></p>
 <p><img src="640.png" alt=""></p>
 
       
@@ -472,7 +425,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="http://www.iotbzw.com/2020/05/24/%E8%93%9D%E7%89%99%E5%8D%8F%E8%AE%AE%E6%A1%86%E6%9E%B6%E6%A2%B3%E7%90%86/" title="蓝牙协议框架梳理">http://www.iotbzw.com/2020/05/24/%E8%93%9D%E7%89%99%E5%8D%8F%E8%AE%AE%E6%A1%86%E6%9E%B6%E6%A2%B3%E7%90%86/</a>
+    <a href="http://www.iotbzw.com/title.html" title="SIG MESH 核心协议与技术框架">http://www.iotbzw.com/title.html</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>
@@ -487,13 +440,11 @@
       
         <div class="post-tags">
           
-            <a href="/tags/hci/" rel="tag"># hci</a>
+            <a href="/tags/MESH/" rel="tag"># MESH</a>
           
-            <a href="/tags/%E8%93%9D%E7%89%99%E6%A1%86%E6%9E%B6/" rel="tag"># 蓝牙框架</a>
+            <a href="/tags/MESH%E6%8A%80%E6%9C%AF/" rel="tag"># MESH技术</a>
           
-            <a href="/tags/acl/" rel="tag"># acl</a>
-          
-            <a href="/tags/%E8%93%9D%E7%89%99%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/" rel="tag"># 蓝牙基本概念</a>
+            <a href="/tags/MESH%E5%B8%82%E5%9C%BA/" rel="tag"># MESH市场</a>
           
         </div>
       
@@ -506,18 +457,14 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2020/05/17/CC2541%20SweynTooth%20BLE%E6%BC%8F%E6%B4%9E%E5%AE%9E%E6%B5%8B/" rel="next" title="CC2541 SweynTooth BLE漏洞实测">
-                <i class="fa fa-chevron-left"></i> CC2541 SweynTooth BLE漏洞实测
-              </a>
-            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2020/05/30/%E7%BB%86%E8%AF%B4%E8%93%9D%E7%89%995%E4%B8%89%E5%A4%A7%E6%96%B0%E7%89%B9%E6%80%A7/" rel="prev" title="细说蓝牙5三大新特性">
-                细说蓝牙5三大新特性 <i class="fa fa-chevron-right"></i>
+              <a href="/title.html" rel="prev" title="SweynTooth爆出最新低功耗蓝牙漏洞，多家知名蓝牙芯片榜上有名">
+                SweynTooth爆出最新低功耗蓝牙漏洞，多家知名蓝牙芯片榜上有名 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -667,7 +614,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#蓝牙基本概念"><span class="nav-text">蓝牙基本概念</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Piconet"><span class="nav-text">Piconet</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PHY-Mode"><span class="nav-text">PHY Mode</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#BT-clock"><span class="nav-text">BT clock</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Physical-Channel（信道）"><span class="nav-text">Physical Channel（信道）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#蓝牙核心框架"><span class="nav-text">蓝牙核心框架</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#核心架构"><span class="nav-text">核心架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#蓝牙协议架构"><span class="nav-text">蓝牙协议架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#蓝牙层级间的数据交互"><span class="nav-text">蓝牙层级间的数据交互</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-text">总结</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-text">参考资料</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SIG-MESH市场现状"><span class="nav-text">SIG MESH市场现状</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SIG-MESH网络的优势"><span class="nav-text">SIG MESH网络的优势</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SIG-MESH核心协议"><span class="nav-text">SIG MESH核心协议</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SIG-MESH架构"><span class="nav-text">SIG MESH架构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SIG-MESH网状节点"><span class="nav-text">SIG MESH网状节点</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SIG-MESH模型"><span class="nav-text">SIG MESH模型</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SUIG-MESH配入网流程"><span class="nav-text">SUIG MESH配入网流程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SIG-MESH应用"><span class="nav-text">SIG MESH应用</span></a></li></ol></div>
             
 
           </div>

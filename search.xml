@@ -2,7 +2,7 @@
 <search>
   <entry>
     <title>CC2541 SweynTooth BLE漏洞实测</title>
-    <url>/2020/05/17/CC2541%20SweynTooth%20BLE%E6%BC%8F%E6%B4%9E%E5%AE%9E%E6%B5%8B/</url>
+    <url>/title.html</url>
     <content><![CDATA[<p>SweynTooth hacker攻击蓝牙SoC时，人为设置错误的LL链路层CONNECT_REQ数据包回复给从机设备，导致从机设备蓝牙controller和host端处理异常。本文利用CC2541EVM，亲测蓝牙漏洞Invalid Connection Request (CVE-2019-19193)。<br><img src="1.jpeg" alt=""></p>
 <a id="more"></a>
 
@@ -56,7 +56,7 @@
   </entry>
   <entry>
     <title>SIG MESH 核心协议与技术框架</title>
-    <url>/2020/05/16/SIG%20MESH%20%E6%A0%B8%E5%BF%83%E5%8D%8F%E8%AE%AE%E4%B8%8E%E6%8A%80%E6%9C%AF%E6%A1%86%E6%9E%B6/</url>
+    <url>/title.html</url>
     <content><![CDATA[<p>终于开启了SIG MESH组网这个话题，本文作为MESH系列的第一篇，介绍Bluetooth mesh 1.0协议的体系结构和功能。</p>
 <a id="more"></a>
 
@@ -112,7 +112,7 @@
   </entry>
   <entry>
     <title>SweynTooth 蓝牙漏洞分析</title>
-    <url>/2020/05/16/SweynTooth%E8%93%9D%E7%89%99%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/</url>
+    <url>/title.html</url>
     <content><![CDATA[<p>近年由于SIG蓝牙安全机制的考虑不周（例如KNOB，BlueBorne 和Invalid ECC Attack），蓝牙连接一直在受到不同程度攻击。每个SoC BLE SDK理应先经过蓝牙认证，然后才能投放市场，但SweynTooth机构的发现表明，蓝牙认证过程并未认真对待，因为大部分漏洞，在测试阶段可以被发现。SweynTooth按照Core Specification规范测试蓝牙SoC芯片时，往往会在被测设备上收到出乎意料的响应，说明蓝牙芯片供应商并未严格遵循协议规范，而测试机构的测试并对此进行严格把关。<a id="more"></a>比如，Telink的设备多次响应版本请求，这违反了核心规范[13]的[Vol 6] B部分第5.1.5节，该部分定义了HOST设备在接收主机发送的HCI指令中应仅响应一次版本请求。同样，SweynTooth测试过的所有设备都可以接受“ hopIncrement”字段值小于5的连接请求，此举违反了[Vol 6] B部分第2.3.3.1节的规定，该部分规定该字段的有效范围在5-16。SweynTooth发现的所有漏洞都与[Vol 1] E部分的2.7节（对格式错误的响应）相关，该部分的说明其实已经提供了指令和一些示例来处理无效或格式错误的数据包。今天我们从技术角度一一分析上文所诉的漏洞。</p>
 <p><img src="0.png" alt=""></p>
 <h1 id="蓝牙连接流程"><a href="#蓝牙连接流程" class="headerlink" title="蓝牙连接流程"></a>蓝牙连接流程</h1><p>下图是一个完整的蓝牙扫描发现从机设备，连接从机设备，建立数据交互通道，分发密钥，建立安全连接，profile发现，以及数据交互过程，牢记这张图表的配对流程，下面针对漏洞一一展开。</p>
@@ -167,7 +167,7 @@
   </entry>
   <entry>
     <title>SweynTooth爆出最新低功耗蓝牙漏洞，多家知名蓝牙芯片榜上有名</title>
-    <url>/2020/05/16/SweynTooth%E7%88%86%E5%87%BA%E6%9C%80%E6%96%B0%E4%BD%8E%E5%8A%9F%E8%80%97%E8%93%9D%E7%89%99%E6%BC%8F%E6%B4%9E%EF%BC%8C%E5%A4%9A%E5%AE%B6%E7%9F%A5%E5%90%8D%E8%93%9D%E7%89%99%E8%8A%AF%E7%89%87%E6%A6%9C%E4%B8%8A%E6%9C%89%E5%90%8D/</url>
+    <url>/title.html</url>
     <content><![CDATA[<p>SWEYNTOOTH机构最近发布一篇报告，该报告指出，针对BLE SOC芯片的SDK进行测试发现，攻击者可以根据情况触发BLE SOC芯片协议栈死锁，崩溃，缓冲区溢出，或者完全绕过安全性。根据原厂的授权，截止到今天为止，TI，NXP，Cypress，Dialog，ST和Telink半导体已全部在列，但绝非所有SoC供应商列表都受SWEYNTOOTH影响，我们一起来看一下。</p>
 <a id="more"></a>
 
@@ -208,7 +208,7 @@
   </entry>
   <entry>
     <title>细说蓝牙5三大新特性</title>
-    <url>/2020/05/30/%E7%BB%86%E8%AF%B4%E8%93%9D%E7%89%995%E4%B8%89%E5%A4%A7%E6%96%B0%E7%89%B9%E6%80%A7/</url>
+    <url>/title.html</url>
     <content><![CDATA[<h1 id="蓝牙5特性一-2X-数据吞吐量"><a href="#蓝牙5特性一-2X-数据吞吐量" class="headerlink" title="蓝牙5特性一  2X 数据吞吐量"></a>蓝牙5特性一  2X 数据吞吐量</h1><p>Bluetooth LE 4.2来说，蓝牙5的速率可以提升一倍是因为PHY层可以支持2Mbps数据传输率。在蓝牙5之前，LE只支持1Mbps PHY的速率。在此强调一点，PHY的速率只为蓝牙往空中丢数据的速率，并不等同于点对点设备的主端蓝牙芯片的应用层传到从端蓝牙芯片应用层的数据吞吐量。</p>
 <a id="more"></a>
 <p><img src="5.png" alt=""></p>
@@ -301,7 +301,7 @@
   </entry>
   <entry>
     <title>蓝牙协议框架梳理</title>
-    <url>/2020/05/24/%E8%93%9D%E7%89%99%E5%8D%8F%E8%AE%AE%E6%A1%86%E6%9E%B6%E6%A2%B3%E7%90%86/</url>
+    <url>/title.html</url>
     <content><![CDATA[<h1 id="蓝牙基本概念"><a href="#蓝牙基本概念" class="headerlink" title="蓝牙基本概念"></a>蓝牙基本概念</h1><h2 id="Piconet"><a href="#Piconet" class="headerlink" title="Piconet"></a>Piconet</h2><p>在蓝牙设备没有跟其他蓝牙设备连线的时候，它自己属于一个piconet。当有连线后，piconet里有两种角色：master 和 slave。发起连线的一方是master，被连接的一方是slave。slave会以master的时钟为参照，以625us为时间单位，与master进行数据收发。每一个piconet里，一个master最多有7个slave。</p>
 <a id="more"></a>
 <p><img src="1.png" alt=""></p>
