@@ -111,6 +111,61 @@
       </tags>
   </entry>
   <entry>
+    <title>SweynTooth 蓝牙漏洞分析</title>
+    <url>/2020/05/16/SweynTooth%E8%93%9D%E7%89%99%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/</url>
+    <content><![CDATA[<p>近年由于SIG蓝牙安全机制的考虑不周（例如KNOB，BlueBorne 和Invalid ECC Attack），蓝牙连接一直在受到不同程度攻击。每个SoC BLE SDK理应先经过蓝牙认证，然后才能投放市场，但SweynTooth机构的发现表明，蓝牙认证过程并未认真对待，因为大部分漏洞，在测试阶段可以被发现。SweynTooth按照Core Specification规范测试蓝牙SoC芯片时，往往会在被测设备上收到出乎意料的响应，说明蓝牙芯片供应商并未严格遵循协议规范，而测试机构的测试并对此进行严格把关。<a id="more"></a>比如，Telink的设备多次响应版本请求，这违反了核心规范[13]的[Vol 6] B部分第5.1.5节，该部分定义了HOST设备在接收主机发送的HCI指令中应仅响应一次版本请求。同样，SweynTooth测试过的所有设备都可以接受“ hopIncrement”字段值小于5的连接请求，此举违反了[Vol 6] B部分第2.3.3.1节的规定，该部分规定该字段的有效范围在5-16。SweynTooth发现的所有漏洞都与[Vol 1] E部分的2.7节（对格式错误的响应）相关，该部分的说明其实已经提供了指令和一些示例来处理无效或格式错误的数据包。今天我们从技术角度一一分析上文所诉的漏洞。</p>
+<p><img src="0.png" alt=""></p>
+<h1 id="蓝牙连接流程"><a href="#蓝牙连接流程" class="headerlink" title="蓝牙连接流程"></a>蓝牙连接流程</h1><p>下图是一个完整的蓝牙扫描发现从机设备，连接从机设备，建立数据交互通道，分发密钥，建立安全连接，profile发现，以及数据交互过程，牢记这张图表的配对流程，下面针对漏洞一一展开。</p>
+<p><img src="1.png" alt=""></p>
+<h1 id="漏洞分析"><a href="#漏洞分析" class="headerlink" title="漏洞分析"></a>漏洞分析</h1><h2 id="Link-Layer-溢出攻击-CVE-2019-16336-CVE-2019-17519"><a href="#Link-Layer-溢出攻击-CVE-2019-16336-CVE-2019-17519" class="headerlink" title="Link Layer 溢出攻击 (CVE-2019-16336, CVE-2019-17519)**"></a>Link Layer 溢出攻击 (CVE-2019-16336, CVE-2019-17519)**</h2><p>赛普拉斯PSoC4 / 6 BLE芯片3.41 / 2.60（CVE-2019-16336）和NXP KW41Z 3.40 SDK（CVE-2019-17519）可根据LL链路层长度溢出漏洞进行攻击。这种漏洞使攻击者可以通过故意加长主机端发送的LL字段来触发从机设备缓冲区溢出。当主机LL数据包填充比其操作码规定的字节要多得多的字节，就会触发从机溢出。下图中显示了一个示例，蓝牙操作码 <strong>版本请求</strong>的长度仅为5个字节，但是当LL Length字段值增加扩展为247个字节，接收端LL 层BLE协议栈会在此类数据包时，会在内存中分配比预期更多的字节，这会导致不稳定，如果申请的缓冲空间未被释放，最终会导致从设备崩溃。</p>
+<p><strong>影响：</strong>此漏洞会导致拒绝服务（DoS）。攻击者可以对产品固件进行反向工程，以植入代码远程执行。BleedingBit漏洞就是最好的体现，该漏洞在19年被爆出，该漏洞允许通过操纵LL长度字段长度，可以在某些德州仪器蓝牙芯片（Texas Instruments）设备上进行远程代码执行。</p>
+<p><img src="2.png" alt=""></p>
+<h2 id="Link-Layer-LLID-死锁-CVE-2019-17061-CVE-2019-17060"><a href="#Link-Layer-LLID-死锁-CVE-2019-17061-CVE-2019-17060" class="headerlink" title="Link Layer LLID 死锁 (CVE-2019-17061, CVE-2019-17060)"></a>Link Layer LLID 死锁 (CVE-2019-17061, CVE-2019-17060)</h2><p>这个漏洞可能会使Cypress（CVE-2019-17061）和NXP设备处于死锁状态（CVE-2019-17060）。如果赛普拉斯PSoC4 / 6或NXP KW41Z设备接收到一个LLID字段被清除的数据包，那么两个设备都将进入故障状态。具体而言，此状态会阻止BLE协议栈的正常工作。该漏洞的详细信息如下图所示，事实证明，这种攻击使从机协议栈LL层处理机陷入混乱，从机接收到的任何数据包都得到正确的处理或被忽略。例如，恩智浦KW41Z外设可能会响应乱序的指令到主机设备。但是，该漏洞不会触发任何硬故障，这个问题可以通过产品固件上的看门狗定时器来防止。</p>
+<p><strong>影响：</strong>该问题不易被发现，并且只有在连接的过程中有可能暴露，他会使BLE产品的体验感受变差，要求用户手动对产品重启以重新建立BLE连接通信。</p>
+<p><img src="3.png" alt=""></p>
+<p>DA14580 SDK 5.0.4或更早版本的设备会存在Truncated L2CAP漏洞。该漏洞是由于在处理L2CAP数据包期间缺乏检查，如果数据包的总长度（即LL长度）的值小于有效载荷的L2CAP长度+ 4，则会将多余字节复制到底层接收缓冲区之外。下图显示了最大传输单元（MTU）的示例，MTU捕获一个长度请求，该请求的LL长度为7个字节，L2CAP长度为3个字节。如果从机设备收到LL长度为5个字节的恶意MTU长度请求，则L2CAP接收缓冲区将溢出两个字节（即L2CAP长度+ 4-LL长度）。因此，攻击者可以通过向外围设备发送正确的L2CAP有效数据和格式错误的超长LL数据的组合来有选择地选择要溢出的字节数。</p>
+<p><strong>影响：</strong>无线电范围内的攻击者可以使用此攻击执行拒绝服务DoS并使设备崩溃。攻击者可能会估计发送需要溢出的数据包，从机设备会将某些内容写入与L2CAP接收缓冲区相邻的RAM中。在最坏的情况下，此攻击可使用Dialog DA14580对执行远程指令代码。</p>
+<p><img src="4.png" alt=""></p>
+<h2 id="Silent-Length-Overflow-CVE-2019-17518"><a href="#Silent-Length-Overflow-CVE-2019-17518" class="headerlink" title="Silent Length Overflow (CVE-2019-17518)"></a>Silent Length Overflow (CVE-2019-17518)</h2><p>这种攻击类似于LL链路层长度溢出。在Dialog DA14680设备中，从设备对主机恶意操作码和过长数据包会有意外响应。虽然此主机行为不符合BLE Core规范，但当发送某个具有高于预期的LL长度的数据包时，从机设备会崩溃。这表明对于某些数据包类型（如配对请求），从机接收缓冲区发生了溢出。</p>
+<p><strong>影响：</strong>攻击者通常可以使用此攻击执行拒绝服务并使设备崩溃。假设根据数据包触发了缓冲区溢出，则有可能执行远程恶意代码。</p>
+<h2 id="Invalid-Connection-Request-CVE-2019-19193"><a href="#Invalid-Connection-Request-CVE-2019-19193" class="headerlink" title="Invalid Connection Request (CVE-2019-19193)"></a>Invalid Connection Request (CVE-2019-19193)</h2><p>当主机设备尝试连接到TI CC2640R2 BLE-STACK SDK（v3.30.00.20及更低版本）和CC2540 SDK（v1.5.0及更低版本）时，TI提供的协议栈无法正确处理某些非法连接参数。从机设备状态机将转移到空闲状态（即无广播）。如果产品代码中的闲置状态正确处理，则设备不会再回到广告阶段。</p>
+<p>在BLE连接的初始阶段，主机设备扫描从机设备的广播数据包，并发送一个连接请求数据包，其中包含诸如连接间隔和超时之类的相关参数。这两个参数分别控制从设备和主设备之间的数据包交换和超时。它们的值必须表示一个非零时间段（以毫秒为单位）。但是，如果主设备发送无效的连接请求，且其字段间隔或超时都为零时，从设备将停止通告。在接收到无效的连接请求期间，BLE协议栈将连接请求失败事件发送到应用程序代码（bleGAPConnNotAcceptable），并且在收到该失败状态后，SDK默认程序进入空闲状态，从而停止广播。</p>
+<p>我们发现TI SDK中没有充分考虑接收无效参数时的状态变化，这可能导致产品开发人员无法处理该空闲状态，错误处理此状态可能导致eGeeLock等产品停止广播，因此需要用户进行重启。</p>
+<p>CC2540还可以接受数据包长度小于预期长度（被截断）的连接请求，由于其数据小于预期长度，因此会自动补零，相当于<strong>Invalid Connection Request</strong> 。</p>
+<p><strong>影响：</strong>攻击者可以利用下图方法，使用SoC芯片轻松被DoS攻击。此外，如果终端产品商未有效检测此类错误，进行处理，则设备可能会进入死锁状态。反过来，受到这类攻击时需要用户手动重新启动设备。</p>
+<p><img src="5.png" alt=""></p>
+<h2 id="Unexpected-Public-Key-Crash-CVE-2019-17520"><a href="#Unexpected-Public-Key-Crash-CVE-2019-17520" class="headerlink" title="Unexpected Public Key Crash (CVE-2019-17520)"></a>Unexpected Public Key Crash (CVE-2019-17520)</h2><p>此漏洞是在Texas Instruments CC2640R2 BLE-STACK-SDK（v3.30.00.20和更早版本）上发现的。具体地说，该漏洞存在于旧版配对过程的实施中，该过程由安全管理器协议（SMP）实施处理。当从机执行旧式配对过程时，通过在SMP配对过程开始之前发送SMP公钥包，有可能在设备内存中造成硬故障（下图步骤9）。通常，如果在配对请求/响应交换中未启用安全连接，则从机设备应忽略公共密钥的接收。在与供应商的协调过程中，德州仪器（TI）通知我们，由于从机设备接受了公钥并将其复制到空目标地址，因此触发了硬故障。通常，如果在配对请求/响应过程中正确指示了安全连接，则此地址对应于有效分配的缓冲区。</p>
+<p><strong>影响：</strong>攻击者可以利用上述行为执行DoS，并可能使用CC2640R2 SoC用于主要应用程序重新启动。从好的方面来说，不可能在从机设备的内存中执行缓冲区溢出。这是因为意外的公钥始终被复制到空地址，这是攻击者无法控制的。但是此漏洞也可能导致死锁。我们对CubiTag蓝牙跟踪器的评估就证明了这一点，CubiTag产品无法正确处理该硬故障，进入来死锁状态。这要求用户手动重新启动它。</p>
+<p><img src="6.png" alt=""></p>
+<h2 id="Sequential-ATT-Deadlock-CVE-2019-19192"><a href="#Sequential-ATT-Deadlock-CVE-2019-19192" class="headerlink" title="Sequential ATT Deadlock (CVE-2019-19192)"></a>Sequential ATT Deadlock (CVE-2019-19192)</h2><p>在ST WB55系列 SDK V1.3.0及更早版本中，可以通过在每个连接事件中发送两个连续的ATT请求数据包使从设备死锁。通常，从主设备发送的每个ATT请求后都带有来自从设备的ATT响应（发生在连接间隔Δt的倍数时间内）。但是，恶意主设备有可能发送多个ATT请求，这些请求被连接间隔Δt分隔（下图）。这种情况下，从设备没有足够的时间响应第一个ATT请求。导致SoC片上协处理器处理异常，阻止了某些BLE事件标志被清除，该协处理器负责WB55内运行BLE SDK，导致WB55用户代码死锁。具体来说，错误代码可能会陷入while循环中，该循环等待永不结束的BLE事件。</p>
+<p><strong>影响：</strong>与其他多个漏洞类似，如果供应商未在产品固件中采用看门狗，则利用此漏洞可能会使产品处于死锁状态。</p>
+<p><img src="7.png" alt=""></p>
+<p>在主从设备通信过程中，蓝牙4.0-4.2核心规范规定，数据包的最小和最大PDU大小应在2-39范围内， 超出此边界的数据包将被丢弃，因为它们是无效的。但是，我们发现，运行 ATMSAMB11 BluSDK Smart v6.2和更低版本的设备并非如此。，根据下图所示，如果将长度为1的L2CAP PDU发送到从设备，则设备会崩溃。</p>
+<p><strong>影响：</strong>SDK中默认启用了看门狗机制，降低了死锁的风险。因此，此漏洞主要远程重新启动设备，影响设备的可用性。</p>
+<p><img src="8.png" alt=""></p>
+<h2 id="Key-Size-Overflow-CVE-2019-19196"><a href="#Key-Size-Overflow-CVE-2019-19196" class="headerlink" title="Key Size Overflow (CVE-2019-19196)"></a>Key Size Overflow (CVE-2019-19196)</h2><p>在所有Telink Semiconductor BLE SDK中都发现了密钥长度溢出漏洞，这会导致设备内存溢出，从而导致崩溃。该漏洞是在使用Telink SMP实现的设备配对过程中发现的多个问题的集合。</p>
+<p>在配对过程开始期间，中央设备会发送一个配对请求数据包，其中包含要在配对过程结束时协商最大允许的密钥大小。密钥的最大大小被标准化为7到16个字节，并且任何与它的偏差的长度都应在配对中予以拒绝。但是，Telink外设实际上是通过使用配对响应应答主设备来接受最大为255的加密密钥。尽管存在第一个问题，但从设备在随后的配对过程的交换密钥期间拒绝配对，而没有异常行为。触发该漏洞的原因之二是由于从设备接受LL加密过程而在配对过程开始之前发生的（尽管在稍后阶段失败了）。通过结合上述两个问题，有可能迫使从设备分配在配对请求期间分配出超大密钥缓冲区长度。如下图所示，主设备发送无效的配对请求，等待配对响应并发送加密请求。该请求被接受，并且从机设备的固件尝试分配超大密钥时，内存会发生溢出。</p>
+<p><strong>影响：</strong>利用此漏洞，攻击者可以启用配对支持来执行缓冲区溢出并使Telink SoC产品崩溃，这是某些BLE产品的常见做法。最坏的情况下，该攻击可能会覆盖存储加密随机数的缓冲区，从而使攻击者可以绕过加密并泄漏用户信息。</p>
+<p><img src="9.png" alt=""></p>
+<h2 id="Zero-LTK-Installation"><a href="#Zero-LTK-Installation" class="headerlink" title="Zero LTK Installation"></a>Zero LTK Installation</h2><p>此严重安全漏洞是密钥长度溢出的变体，它会影响使用Telink 所有的产品。当Telink从机设备接受来自主机端乱序加密请求时，使用LTK = 0（长期密钥）的就可以绕开加密过程。LTK大小通常为16个字节，是在配对请求/响应交换期间达成的，流氓主机发送带有安全连接配对指示的配对请求，并等待配对响应。接下来，主机跳过安全配对过程，直接发送加密请求，开始加密过程。</p>
+<p>由于从机设备缺乏验证，因此主机从从机设备接收加密开始指令，然后将加密的加密响应发送回去，从机设备将根据会话密钥SK对其进行验证，该会话密钥SK是从有效LTK派生的。问题出现了，从机的LTK初始化为零，这就意味着主机可以轻松派生出SK，以将正确的加密的加密响应发送给从机设备，从而完成加密过程。SK（在蓝牙核心规范中被隐藏为sessionKey ）是由下述加密函数生成的。</p>
+<p><em>SK</em> = <em>AES**ECB</em> ( <em>Key</em> = LTK, <em>Plaintext</em> = SKD )</p>
+<p>Session Key Diversifier（SKD）是一个随机的16字节数字，通过加密请求/响应交换获得。因此，主机拥有正确的LTK即可发送带有有效SK的加密响应。</p>
+<p><strong>影响：</strong>攻击者可以利用此漏洞完全绕过BLE产品的安全性，而BLE产品依赖安全连接配对来保护用户隐私。简而言之，此漏洞使攻击者可以对受保护的BLE应用程序进行完全的通信控制。</p>
+<p><img src="10.png" alt=""></p>
+<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>下一篇文章我们利用python实测漏洞</p>
+<p><img src="640.png" alt=""></p>
+]]></content>
+      <categories>
+        <category>蓝牙协议</category>
+      </categories>
+      <tags>
+        <tag>SweynTooth</tag>
+        <tag>蓝牙漏洞</tag>
+        <tag>ble</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>SweynTooth爆出最新低功耗蓝牙漏洞，多家知名蓝牙芯片榜上有名</title>
     <url>/2020/05/16/SweynTooth%E7%88%86%E5%87%BA%E6%9C%80%E6%96%B0%E4%BD%8E%E5%8A%9F%E8%80%97%E8%93%9D%E7%89%99%E6%BC%8F%E6%B4%9E%EF%BC%8C%E5%A4%9A%E5%AE%B6%E7%9F%A5%E5%90%8D%E8%93%9D%E7%89%99%E8%8A%AF%E7%89%87%E6%A6%9C%E4%B8%8A%E6%9C%89%E5%90%8D/</url>
     <content><![CDATA[<p>SWEYNTOOTH机构最近发布一篇报告，该报告指出，针对BLE SOC芯片的SDK进行测试发现，攻击者可以根据情况触发BLE SOC芯片协议栈死锁，崩溃，缓冲区溢出，或者完全绕过安全性。根据原厂的授权，截止到今天为止，TI，NXP，Cypress，Dialog，ST和Telink半导体已全部在列，但绝非所有SoC供应商列表都受SWEYNTOOTH影响，我们一起来看一下。</p>
@@ -242,61 +297,6 @@
         <tag>远距离</tag>
         <tag>大广播</tag>
         <tag>2M PHY</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>SweynTooth 蓝牙漏洞分析</title>
-    <url>/2020/05/16/SweynTooth%E8%93%9D%E7%89%99%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/</url>
-    <content><![CDATA[<p>近年由于SIG蓝牙安全机制的考虑不周（例如KNOB，BlueBorne 和Invalid ECC Attack），蓝牙连接一直在受到不同程度攻击。每个SoC BLE SDK理应先经过蓝牙认证，然后才能投放市场，但SweynTooth机构的发现表明，蓝牙认证过程并未认真对待，因为大部分漏洞，在测试阶段可以被发现。SweynTooth按照Core Specification规范测试蓝牙SoC芯片时，往往会在被测设备上收到出乎意料的响应，说明蓝牙芯片供应商并未严格遵循协议规范，而测试机构的测试并对此进行严格把关。<a id="more"></a>比如，Telink的设备多次响应版本请求，这违反了核心规范[13]的[Vol 6] B部分第5.1.5节，该部分定义了HOST设备在接收主机发送的HCI指令中应仅响应一次版本请求。同样，SweynTooth测试过的所有设备都可以接受“ hopIncrement”字段值小于5的连接请求，此举违反了[Vol 6] B部分第2.3.3.1节的规定，该部分规定该字段的有效范围在5-16。SweynTooth发现的所有漏洞都与[Vol 1] E部分的2.7节（对格式错误的响应）相关，该部分的说明其实已经提供了指令和一些示例来处理无效或格式错误的数据包。今天我们从技术角度一一分析上文所诉的漏洞。</p>
-<p><img src="0.png" alt=""></p>
-<h1 id="蓝牙连接流程"><a href="#蓝牙连接流程" class="headerlink" title="蓝牙连接流程"></a>蓝牙连接流程</h1><p>下图是一个完整的蓝牙扫描发现从机设备，连接从机设备，建立数据交互通道，分发密钥，建立安全连接，profile发现，以及数据交互过程，牢记这张图表的配对流程，下面针对漏洞一一展开。</p>
-<p><img src="1.png" alt=""></p>
-<h1 id="漏洞分析"><a href="#漏洞分析" class="headerlink" title="漏洞分析"></a>漏洞分析</h1><h2 id="Link-Layer-溢出攻击-CVE-2019-16336-CVE-2019-17519"><a href="#Link-Layer-溢出攻击-CVE-2019-16336-CVE-2019-17519" class="headerlink" title="Link Layer 溢出攻击 (CVE-2019-16336, CVE-2019-17519)**"></a>Link Layer 溢出攻击 (CVE-2019-16336, CVE-2019-17519)**</h2><p>赛普拉斯PSoC4 / 6 BLE芯片3.41 / 2.60（CVE-2019-16336）和NXP KW41Z 3.40 SDK（CVE-2019-17519）可根据LL链路层长度溢出漏洞进行攻击。这种漏洞使攻击者可以通过故意加长主机端发送的LL字段来触发从机设备缓冲区溢出。当主机LL数据包填充比其操作码规定的字节要多得多的字节，就会触发从机溢出。下图中显示了一个示例，蓝牙操作码 <strong>版本请求</strong>的长度仅为5个字节，但是当LL Length字段值增加扩展为247个字节，接收端LL 层BLE协议栈会在此类数据包时，会在内存中分配比预期更多的字节，这会导致不稳定，如果申请的缓冲空间未被释放，最终会导致从设备崩溃。</p>
-<p><strong>影响：</strong>此漏洞会导致拒绝服务（DoS）。攻击者可以对产品固件进行反向工程，以植入代码远程执行。BleedingBit漏洞就是最好的体现，该漏洞在19年被爆出，该漏洞允许通过操纵LL长度字段长度，可以在某些德州仪器蓝牙芯片（Texas Instruments）设备上进行远程代码执行。</p>
-<p><img src="2.png" alt=""></p>
-<h2 id="Link-Layer-LLID-死锁-CVE-2019-17061-CVE-2019-17060"><a href="#Link-Layer-LLID-死锁-CVE-2019-17061-CVE-2019-17060" class="headerlink" title="Link Layer LLID 死锁 (CVE-2019-17061, CVE-2019-17060)"></a>Link Layer LLID 死锁 (CVE-2019-17061, CVE-2019-17060)</h2><p>这个漏洞可能会使Cypress（CVE-2019-17061）和NXP设备处于死锁状态（CVE-2019-17060）。如果赛普拉斯PSoC4 / 6或NXP KW41Z设备接收到一个LLID字段被清除的数据包，那么两个设备都将进入故障状态。具体而言，此状态会阻止BLE协议栈的正常工作。该漏洞的详细信息如下图所示，事实证明，这种攻击使从机协议栈LL层处理机陷入混乱，从机接收到的任何数据包都得到正确的处理或被忽略。例如，恩智浦KW41Z外设可能会响应乱序的指令到主机设备。但是，该漏洞不会触发任何硬故障，这个问题可以通过产品固件上的看门狗定时器来防止。</p>
-<p><strong>影响：</strong>该问题不易被发现，并且只有在连接的过程中有可能暴露，他会使BLE产品的体验感受变差，要求用户手动对产品重启以重新建立BLE连接通信。</p>
-<p><img src="3.png" alt=""></p>
-<p>DA14580 SDK 5.0.4或更早版本的设备会存在Truncated L2CAP漏洞。该漏洞是由于在处理L2CAP数据包期间缺乏检查，如果数据包的总长度（即LL长度）的值小于有效载荷的L2CAP长度+ 4，则会将多余字节复制到底层接收缓冲区之外。下图显示了最大传输单元（MTU）的示例，MTU捕获一个长度请求，该请求的LL长度为7个字节，L2CAP长度为3个字节。如果从机设备收到LL长度为5个字节的恶意MTU长度请求，则L2CAP接收缓冲区将溢出两个字节（即L2CAP长度+ 4-LL长度）。因此，攻击者可以通过向外围设备发送正确的L2CAP有效数据和格式错误的超长LL数据的组合来有选择地选择要溢出的字节数。</p>
-<p><strong>影响：</strong>无线电范围内的攻击者可以使用此攻击执行拒绝服务DoS并使设备崩溃。攻击者可能会估计发送需要溢出的数据包，从机设备会将某些内容写入与L2CAP接收缓冲区相邻的RAM中。在最坏的情况下，此攻击可使用Dialog DA14580对执行远程指令代码。</p>
-<p><img src="4.png" alt=""></p>
-<h2 id="Silent-Length-Overflow-CVE-2019-17518"><a href="#Silent-Length-Overflow-CVE-2019-17518" class="headerlink" title="Silent Length Overflow (CVE-2019-17518)"></a>Silent Length Overflow (CVE-2019-17518)</h2><p>这种攻击类似于LL链路层长度溢出。在Dialog DA14680设备中，从设备对主机恶意操作码和过长数据包会有意外响应。虽然此主机行为不符合BLE Core规范，但当发送某个具有高于预期的LL长度的数据包时，从机设备会崩溃。这表明对于某些数据包类型（如配对请求），从机接收缓冲区发生了溢出。</p>
-<p><strong>影响：</strong>攻击者通常可以使用此攻击执行拒绝服务并使设备崩溃。假设根据数据包触发了缓冲区溢出，则有可能执行远程恶意代码。</p>
-<h2 id="Invalid-Connection-Request-CVE-2019-19193"><a href="#Invalid-Connection-Request-CVE-2019-19193" class="headerlink" title="Invalid Connection Request (CVE-2019-19193)"></a>Invalid Connection Request (CVE-2019-19193)</h2><p>当主机设备尝试连接到TI CC2640R2 BLE-STACK SDK（v3.30.00.20及更低版本）和CC2540 SDK（v1.5.0及更低版本）时，TI提供的协议栈无法正确处理某些非法连接参数。从机设备状态机将转移到空闲状态（即无广播）。如果产品代码中的闲置状态正确处理，则设备不会再回到广告阶段。</p>
-<p>在BLE连接的初始阶段，主机设备扫描从机设备的广播数据包，并发送一个连接请求数据包，其中包含诸如连接间隔和超时之类的相关参数。这两个参数分别控制从设备和主设备之间的数据包交换和超时。它们的值必须表示一个非零时间段（以毫秒为单位）。但是，如果主设备发送无效的连接请求，且其字段间隔或超时都为零时，从设备将停止通告。在接收到无效的连接请求期间，BLE协议栈将连接请求失败事件发送到应用程序代码（bleGAPConnNotAcceptable），并且在收到该失败状态后，SDK默认程序进入空闲状态，从而停止广播。</p>
-<p>我们发现TI SDK中没有充分考虑接收无效参数时的状态变化，这可能导致产品开发人员无法处理该空闲状态，错误处理此状态可能导致eGeeLock等产品停止广播，因此需要用户进行重启。</p>
-<p>CC2540还可以接受数据包长度小于预期长度（被截断）的连接请求，由于其数据小于预期长度，因此会自动补零，相当于<strong>Invalid Connection Request</strong> 。</p>
-<p><strong>影响：</strong>攻击者可以利用下图方法，使用SoC芯片轻松被DoS攻击。此外，如果终端产品商未有效检测此类错误，进行处理，则设备可能会进入死锁状态。反过来，受到这类攻击时需要用户手动重新启动设备。</p>
-<p><img src="5.png" alt=""></p>
-<h2 id="Unexpected-Public-Key-Crash-CVE-2019-17520"><a href="#Unexpected-Public-Key-Crash-CVE-2019-17520" class="headerlink" title="Unexpected Public Key Crash (CVE-2019-17520)"></a>Unexpected Public Key Crash (CVE-2019-17520)</h2><p>此漏洞是在Texas Instruments CC2640R2 BLE-STACK-SDK（v3.30.00.20和更早版本）上发现的。具体地说，该漏洞存在于旧版配对过程的实施中，该过程由安全管理器协议（SMP）实施处理。当从机执行旧式配对过程时，通过在SMP配对过程开始之前发送SMP公钥包，有可能在设备内存中造成硬故障（下图步骤9）。通常，如果在配对请求/响应交换中未启用安全连接，则从机设备应忽略公共密钥的接收。在与供应商的协调过程中，德州仪器（TI）通知我们，由于从机设备接受了公钥并将其复制到空目标地址，因此触发了硬故障。通常，如果在配对请求/响应过程中正确指示了安全连接，则此地址对应于有效分配的缓冲区。</p>
-<p><strong>影响：</strong>攻击者可以利用上述行为执行DoS，并可能使用CC2640R2 SoC用于主要应用程序重新启动。从好的方面来说，不可能在从机设备的内存中执行缓冲区溢出。这是因为意外的公钥始终被复制到空地址，这是攻击者无法控制的。但是此漏洞也可能导致死锁。我们对CubiTag蓝牙跟踪器的评估就证明了这一点，CubiTag产品无法正确处理该硬故障，进入来死锁状态。这要求用户手动重新启动它。</p>
-<p><img src="6.png" alt=""></p>
-<h2 id="Sequential-ATT-Deadlock-CVE-2019-19192"><a href="#Sequential-ATT-Deadlock-CVE-2019-19192" class="headerlink" title="Sequential ATT Deadlock (CVE-2019-19192)"></a>Sequential ATT Deadlock (CVE-2019-19192)</h2><p>在ST WB55系列 SDK V1.3.0及更早版本中，可以通过在每个连接事件中发送两个连续的ATT请求数据包使从设备死锁。通常，从主设备发送的每个ATT请求后都带有来自从设备的ATT响应（发生在连接间隔Δt的倍数时间内）。但是，恶意主设备有可能发送多个ATT请求，这些请求被连接间隔Δt分隔（下图）。这种情况下，从设备没有足够的时间响应第一个ATT请求。导致SoC片上协处理器处理异常，阻止了某些BLE事件标志被清除，该协处理器负责WB55内运行BLE SDK，导致WB55用户代码死锁。具体来说，错误代码可能会陷入while循环中，该循环等待永不结束的BLE事件。</p>
-<p><strong>影响：</strong>与其他多个漏洞类似，如果供应商未在产品固件中采用看门狗，则利用此漏洞可能会使产品处于死锁状态。</p>
-<p><img src="7.png" alt=""></p>
-<p>在主从设备通信过程中，蓝牙4.0-4.2核心规范规定，数据包的最小和最大PDU大小应在2-39范围内， 超出此边界的数据包将被丢弃，因为它们是无效的。但是，我们发现，运行 ATMSAMB11 BluSDK Smart v6.2和更低版本的设备并非如此。，根据下图所示，如果将长度为1的L2CAP PDU发送到从设备，则设备会崩溃。</p>
-<p><strong>影响：</strong>SDK中默认启用了看门狗机制，降低了死锁的风险。因此，此漏洞主要远程重新启动设备，影响设备的可用性。</p>
-<p><img src="8.png" alt=""></p>
-<h2 id="Key-Size-Overflow-CVE-2019-19196"><a href="#Key-Size-Overflow-CVE-2019-19196" class="headerlink" title="Key Size Overflow (CVE-2019-19196)"></a>Key Size Overflow (CVE-2019-19196)</h2><p>在所有Telink Semiconductor BLE SDK中都发现了密钥长度溢出漏洞，这会导致设备内存溢出，从而导致崩溃。该漏洞是在使用Telink SMP实现的设备配对过程中发现的多个问题的集合。</p>
-<p>在配对过程开始期间，中央设备会发送一个配对请求数据包，其中包含要在配对过程结束时协商最大允许的密钥大小。密钥的最大大小被标准化为7到16个字节，并且任何与它的偏差的长度都应在配对中予以拒绝。但是，Telink外设实际上是通过使用配对响应应答主设备来接受最大为255的加密密钥。尽管存在第一个问题，但从设备在随后的配对过程的交换密钥期间拒绝配对，而没有异常行为。触发该漏洞的原因之二是由于从设备接受LL加密过程而在配对过程开始之前发生的（尽管在稍后阶段失败了）。通过结合上述两个问题，有可能迫使从设备分配在配对请求期间分配出超大密钥缓冲区长度。如下图所示，主设备发送无效的配对请求，等待配对响应并发送加密请求。该请求被接受，并且从机设备的固件尝试分配超大密钥时，内存会发生溢出。</p>
-<p><strong>影响：</strong>利用此漏洞，攻击者可以启用配对支持来执行缓冲区溢出并使Telink SoC产品崩溃，这是某些BLE产品的常见做法。最坏的情况下，该攻击可能会覆盖存储加密随机数的缓冲区，从而使攻击者可以绕过加密并泄漏用户信息。</p>
-<p><img src="9.png" alt=""></p>
-<h2 id="Zero-LTK-Installation"><a href="#Zero-LTK-Installation" class="headerlink" title="Zero LTK Installation"></a>Zero LTK Installation</h2><p>此严重安全漏洞是密钥长度溢出的变体，它会影响使用Telink 所有的产品。当Telink从机设备接受来自主机端乱序加密请求时，使用LTK = 0（长期密钥）的就可以绕开加密过程。LTK大小通常为16个字节，是在配对请求/响应交换期间达成的，流氓主机发送带有安全连接配对指示的配对请求，并等待配对响应。接下来，主机跳过安全配对过程，直接发送加密请求，开始加密过程。</p>
-<p>由于从机设备缺乏验证，因此主机从从机设备接收加密开始指令，然后将加密的加密响应发送回去，从机设备将根据会话密钥SK对其进行验证，该会话密钥SK是从有效LTK派生的。问题出现了，从机的LTK初始化为零，这就意味着主机可以轻松派生出SK，以将正确的加密的加密响应发送给从机设备，从而完成加密过程。SK（在蓝牙核心规范中被隐藏为sessionKey ）是由下述加密函数生成的。</p>
-<p><em>SK</em> = <em>AES**ECB</em> ( <em>Key</em> = LTK, <em>Plaintext</em> = SKD )</p>
-<p>Session Key Diversifier（SKD）是一个随机的16字节数字，通过加密请求/响应交换获得。因此，主机拥有正确的LTK即可发送带有有效SK的加密响应。</p>
-<p><strong>影响：</strong>攻击者可以利用此漏洞完全绕过BLE产品的安全性，而BLE产品依赖安全连接配对来保护用户隐私。简而言之，此漏洞使攻击者可以对受保护的BLE应用程序进行完全的通信控制。</p>
-<p><img src="10.png" alt=""></p>
-<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>下一篇文章我们利用python实测漏洞</p>
-<p><img src="640.png" alt=""></p>
-]]></content>
-      <categories>
-        <category>蓝牙协议</category>
-      </categories>
-      <tags>
-        <tag>SweynTooth</tag>
-        <tag>蓝牙漏洞</tag>
-        <tag>ble</tag>
       </tags>
   </entry>
   <entry>
