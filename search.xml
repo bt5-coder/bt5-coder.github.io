@@ -257,69 +257,6 @@
       </tags>
   </entry>
   <entry>
-    <title>蓝牙Controller框架梳理</title>
-    <url>/2020/08/11/%E8%93%9D%E7%89%99Controller%E6%A1%86%E6%9E%B6%E6%A2%B3%E7%90%86/</url>
-    <content><![CDATA[<h1 id="BLE-Controller基本概念"><a href="#BLE-Controller基本概念" class="headerlink" title="BLE Controller基本概念"></a>BLE Controller基本概念</h1><h2 id="Controller构成"><a href="#Controller构成" class="headerlink" title="Controller构成"></a>Controller构成</h2><p>蓝牙协议分host和controller两个部分，Host是正真意义的蓝牙协议，Controller为蓝牙底层，或者说是基带芯片。基带芯片又可以分为三个部分，Radio，Link Layer和HCI。</p>
-<a id="more"></a>
-
-<p><img src="1.png" alt=""></p>
-<h2 id="Radio"><a href="#Radio" class="headerlink" title="Radio"></a>Radio</h2><p>Radio可以理解为一个独立的协处理器，负责调制解调2.4G裸数据，完整的Radio功能应该包括，数据组包拆包，CRC校验，白话，调制解调等功能。</p>
-<p><img src="2.png" alt=""></p>
-<p>根据Controller的设计需要，Radio协处理器被设计为一个小型状态机，下图为Nordic 52810 Radio内核状态机状态，该状态机分为9种状态，Radio会输出下图9种状态给SOC芯片，SOC芯片根据相应状态机状态，进行处理，协处理器和SOC之间共用数据总线。</p>
-<p><img src="3.png" alt=""></p>
-<p><img src="4.png" alt=""></p>
-<h2 id="Link-layer架构"><a href="#Link-layer架构" class="headerlink" title="Link layer架构"></a>Link layer架构</h2><p>Link Layer决定蓝牙所处的状态，蓝牙可以分为idel（standby），adv，scan，init以及connection状态，connection又可分为master或者slave。状态之间可以相互转换。</p>
-<p><img src="5.png" alt=""></p>
-<p>Link Layer允许多种状态同时并存，一个piconet可以支持多种状态，即Combination States。Combination States并不是任意若干种状态的结合，其中有限制存在，比如一个piconet不可能同时支持master和slave状态，比如两个scan不能同时存在，下图多多状态的二维组合分布图。</p>
-<p><img src="6.png" alt=""></p>
-<h2 id="HCI架构"><a href="#HCI架构" class="headerlink" title="HCI架构"></a>HCI架构</h2><p>蓝牙和蓝牙WIFI二合一芯片HOST和Controller早期都是两类芯片厂家分开提供，两颗芯片交互需要采用统一标准，HCI层由此而来。Host蓝牙协议只需要按照蓝牙联盟规范的HCI指令即可控制蓝牙controller。</p>
-<p><img src="7.png" alt=""></p>
-<h1 id="Controller宏观认知"><a href="#Controller宏观认知" class="headerlink" title="Controller宏观认知"></a>Controller宏观认知</h1><h2 id="ADV广播"><a href="#ADV广播" class="headerlink" title="ADV广播"></a>ADV广播</h2><p><img src="8.png" alt=""></p>
-<h2 id="SCAN扫描"><a href="#SCAN扫描" class="headerlink" title="SCAN扫描"></a>SCAN扫描</h2><p><img src="9.png" alt=""></p>
-<h2 id="INIT初始化"><a href="#INIT初始化" class="headerlink" title="INIT初始化"></a>INIT初始化</h2><p><img src="10.png" alt=""></p>
-<h2 id="Connection连接"><a href="#Connection连接" class="headerlink" title="Connection连接"></a>Connection连接</h2><p><img src="11.png" alt=""></p>
-<h1 id="Controller核心框架"><a href="#Controller核心框架" class="headerlink" title="Controller核心框架"></a>Controller核心框架</h1><h2 id="核心架构"><a href="#核心架构" class="headerlink" title="核心架构"></a>核心架构</h2><p>Link Layer和芯片Radio设计相关度较大，根据与PYH（radio）传输接口的不一样，可以分为：</p>
-<ul>
-<li><p>Radio负责packet，即硬件只提供收或者发一个包的接口。</p>
-</li>
-<li><p>Radio负责frame，即硬件提供包含一个IFS的一组收发的接口。</p>
-</li>
-<li><p>Radio硬件负责event，即硬件提供控制整个event内，若干组收发的接口（CEVA BLE IP的实现采用的就是这种）。</p>
-</li>
-</ul>
-<p>三种方案数字设计的复杂度是递增的，灵活性是递减的，对CPU的处理能力需求是递减的。</p>
-<h2 id="LL调度机制-Radio负责packet"><a href="#LL调度机制-Radio负责packet" class="headerlink" title="LL调度机制-Radio负责packet"></a>LL调度机制-Radio负责packet</h2><p>以Radio负责packet的方案介绍LL的整体设计思路：</p>
-<p>根据Radio状态机的9种状态，设计Link Layer中的adv，scan，init，master，slave 事件，事件之间的存在如下相互转换关系：</p>
-<p><img src="12.png" alt=""></p>
-<p>每个事件结束后，调用任务调度机，决定ll下一个状态，下一个ll状态可能是当前状态的延续，可能是新的状态，也可能是当前状态和新的状态的Combination，所以ll调度机不光决定一个状态，还需要考虑多状态能否共存，Scheduler确定是否能执行下一个状态后，启动该任务，执行该任务。</p>
-<p>谈到状态共存，adv，scan，init必须给connection事件让步，在这个时间内，哪些事可以提前做，哪些事需要推迟做，这是Scheduler需要考虑的。</p>
-<p><img src="13.png" alt=""></p>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>LL事件，Scheduler任务调度，HCI组包解包是构成Radio的三大模块， 弄清楚整个控制框架，配合时间戳要求，才能把controller玩转起来，controller时间戳同步也是一个非常头疼的话题，特别是搅合在任务调度一起，到此了。</p>
-<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><h2 id="master-slave共存"><a href="#master-slave共存" class="headerlink" title="master/slave共存"></a>master/slave共存</h2><p>一个controller可以支持多个ll状态机，一个ll状态机的状态不允许master&amp;slave同时存在(上文已经说明)，但可以通过分别开启两个ll状态机（piconet的概念由来），一个在master状态，一个在slave状态，这样从使用者的角度上看，就是master和slave共存。</p>
-<h2 id="BT5-2-新状态"><a href="#BT5-2-新状态" class="headerlink" title="BT5.2 新状态"></a>BT5.2 新状态</h2><p>BT 5.2增加了两个新状态，一个isochronous broadcasting 一个synchronization。</p>
-<p><img src="14.png" alt=""></p>
-<p><strong>参考资料</strong></p>
-<ul>
-<li><p>Ble_101_frontline</p>
-</li>
-<li><p>Nordic52810 spec</p>
-</li>
-<li><p>蓝牙5.0 spec</p>
-</li>
-</ul>
-<p><img src="640.png" alt=""></p>
-]]></content>
-      <categories>
-        <category>蓝牙协议</category>
-      </categories>
-      <tags>
-        <tag>蓝牙 controller</tag>
-        <tag>ll 状态机</tag>
-        <tag>蓝牙 radio</tag>
-        <tag>蓝牙 phy</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>CC2541 SweynTooth BLE漏洞实测</title>
     <url>/2020/05/17/CC2541%20SweynTooth%20BLE%E6%BC%8F%E6%B4%9E%E5%AE%9E%E6%B5%8B/</url>
     <content><![CDATA[<p>SweynTooth hacker攻击蓝牙SoC时，人为设置错误的LL链路层CONNECT_REQ数据包回复给从机设备，导致从机设备蓝牙controller和host端处理异常。本文利用CC2541EVM，亲测蓝牙漏洞Invalid Connection Request (CVE-2019-19193)。<br><img src="1.jpeg" alt=""></p>
@@ -464,6 +401,69 @@
         <tag>远距离</tag>
         <tag>大广播</tag>
         <tag>2M PHY</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>BLE Controller框架梳理</title>
+    <url>/2020/08/11/Controller%E6%A1%86%E6%9E%B6%E6%A2%B3%E7%90%86/</url>
+    <content><![CDATA[<h1 id="BLE-Controller基本概念"><a href="#BLE-Controller基本概念" class="headerlink" title="BLE Controller基本概念"></a>BLE Controller基本概念</h1><h2 id="Controller构成"><a href="#Controller构成" class="headerlink" title="Controller构成"></a>Controller构成</h2><p>蓝牙协议分host和controller两个部分，Host是正真意义的蓝牙协议，Controller为蓝牙底层，或者说是基带芯片。基带芯片又可以分为三个部分，Radio，Link Layer和HCI。</p>
+<a id="more"></a>
+
+<p><img src="1.png" alt=""></p>
+<h2 id="Radio"><a href="#Radio" class="headerlink" title="Radio"></a>Radio</h2><p>Radio可以理解为一个独立的协处理器，负责调制解调2.4G裸数据，完整的Radio功能应该包括，数据组包拆包，CRC校验，白话，调制解调等功能。</p>
+<p><img src="2.png" alt=""></p>
+<p>根据Controller的设计需要，Radio协处理器被设计为一个小型状态机，下图为Nordic 52810 Radio内核状态机状态，该状态机分为9种状态，Radio会输出下图9种状态给SOC芯片，SOC芯片根据相应状态机状态，进行处理，协处理器和SOC之间共用数据总线。</p>
+<p><img src="3.png" alt=""></p>
+<p><img src="4.png" alt=""></p>
+<h2 id="Link-layer架构"><a href="#Link-layer架构" class="headerlink" title="Link layer架构"></a>Link layer架构</h2><p>Link Layer决定蓝牙所处的状态，蓝牙可以分为idel（standby），adv，scan，init以及connection状态，connection又可分为master或者slave。状态之间可以相互转换。</p>
+<p><img src="5.png" alt=""></p>
+<p>Link Layer允许多种状态同时并存，一个piconet可以支持多种状态，即Combination States。Combination States并不是任意若干种状态的结合，其中有限制存在，比如一个piconet不可能同时支持master和slave状态，比如两个scan不能同时存在，下图多多状态的二维组合分布图。</p>
+<p><img src="6.png" alt=""></p>
+<h2 id="HCI架构"><a href="#HCI架构" class="headerlink" title="HCI架构"></a>HCI架构</h2><p>蓝牙和蓝牙WIFI二合一芯片HOST和Controller早期都是两类芯片厂家分开提供，两颗芯片交互需要采用统一标准，HCI层由此而来。Host蓝牙协议只需要按照蓝牙联盟规范的HCI指令即可控制蓝牙controller。</p>
+<p><img src="7.png" alt=""></p>
+<h1 id="Controller宏观认知"><a href="#Controller宏观认知" class="headerlink" title="Controller宏观认知"></a>Controller宏观认知</h1><h2 id="ADV广播"><a href="#ADV广播" class="headerlink" title="ADV广播"></a>ADV广播</h2><p><img src="8.png" alt=""></p>
+<h2 id="SCAN扫描"><a href="#SCAN扫描" class="headerlink" title="SCAN扫描"></a>SCAN扫描</h2><p><img src="9.png" alt=""></p>
+<h2 id="INIT初始化"><a href="#INIT初始化" class="headerlink" title="INIT初始化"></a>INIT初始化</h2><p><img src="10.png" alt=""></p>
+<h2 id="Connection连接"><a href="#Connection连接" class="headerlink" title="Connection连接"></a>Connection连接</h2><p><img src="11.png" alt=""></p>
+<h1 id="Controller核心框架"><a href="#Controller核心框架" class="headerlink" title="Controller核心框架"></a>Controller核心框架</h1><h2 id="核心架构"><a href="#核心架构" class="headerlink" title="核心架构"></a>核心架构</h2><p>Link Layer和芯片Radio设计相关度较大，根据与PYH（radio）传输接口的不一样，可以分为：</p>
+<ul>
+<li><p>Radio负责packet，即硬件只提供收或者发一个包的接口。</p>
+</li>
+<li><p>Radio负责frame，即硬件提供包含一个IFS的一组收发的接口。</p>
+</li>
+<li><p>Radio硬件负责event，即硬件提供控制整个event内，若干组收发的接口（CEVA BLE IP的实现采用的就是这种）。</p>
+</li>
+</ul>
+<p>三种方案数字设计的复杂度是递增的，灵活性是递减的，对CPU的处理能力需求是递减的。</p>
+<h2 id="LL调度机制-Radio负责packet"><a href="#LL调度机制-Radio负责packet" class="headerlink" title="LL调度机制-Radio负责packet"></a>LL调度机制-Radio负责packet</h2><p>以Radio负责packet的方案介绍LL的整体设计思路：</p>
+<p>根据Radio状态机的9种状态，设计Link Layer中的adv，scan，init，master，slave 事件，事件之间的存在如下相互转换关系：</p>
+<p><img src="12.png" alt=""></p>
+<p>每个事件结束后，调用任务调度机，决定ll下一个状态，下一个ll状态可能是当前状态的延续，可能是新的状态，也可能是当前状态和新的状态的Combination，所以ll调度机不光决定一个状态，还需要考虑多状态能否共存，Scheduler确定是否能执行下一个状态后，启动该任务，执行该任务。</p>
+<p>谈到状态共存，adv，scan，init必须给connection事件让步，在这个时间内，哪些事可以提前做，哪些事需要推迟做，这是Scheduler需要考虑的。</p>
+<p><img src="13.png" alt=""></p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>LL事件，Scheduler任务调度，HCI组包解包是构成Radio的三大模块， 弄清楚整个控制框架，配合时间戳要求，才能把controller玩转起来，controller时间戳同步也是一个非常头疼的话题，特别是搅合在任务调度一起，到此了。</p>
+<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><h2 id="master-slave共存"><a href="#master-slave共存" class="headerlink" title="master/slave共存"></a>master/slave共存</h2><p>一个controller可以支持多个ll状态机，一个ll状态机的状态不允许master&amp;slave同时存在(上文已经说明)，但可以通过分别开启两个ll状态机（piconet的概念由来），一个在master状态，一个在slave状态，这样从使用者的角度上看，就是master和slave共存。</p>
+<h2 id="BT5-2-新状态"><a href="#BT5-2-新状态" class="headerlink" title="BT5.2 新状态"></a>BT5.2 新状态</h2><p>BT 5.2增加了两个新状态，一个isochronous broadcasting 一个synchronization。</p>
+<p><img src="14.png" alt=""></p>
+<p><strong>参考资料</strong></p>
+<ul>
+<li><p>Ble_101_frontline</p>
+</li>
+<li><p>Nordic52810 spec</p>
+</li>
+<li><p>蓝牙5.0 spec</p>
+</li>
+</ul>
+<p><img src="640.png" alt=""></p>
+]]></content>
+      <categories>
+        <category>蓝牙协议</category>
+      </categories>
+      <tags>
+        <tag>蓝牙 controller</tag>
+        <tag>ll 状态机</tag>
+        <tag>蓝牙 radio</tag>
+        <tag>蓝牙 phy</tag>
       </tags>
   </entry>
 </search>
