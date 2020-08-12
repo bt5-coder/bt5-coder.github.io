@@ -104,7 +104,7 @@
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     duoshuo: {
       userId: '0',
-      author: 'Auteur'
+      author: 'Author'
     },
     algolia: {
       applicationID: '',
@@ -362,7 +362,7 @@
       
 
       
-        <h1 id="Controller基本概念"><a href="#Controller基本概念" class="headerlink" title="Controller基本概念"></a>Controller基本概念</h1><h2 id="Controller构成"><a href="#Controller构成" class="headerlink" title="Controller构成"></a>Controller构成</h2><p>蓝牙协议分host和controller两个部分，Host是正真意义的蓝牙协议，Controller为蓝牙底层，或者说是基带芯片。基带芯片又可以分为三个部分，Radio，Link Layer和HCI。</p>
+        <h1 id="BLE-Controller基本概念"><a href="#BLE-Controller基本概念" class="headerlink" title="BLE Controller基本概念"></a>BLE Controller基本概念</h1><h2 id="Controller构成"><a href="#Controller构成" class="headerlink" title="Controller构成"></a>Controller构成</h2><p>蓝牙协议分host和controller两个部分，Host是正真意义的蓝牙协议，Controller为蓝牙底层，或者说是基带芯片。基带芯片又可以分为三个部分，Radio，Link Layer和HCI。</p>
 <a id="more"></a>
 
 <p><img src="1.png" alt=""></p>
@@ -398,13 +398,16 @@
 <p>谈到状态共存，adv，scan，init必须给connection事件让步，在这个时间内，哪些事可以提前做，哪些事需要推迟做，这是Scheduler需要考虑的。</p>
 <p><img src="13.png" alt=""></p>
 <h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>LL事件，Scheduler任务调度，HCI组包解包是构成Radio的三大模块， 弄清楚整个控制框架，配合时间戳要求，才能把controller玩转起来，controller时间戳同步也是一个非常头疼的话题，特别是搅合在任务调度一起，到此了。</p>
+<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><h2 id="master-slave共存"><a href="#master-slave共存" class="headerlink" title="master/slave共存"></a>master/slave共存</h2><p>一个controller可以支持多个ll状态机，一个ll状态机的状态不允许master&amp;slave同时存在(上文已经说明)，但可以通过分别开启两个ll状态机（piconet的概念由来），一个在master状态，一个在slave状态，这样从使用者的角度上看，就是master和slave共存。</p>
+<h2 id="BT5-2-新状态"><a href="#BT5-2-新状态" class="headerlink" title="BT5.2 新状态"></a>BT5.2 新状态</h2><p>BT 5.2增加了两个新状态，一个isochronous broadcasting 一个synchronization。</p>
+<p><img src="14.png" alt=""></p>
 <p><strong>参考资料</strong></p>
 <ul>
 <li><p>Ble_101_frontline</p>
 </li>
 <li><p>Nordic52810 spec</p>
 </li>
-<li><p>蓝牙5.2spec</p>
+<li><p>蓝牙5.0 spec</p>
 </li>
 </ul>
 <p><img src="640.png" alt=""></p>
@@ -619,7 +622,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Controller基本概念"><span class="nav-text">Controller基本概念</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Controller构成"><span class="nav-text">Controller构成</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Radio"><span class="nav-text">Radio</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Link-layer架构"><span class="nav-text">Link layer架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HCI架构"><span class="nav-text">HCI架构</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Controller宏观认知"><span class="nav-text">Controller宏观认知</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ADV广播"><span class="nav-text">ADV广播</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SCAN扫描"><span class="nav-text">SCAN扫描</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#INIT初始化"><span class="nav-text">INIT初始化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Connection连接"><span class="nav-text">Connection连接</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Controller核心框架"><span class="nav-text">Controller核心框架</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#核心架构"><span class="nav-text">核心架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LL调度机制-Radio负责packet"><span class="nav-text">LL调度机制-Radio负责packet</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-text">总结</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#BLE-Controller基本概念"><span class="nav-text">BLE Controller基本概念</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Controller构成"><span class="nav-text">Controller构成</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Radio"><span class="nav-text">Radio</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Link-layer架构"><span class="nav-text">Link layer架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HCI架构"><span class="nav-text">HCI架构</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Controller宏观认知"><span class="nav-text">Controller宏观认知</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ADV广播"><span class="nav-text">ADV广播</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SCAN扫描"><span class="nav-text">SCAN扫描</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#INIT初始化"><span class="nav-text">INIT初始化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Connection连接"><span class="nav-text">Connection连接</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Controller核心框架"><span class="nav-text">Controller核心框架</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#核心架构"><span class="nav-text">核心架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LL调度机制-Radio负责packet"><span class="nav-text">LL调度机制-Radio负责packet</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-text">总结</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#后记"><span class="nav-text">后记</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#master-slave共存"><span class="nav-text">master&#x2F;slave共存</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#BT5-2-新状态"><span class="nav-text">BT5.2 新状态</span></a></li></ol></li></ol></div>
             
 
           </div>
