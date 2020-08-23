@@ -1,62 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>SIG MESH 核心协议与技术框架</title>
-    <url>/2020/05/16/SIG%20MESH%20%E6%A0%B8%E5%BF%83%E5%8D%8F%E8%AE%AE%E4%B8%8E%E6%8A%80%E6%9C%AF%E6%A1%86%E6%9E%B6/</url>
-    <content><![CDATA[<p>终于开启了SIG MESH组网这个话题，本文作为MESH系列的第一篇，介绍Bluetooth mesh 1.0协议的体系结构和功能。</p>
-<a id="more"></a>
-
-<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>Bluetooth Mesh协议作为蓝牙低功耗协议的补充协议，独立于蓝牙5.0，该协议首次将开放标准的网状网络引入低功耗蓝牙设备。</p>
-<p>MESH网络是针对面向智能家居和楼宇自动化应用应用而生的低功耗无线技术， 但是由于蓝牙联盟之前缺乏对MESH网络支持，使得使用低功耗蓝牙的工程师不得不选择其他技术（例如Zigbee和Thread）用于智能家居应用的开发，直到2017年中蓝牙MESH的规范公之于众。现在蓝牙SIG通过引入蓝牙5.0补充规范-蓝牙网状网络1.0解决了MESH组网这一欠缺。该规范不需要其他硬件支持，可以通过刷新固件在目前已有蓝牙低功耗芯片（v4.0、4.1、4.2和5）上运行。一些芯片厂家已经可以支持Bluetooth Mesh 1.0协议。</p>
-<h1 id="SIG-MESH市场现状"><a href="#SIG-MESH市场现状" class="headerlink" title="SIG MESH市场现状"></a>SIG MESH市场现状</h1><p>到目前为止，全球已经在SIG联盟认证的BLE MESH的企业共有73家，认证的产品数量高达461个，该数据包括终端产品和芯片的认证总数，下表罗列出认证企业和其产品认证的数量，其中国的互联网巨头认证的终端产品不少。</p>
-<p><img src="1.jpg" alt=""></p>
-<h1 id="SIG-MESH网络的优势"><a href="#SIG-MESH网络的优势" class="headerlink" title="SIG MESH网络的优势"></a>SIG MESH网络的优势</h1><p>低功耗蓝牙最初旨在通过将无线技术扩展到电池供电的设备，补充“经典”蓝牙低功耗的不足。比如低功耗蓝牙在心率带或无线控制的玩具应用，这些设备都通过低功耗蓝牙与主机设备（例如手机）进行通信，，甚至一个主机设备控制多个从机设备，形成星形网络拓扑。</p>
-<p>低功耗蓝牙由于其与手机的互操作性在一定程度上帮助其迅速扩展到其他领域应用，包括照明控制，智能家居等。在这些类型的应用中，星形网络的缺点就变得很明显。例如，蓝牙低功耗解决方案只能应付有限数量的同时连接（通常为八个），灯泡数量超过该数量的照明设备无法通过单个命令进行控制，从而导致控制延迟。其次，在大房子，远处的灯泡可能不在中央控制器的范围内，需要有路由功能的节点转接。</p>
-<p>在网状网络中，不是通过Gateway与各个外围设备进行通信，而是通过跨连接多个节点的双向通道进行转发，将消息从网络中的一个点中继到其他任何点。这样，网状网络带来了显着的优势，因为它允许同时控制多个连接设备，克服了范围限制。</p>
-<p><img src="2.png" alt=""></p>
-<h1 id="SIG-MESH核心协议"><a href="#SIG-MESH核心协议" class="headerlink" title="SIG MESH核心协议"></a>SIG MESH核心协议</h1><p>自从推出Bluetooth LE以来，低功耗蓝牙已推出版本4.1、4.2、5.0，和5.1版本，协议中增加了比如传输范围、吞吐量、广播数据载核、AoA、AoD定位，以及共存方面的改进（当然，这些新特性有些属于可选，可选的意思是不支持这些新功能的芯片也可以是蓝牙5.0的芯片）。 </p>
-<p><strong>Bluetooth Mesh 1.0不是简单的Bluetooth 5的升级，他是独立与蓝牙协议之外的一套协议，任何旧版（4.0、4.1、4.2、5）低功耗蓝牙芯片产品都可以进行修改升级，仅需进行固件升级即可运行蓝牙网格，前提是flash和ram资源足够。</strong></p>
-<p><strong>BLE MESH核心协议向蓝牙协议兼容的特点在于，蓝牙MESH网络并不是蓝牙BLE协议栈中不可或缺的一部分，而是一个由七个层组成的单独的新实体，其中的某些节点可以和蓝牙协议进行数据交互。</strong></p>
-<p><img src="3.png" alt=""></p>
-<p>当蓝牙MESH节点收到消息时，它将消息从底层蓝牙低功耗协议中获取的数据传递给承载层，蓝牙数据再通过承载层再传递到网络层。网络层应用各种检查来决定是将消息传递到传输层还是将其丢弃。</p>
-<p>蓝牙MESH规范定义了一个全新的核心协议，该核心协议的部分层与蓝牙低功耗核心协议层共享一些概念，但两者不完全兼容。这与Zigbee和Thread等技术有些不同，Zigbee和Thread从一开始就被设计为MESH网络，其底层规范基于802.15.4，但并未考虑其他主流协议的兼容性（近两年Zigbee在顶层考虑使用dotdot以兼容其他网络协议，到达互联互通，详见<a href="https://zigbeealliance.org/solution/dotdot/）。" target="_blank" rel="noopener">https://zigbeealliance.org/solution/dotdot/）。</a></p>
-<h1 id="SIG-MESH架构"><a href="#SIG-MESH架构" class="headerlink" title="SIG MESH架构"></a>SIG MESH架构</h1><p>蓝牙网状网使用“泛洪”技术在网络上发送消息（说人话：病毒传播方式）。每个数据包都转发广播到网络中的其他节点，直到消息送达目标节点为止。消息广播可以针对单个节点，一组节点或所有节点。举个例子，我们可以把单个房间所有的灯定义为一个组地址。蓝牙mesh规范定义了四个固定组地址：<strong>“所有代理节点”，“所有好友节点”，“所有中继节点”和“所有节点”</strong>以专门针对节点类型。（LPN不具备转发消息功能，因为他要保持低功耗，就是这么高冷）。</p>
-<p><strong>泛洪网状mesh架构</strong>和<strong>组地址的选择</strong>增强了蓝牙MESH网络对于智能家居应用支持。例如，MESH网络中的Gateway设备收到“ ON” 命令，可以通过MESH网络快速把该指令广播到整个网络，每个网络中的节点设备都接收该命令并据此采取行动，目标组中的灯可以几乎立即点亮。</p>
-<p>相比于星型网络而言，MESH网络节点平均接收数据的最小等待时间比星形网络的最小等待时间低得多，因为在星形网络中，要求中央设备向每个连接的灯传输单独的命令，中央处理器需要分时下达指令到所以子设备。</p>
-<p>蓝牙MESH有一个和传统蓝牙不一致的地方，所有的mesh数据只会在37，38，39三广播信道传输，这种数据传输策略有好有坏，好的地方是效率高，信道传输策略简单；缺点是减少了网络带宽，增加了拥塞风险。</p>
-<p><strong>MESH网络处理拥塞的机制有两种</strong>：第一个是<strong>“生存时间”（TTL）计数器</strong>，它定义特定数据包可以中继多少次（典型值为三个步骤）。第二个是<strong>广播数据包缓存</strong>，设备捕获一帧转发的数据包后只会广播一次，下次接收到其他设备广播的相同信息数据包时，该设备不需要进一步转发。</p>
-<p>开发人员还可以采用可选的组传递路线，以及保留中继功能，这样设置后，节点可以接收数据包，但不能将其传递，节点的灵活性会变差。</p>
-<h1 id="SIG-MESH网状节点"><a href="#SIG-MESH网状节点" class="headerlink" title="SIG MESH网状节点"></a>SIG MESH网状节点</h1><p>蓝牙网格使用四种类型的网络节点：</p>
-<p><strong>中继节点（Relay Nodes ）</strong>中继节点通过网络层接收和转发数据包。中继节点的缺点是它们必须始终保持警报状态，这会大大增加功耗。这对于诸如智能照明之类的主电源供电的应用程序不是不利的，但是对于诸如被并入网络中的交换机之类的非主电源供电的节点则是一个问题。</p>
-<p><strong>低功耗节点（LPN）</strong>低功耗节点采用蓝牙低功耗的标准节电特性（即：长时间处于睡眠状态），因此可以通过电池或能量收集来长期运行。每个LPN都连接到由市电供电的Friend Node，该Friend Node保持唤醒状态并缓存指向LPN的所有消息。当LPN进入接收模式（按照预定的时间表）时，它接受缓存的消息，按照指示进行操作，然后返回节能睡眠模式。</p>
-<p><strong>友邻节点（Friend Nodes）</strong>友邻特性收听网络中转发的任何消息，友邻节点会存储这些消息，当低功耗节点唤醒并Polling友邻节点时，将这些消息传送给相关的低功耗节点。由于友邻节点需要为一个或多个低功耗节点存储消息，因此友邻节点会比其他类型的节点多占用存储器。所需的存储器大小取决于需要存放在友邻节点、并在轮询操作中传送给低功耗节点的数据/命令数量。</p>
-<p><strong>代理节点（Proxy Nodes）</strong>代理节点是非BLE MESH设备（手机）连接到BLE MESH网络的唯一入口。对于不直接支持蓝牙的Mesh设备，具备代理特性的节点是它们登入Mesh网络的入口。代理特性支持节点在GATT（通用属性）层和广播承载层之间转发消息，而在蓝牙Mesh网络中，消息是通过广播承载层转发。例如，当用户希望使用传统智能手机来控制智能照明网络时，此功能很有用。交互是通过节点和设备的通用属性配置文件（GATT）数据传输实现。</p>
-<p><img src="4.png" alt=""></p>
-<p>举个例子，如图所示的温度传感器是电池供电的LPN，设备定期从灯泡友邻节点（最左端长供电的灯泡）接收发送温度消息，温度消息通过灯泡间的传递，最后智能手机通过BLE的GATT层和代理节点的灯泡进行数据传递（左上）。</p>
-<p>另外，在新节点加入MESH网络前，必须进行入网配置，用于保证该新设备可访问网络中所有节点，是一个受信任的设备。进入网络后，MESH网络为新节点分配地址，以及设备类型和设备密钥。设置后，设备密钥用于建立安全通道以配置新节点使用，理论上蓝牙MESH网络可以支持多达32,000个节点。</p>
-<h1 id="SIG-MESH模型"><a href="#SIG-MESH模型" class="headerlink" title="SIG MESH模型"></a>SIG MESH模型</h1><p>MESH MODE的概念类似蓝牙的profile概念，该模型规定一个公共信息结构体，内部可以包含一个或者多个服务（MODE的概念是用于定义终端设备）。</p>
-<p>模型包含节点特定的行为或服务，并定义了一组状态以及对这些状态起作用的消息。标准模型涵盖了典型的使用场景，例如设备配置，传感器读数和照明控制。 开发者还可以创建自定义模型。</p>
-<p>节点中的模型按元素排列；每个元素都充当具有唯一地址的网格中的虚拟实体。每个传入消息都由元素中的模型处理。</p>
-<p><img src="5.png" alt=""></p>
-<p>不同的模型间通过 “<strong>发布和订阅</strong>”方式相互交谈。发布节点发送一条消息，配置为订阅的节点接收到消息后会进行处理。</p>
-<p>在下图中，最左边的灯开关（开关1）指令发布到Kitchen组地址，假设节点Light 1，Light 2和Light 3（灯的顺序从左往右）订阅了Kitchen地址，因此它们会接收处理并根据发布到该地址的消息（例如“ on”和“ off”命令）进行操作。Light 3也预订了饭厅地址，因此可以从Switch 2以及Switch 1进行操作。</p>
-<p><img src="6.png" alt=""></p>
-<h1 id="SUIG-MESH配入网流程"><a href="#SUIG-MESH配入网流程" class="headerlink" title="SUIG MESH配入网流程"></a>SUIG MESH配入网流程</h1><p>下图是一个完整的配网订阅的例子，该流程是蓝牙MESH配网注册设备的标准流程，灯泡首先向MESH网络发送信号，告知其正在寻找要加入的网络。配置节点会验证灯泡的信标，并邀请其加入网络。如果身份验证成功，则会为设备提供必要的密钥和地址，以加入网络并为配置做准备。接下来，为灯泡提供“家庭自动化”应用程序密钥。设置“ OnOff服务器”（控制灯泡）的发布状态，最后添加对“灯组”的订阅。</p>
-<p><img src="8.png" alt=""></p>
-<h1 id="SIG-MESH应用"><a href="#SIG-MESH应用" class="headerlink" title="SIG MESH应用"></a>SIG MESH应用</h1><p>对SIG认证的产品进行初略统计发现，BLE MESH的应用主要集中在智能家居和灯控场合，灯控占6成，智能家具设备占3成，还有一成属于原厂的芯片认证以及小众市场应用，BLE MESH无疑已经是Zigbee最大的竞争对手，后续慢慢分析。</p>
-<p><img src="13.png" alt=""></p>
-<p><img src="640.png" alt=""></p>
-]]></content>
-      <categories>
-        <category>SIG MESH</category>
-      </categories>
-      <tags>
-        <tag>MESH</tag>
-        <tag>MESH技术</tag>
-        <tag>MESH市场</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>CC2541 SweynTooth BLE漏洞实测</title>
     <url>/2020/05/17/CC2541%20SweynTooth%20BLE%E6%BC%8F%E6%B4%9E%E5%AE%9E%E6%B5%8B/</url>
     <content><![CDATA[<p>SweynTooth hacker攻击蓝牙SoC时，人为设置错误的LL链路层CONNECT_REQ数据包回复给从机设备，导致从机设备蓝牙controller和host端处理异常。本文利用CC2541EVM，亲测蓝牙漏洞Invalid Connection Request (CVE-2019-19193)。<br><img src="1.jpeg" alt=""></p>
@@ -111,44 +55,59 @@
       </tags>
   </entry>
   <entry>
-    <title>SweynTooth爆出最新低功耗蓝牙漏洞，多家知名蓝牙芯片榜上有名</title>
-    <url>/2020/05/16/SweynTooth%E7%88%86%E5%87%BA%E6%9C%80%E6%96%B0%E4%BD%8E%E5%8A%9F%E8%80%97%E8%93%9D%E7%89%99%E6%BC%8F%E6%B4%9E%EF%BC%8C%E5%A4%9A%E5%AE%B6%E7%9F%A5%E5%90%8D%E8%93%9D%E7%89%99%E8%8A%AF%E7%89%87%E6%A6%9C%E4%B8%8A%E6%9C%89%E5%90%8D/</url>
-    <content><![CDATA[<p>SWEYNTOOTH机构最近发布一篇报告，该报告指出，针对BLE SOC芯片的SDK进行测试发现，攻击者可以根据情况触发BLE SOC芯片协议栈死锁，崩溃，缓冲区溢出，或者完全绕过安全性。根据原厂的授权，截止到今天为止，TI，NXP，Cypress，Dialog，ST和Telink半导体已全部在列，但绝非所有SoC供应商列表都受SWEYNTOOTH影响，我们一起来看一下。</p>
+    <title>SIG MESH 核心协议与技术框架</title>
+    <url>/2020/05/16/SIG%20MESH%20%E6%A0%B8%E5%BF%83%E5%8D%8F%E8%AE%AE%E4%B8%8E%E6%8A%80%E6%9C%AF%E6%A1%86%E6%9E%B6/</url>
+    <content><![CDATA[<p>终于开启了SIG MESH组网这个话题，本文作为MESH系列的第一篇，介绍Bluetooth mesh 1.0协议的体系结构和功能。</p>
 <a id="more"></a>
 
-<h1 id="漏洞类型"><a href="#漏洞类型" class="headerlink" title="漏洞类型"></a>漏洞类型</h1><p><strong>崩溃：</strong>此类漏洞可以通过故意触发硬故障中断使设备软件崩溃。这是由于SDK框架中某些不正确的代码行为或存储器溢出而造成，比如BLE接收缓冲区发生缓冲区溢出。崩溃发生时，软件通常会进行重新启动。但是，这种重启功能取决于BLE SoC的协议栈中是否考虑硬故障处理机制。</p>
-<p><strong>死锁：</strong>死锁是会影响BLE连接，不会引起硬故障或内存损坏的漏洞。通常，它们是由于用户APP代码与SoC SDK固件之间的某些不正确同步造成用户代码陷于某个死锁等待状态。如果正确不当，则可能会导致死锁。在大多数情况下，当发生死锁时，用户手动关闭设备电源并重新打开设备电源以重新建立正确的BLE通信。</p>
-<p><strong>配对安全：</strong>此漏洞是最严重的漏洞。该漏洞允许无攻击者设备绕过BLE的最新安全配对模式。绕过后，攻击者可以对设备功能进行任意读取或写入访问。而这些功能原来只能由正确交换密钥的授权用户访问。</p>
-<p><img src="2.jpeg" alt=""></p>
-<p>目前各大原厂已经公开发布各自的补丁修改问题。 部分终端产品也因该问题被陆续曝光，包括知名手环厂商FITBIT，北美智能锁制造商August等，但是只要产品支持BLE OTA升级功能，受影响的BLE SoC可通过软件升级方式更新原厂固件。</p>
-<h1 id="高风险设备"><a href="#高风险设备" class="headerlink" title="高风险设备"></a>高风险设备</h1><p><strong>可穿戴设备：</strong>Fitbit Inspire  FitBit 2018年最新智能手表使用赛普拉斯PSoC 6作为主处理器。通过测试，它们容易受到链路层溢出和LLID死锁的影响，为了验证利用这两个问题时可穿戴设备会发生什么，我们已通过BLE主设备将恶意数据包发送到Fitbit Inspire智能手表，恶意数据包发送到设备后，有可能触发设备内存中的缓冲区溢出或使蓝牙堆栈死锁。前者的攻击（利用链路层溢出）可立即重启设备，而后者的攻击（利用LLID死锁）可禁用蓝牙广告约27秒钟，然后使智能手表重启。</p>
-<p>总而言之，这些漏洞似乎只是暂时阻止了Fitbit手表的可用性。但是，链路层长度溢出本身就是一个威胁。特别是，一旦攻击者通过对固件进行反向工程来了解固件的内存布局，这种溢出就可能成为远程执行的潜在大门。在Fitbit Charge 3和Ace 2中预也会遇到同样问题(赛普拉斯PSoC 6处理器)。</p>
-<p><strong>智能家居：</strong>Eve Systems的许多智能家居产品由于依赖Dialog DA14680作为主处理器。例如，Eve电灯开关，Eve Motion MKII，Eve Aqua，Eve Thermo MKII，Eve Room，Eve Lock等都容易出现溢出攻击。具体来说，有可能通过发送溢出设备接收缓冲区的特定数据包来使此类设备崩溃。当发生攻击时，用户可以立即体验其智能产品重新启动或变得不稳定。例如，对Eve Energy进行溢出攻击，当智能插头的处理器崩溃并重新启动时，智能插头上的电源就会切断。因此，我们只需在智能插座的蓝牙接收范围内发送恶意数据包，就可以暂时切断与插座电源。此外，攻击者可以使用这种简单的攻击，通过间断地切断其电源，对连接到插头的某些设备造成物理损害。</p>
-<p><strong>智能锁：</strong>TheeGeeTouch是一种智能行李箱锁，可以通过手机APP进行远程锁定或解锁。该设备使用TI CC2540 SoC，在漏洞测试过程中，利用“无效连接请求”漏洞能将智能锁置于死锁状态。进行攻击时，设备会挂起，用户需要手动按下智能锁上的开机按钮才能与其进行交互，最严重的时，必须重新插入其电池以重新启动其处理器并使功能恢复正常。</p>
+<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>Bluetooth Mesh协议作为蓝牙低功耗协议的补充协议，独立于蓝牙5.0，该协议首次将开放标准的网状网络引入低功耗蓝牙设备。</p>
+<p>MESH网络是针对面向智能家居和楼宇自动化应用应用而生的低功耗无线技术， 但是由于蓝牙联盟之前缺乏对MESH网络支持，使得使用低功耗蓝牙的工程师不得不选择其他技术（例如Zigbee和Thread）用于智能家居应用的开发，直到2017年中蓝牙MESH的规范公之于众。现在蓝牙SIG通过引入蓝牙5.0补充规范-蓝牙网状网络1.0解决了MESH组网这一欠缺。该规范不需要其他硬件支持，可以通过刷新固件在目前已有蓝牙低功耗芯片（v4.0、4.1、4.2和5）上运行。一些芯片厂家已经可以支持Bluetooth Mesh 1.0协议。</p>
+<h1 id="SIG-MESH市场现状"><a href="#SIG-MESH市场现状" class="headerlink" title="SIG MESH市场现状"></a>SIG MESH市场现状</h1><p>到目前为止，全球已经在SIG联盟认证的BLE MESH的企业共有73家，认证的产品数量高达461个，该数据包括终端产品和芯片的认证总数，下表罗列出认证企业和其产品认证的数量，其中国的互联网巨头认证的终端产品不少。</p>
+<p><img src="1.jpg" alt=""></p>
+<h1 id="SIG-MESH网络的优势"><a href="#SIG-MESH网络的优势" class="headerlink" title="SIG MESH网络的优势"></a>SIG MESH网络的优势</h1><p>低功耗蓝牙最初旨在通过将无线技术扩展到电池供电的设备，补充“经典”蓝牙低功耗的不足。比如低功耗蓝牙在心率带或无线控制的玩具应用，这些设备都通过低功耗蓝牙与主机设备（例如手机）进行通信，，甚至一个主机设备控制多个从机设备，形成星形网络拓扑。</p>
+<p>低功耗蓝牙由于其与手机的互操作性在一定程度上帮助其迅速扩展到其他领域应用，包括照明控制，智能家居等。在这些类型的应用中，星形网络的缺点就变得很明显。例如，蓝牙低功耗解决方案只能应付有限数量的同时连接（通常为八个），灯泡数量超过该数量的照明设备无法通过单个命令进行控制，从而导致控制延迟。其次，在大房子，远处的灯泡可能不在中央控制器的范围内，需要有路由功能的节点转接。</p>
+<p>在网状网络中，不是通过Gateway与各个外围设备进行通信，而是通过跨连接多个节点的双向通道进行转发，将消息从网络中的一个点中继到其他任何点。这样，网状网络带来了显着的优势，因为它允许同时控制多个连接设备，克服了范围限制。</p>
+<p><img src="2.png" alt=""></p>
+<h1 id="SIG-MESH核心协议"><a href="#SIG-MESH核心协议" class="headerlink" title="SIG MESH核心协议"></a>SIG MESH核心协议</h1><p>自从推出Bluetooth LE以来，低功耗蓝牙已推出版本4.1、4.2、5.0，和5.1版本，协议中增加了比如传输范围、吞吐量、广播数据载核、AoA、AoD定位，以及共存方面的改进（当然，这些新特性有些属于可选，可选的意思是不支持这些新功能的芯片也可以是蓝牙5.0的芯片）。 </p>
+<p><strong>Bluetooth Mesh 1.0不是简单的Bluetooth 5的升级，他是独立与蓝牙协议之外的一套协议，任何旧版（4.0、4.1、4.2、5）低功耗蓝牙芯片产品都可以进行修改升级，仅需进行固件升级即可运行蓝牙网格，前提是flash和ram资源足够。</strong></p>
+<p><strong>BLE MESH核心协议向蓝牙协议兼容的特点在于，蓝牙MESH网络并不是蓝牙BLE协议栈中不可或缺的一部分，而是一个由七个层组成的单独的新实体，其中的某些节点可以和蓝牙协议进行数据交互。</strong></p>
+<p><img src="3.png" alt=""></p>
+<p>当蓝牙MESH节点收到消息时，它将消息从底层蓝牙低功耗协议中获取的数据传递给承载层，蓝牙数据再通过承载层再传递到网络层。网络层应用各种检查来决定是将消息传递到传输层还是将其丢弃。</p>
+<p>蓝牙MESH规范定义了一个全新的核心协议，该核心协议的部分层与蓝牙低功耗核心协议层共享一些概念，但两者不完全兼容。这与Zigbee和Thread等技术有些不同，Zigbee和Thread从一开始就被设计为MESH网络，其底层规范基于802.15.4，但并未考虑其他主流协议的兼容性（近两年Zigbee在顶层考虑使用dotdot以兼容其他网络协议，到达互联互通，详见<a href="https://zigbeealliance.org/solution/dotdot/）。" target="_blank" rel="noopener">https://zigbeealliance.org/solution/dotdot/）。</a></p>
+<h1 id="SIG-MESH架构"><a href="#SIG-MESH架构" class="headerlink" title="SIG MESH架构"></a>SIG MESH架构</h1><p>蓝牙网状网使用“泛洪”技术在网络上发送消息（说人话：病毒传播方式）。每个数据包都转发广播到网络中的其他节点，直到消息送达目标节点为止。消息广播可以针对单个节点，一组节点或所有节点。举个例子，我们可以把单个房间所有的灯定义为一个组地址。蓝牙mesh规范定义了四个固定组地址：<strong>“所有代理节点”，“所有好友节点”，“所有中继节点”和“所有节点”</strong>以专门针对节点类型。（LPN不具备转发消息功能，因为他要保持低功耗，就是这么高冷）。</p>
+<p><strong>泛洪网状mesh架构</strong>和<strong>组地址的选择</strong>增强了蓝牙MESH网络对于智能家居应用支持。例如，MESH网络中的Gateway设备收到“ ON” 命令，可以通过MESH网络快速把该指令广播到整个网络，每个网络中的节点设备都接收该命令并据此采取行动，目标组中的灯可以几乎立即点亮。</p>
+<p>相比于星型网络而言，MESH网络节点平均接收数据的最小等待时间比星形网络的最小等待时间低得多，因为在星形网络中，要求中央设备向每个连接的灯传输单独的命令，中央处理器需要分时下达指令到所以子设备。</p>
+<p>蓝牙MESH有一个和传统蓝牙不一致的地方，所有的mesh数据只会在37，38，39三广播信道传输，这种数据传输策略有好有坏，好的地方是效率高，信道传输策略简单；缺点是减少了网络带宽，增加了拥塞风险。</p>
+<p><strong>MESH网络处理拥塞的机制有两种</strong>：第一个是<strong>“生存时间”（TTL）计数器</strong>，它定义特定数据包可以中继多少次（典型值为三个步骤）。第二个是<strong>广播数据包缓存</strong>，设备捕获一帧转发的数据包后只会广播一次，下次接收到其他设备广播的相同信息数据包时，该设备不需要进一步转发。</p>
+<p>开发人员还可以采用可选的组传递路线，以及保留中继功能，这样设置后，节点可以接收数据包，但不能将其传递，节点的灵活性会变差。</p>
+<h1 id="SIG-MESH网状节点"><a href="#SIG-MESH网状节点" class="headerlink" title="SIG MESH网状节点"></a>SIG MESH网状节点</h1><p>蓝牙网格使用四种类型的网络节点：</p>
+<p><strong>中继节点（Relay Nodes ）</strong>中继节点通过网络层接收和转发数据包。中继节点的缺点是它们必须始终保持警报状态，这会大大增加功耗。这对于诸如智能照明之类的主电源供电的应用程序不是不利的，但是对于诸如被并入网络中的交换机之类的非主电源供电的节点则是一个问题。</p>
+<p><strong>低功耗节点（LPN）</strong>低功耗节点采用蓝牙低功耗的标准节电特性（即：长时间处于睡眠状态），因此可以通过电池或能量收集来长期运行。每个LPN都连接到由市电供电的Friend Node，该Friend Node保持唤醒状态并缓存指向LPN的所有消息。当LPN进入接收模式（按照预定的时间表）时，它接受缓存的消息，按照指示进行操作，然后返回节能睡眠模式。</p>
+<p><strong>友邻节点（Friend Nodes）</strong>友邻特性收听网络中转发的任何消息，友邻节点会存储这些消息，当低功耗节点唤醒并Polling友邻节点时，将这些消息传送给相关的低功耗节点。由于友邻节点需要为一个或多个低功耗节点存储消息，因此友邻节点会比其他类型的节点多占用存储器。所需的存储器大小取决于需要存放在友邻节点、并在轮询操作中传送给低功耗节点的数据/命令数量。</p>
+<p><strong>代理节点（Proxy Nodes）</strong>代理节点是非BLE MESH设备（手机）连接到BLE MESH网络的唯一入口。对于不直接支持蓝牙的Mesh设备，具备代理特性的节点是它们登入Mesh网络的入口。代理特性支持节点在GATT（通用属性）层和广播承载层之间转发消息，而在蓝牙Mesh网络中，消息是通过广播承载层转发。例如，当用户希望使用传统智能手机来控制智能照明网络时，此功能很有用。交互是通过节点和设备的通用属性配置文件（GATT）数据传输实现。</p>
 <p><img src="4.png" alt=""></p>
-<p><img src="1.jpeg" alt=""></p>
-<p>尽管很难确定存在漏洞风险的产品数量，但我们从SIG联盟的蓝牙认证清单上搜索到多款可能受影响的产品类型。下图记录了截至2020年2月8日使用受影响的产品列表总数。</p>
-<p><img src="9.png" alt=""></p>
-<p>物流，医疗，消费电子，智能家居，可穿戴设备和其他领域的产品也应该高度重视，我们概述了一些在SIG Bluetooth Listing上认证过的产品。</p>
-<p><img src="10.png" alt=""></p>
-<p>生产血糖仪的VivaCheck  Lab有很多产品都使用来DA14580。这些产品都可能容易受到L2CAP恶意数据攻击。更糟糕的是，Medtronic最新的起搏器相关的产品可能也会受到影响，为了避免使用任何可能对使用相应医疗产品的患者造成生命危险的情况，强烈建议此类公司更新固件。</p>
-<p>另外恩智浦半导体的SoC KW41Z 电池供电自动包裹储物柜，KW41Z LLID死锁漏洞非常容易复现，攻击者可以简单地阻止任何人连接到包裹储物柜（除非包裹储物柜自动重启）。恩智浦已经发布了影响KW41Z的两个漏洞的补丁程序。</p>
-<p>上表并不详尽，因此建议每个产品供应商将其产品的SDK固件更新到最新（如果有），或者联系其SoC供应商以查询补丁状态。</p>
-<p>大多数芯片厂家已为其SoC发布了补丁包，通过下载下表中引用的供应商的最新SDK，即可获得最新补丁。另一方面，每个SoC供应商都独立联系产品供应商（使用受影响的SoC），以告知有关安全补丁的信息 。</p>
-<p>在我们与Dialog联系期间，他们已经确认计划在下一个SDK版本中为受影响的SoC修补一个补丁。</p>
+<p>举个例子，如图所示的温度传感器是电池供电的LPN，设备定期从灯泡友邻节点（最左端长供电的灯泡）接收发送温度消息，温度消息通过灯泡间的传递，最后智能手机通过BLE的GATT层和代理节点的灯泡进行数据传递（左上）。</p>
+<p>另外，在新节点加入MESH网络前，必须进行入网配置，用于保证该新设备可访问网络中所有节点，是一个受信任的设备。进入网络后，MESH网络为新节点分配地址，以及设备类型和设备密钥。设置后，设备密钥用于建立安全通道以配置新节点使用，理论上蓝牙MESH网络可以支持多达32,000个节点。</p>
+<h1 id="SIG-MESH模型"><a href="#SIG-MESH模型" class="headerlink" title="SIG MESH模型"></a>SIG MESH模型</h1><p>MESH MODE的概念类似蓝牙的profile概念，该模型规定一个公共信息结构体，内部可以包含一个或者多个服务（MODE的概念是用于定义终端设备）。</p>
+<p>模型包含节点特定的行为或服务，并定义了一组状态以及对这些状态起作用的消息。标准模型涵盖了典型的使用场景，例如设备配置，传感器读数和照明控制。 开发者还可以创建自定义模型。</p>
+<p>节点中的模型按元素排列；每个元素都充当具有唯一地址的网格中的虚拟实体。每个传入消息都由元素中的模型处理。</p>
+<p><img src="5.png" alt=""></p>
+<p>不同的模型间通过 “<strong>发布和订阅</strong>”方式相互交谈。发布节点发送一条消息，配置为订阅的节点接收到消息后会进行处理。</p>
+<p>在下图中，最左边的灯开关（开关1）指令发布到Kitchen组地址，假设节点Light 1，Light 2和Light 3（灯的顺序从左往右）订阅了Kitchen地址，因此它们会接收处理并根据发布到该地址的消息（例如“ on”和“ off”命令）进行操作。Light 3也预订了饭厅地址，因此可以从Switch 2以及Switch 1进行操作。</p>
 <p><img src="6.png" alt=""></p>
-<h1 id="深入调查"><a href="#深入调查" class="headerlink" title="深入调查"></a>深入调查</h1><p>近年来，由于一些安全机制的考虑不周（例如KNOB，BlueBorne 和Invalid ECC Attack）蓝牙连接一直会受到不同程度攻击。每个SoC BLE SDK都必须先经过蓝牙认证，然后才能投放市场。但我们的发现表明，认证过程应该进行改进。我们按照Core Specification规范测试蓝牙SoC，往往会上收到了截然不同的响应，说明蓝牙芯片供应商并未严格遵循协议规范，比如，Telink的设备多次响应版本请求，这违反了核心规范[13]的[Vol 6] B部分第5.1.5节，该部分定义了HOST设备在接收主机发送的HCI指令中应仅响应一次版本请求。同样，我们测试过的所有设备都可以接受“ hopIncrement”字段值小于5的连接请求，此举违反了[Vol 6] B部分第2.3.3.1节的规定，该部分规定该字段的有效范围在5-16。此外，我们发现的所有漏洞都与[Vol 1] E部分的2.7节（对格式错误的响应）相关，该部分的说明其实已经提供了指令和一些示例来处理无效或格式错误的数据包。希望蓝牙SIG改进并显着扩展第2.7节，并向蓝牙认证中添加更多基本测试，以避免以上漏洞。</p>
-<h1 id="附录：蓝牙连接全过程"><a href="#附录：蓝牙连接全过程" class="headerlink" title="附录：蓝牙连接全过程"></a>附录：<strong>蓝牙连接全过程</strong></h1><p><img src="11.jpeg" alt=""></p>
+<h1 id="SUIG-MESH配入网流程"><a href="#SUIG-MESH配入网流程" class="headerlink" title="SUIG MESH配入网流程"></a>SUIG MESH配入网流程</h1><p>下图是一个完整的配网订阅的例子，该流程是蓝牙MESH配网注册设备的标准流程，灯泡首先向MESH网络发送信号，告知其正在寻找要加入的网络。配置节点会验证灯泡的信标，并邀请其加入网络。如果身份验证成功，则会为设备提供必要的密钥和地址，以加入网络并为配置做准备。接下来，为灯泡提供“家庭自动化”应用程序密钥。设置“ OnOff服务器”（控制灯泡）的发布状态，最后添加对“灯组”的订阅。</p>
+<p><img src="8.png" alt=""></p>
+<h1 id="SIG-MESH应用"><a href="#SIG-MESH应用" class="headerlink" title="SIG MESH应用"></a>SIG MESH应用</h1><p>对SIG认证的产品进行初略统计发现，BLE MESH的应用主要集中在智能家居和灯控场合，灯控占6成，智能家具设备占3成，还有一成属于原厂的芯片认证以及小众市场应用，BLE MESH无疑已经是Zigbee最大的竞争对手，后续慢慢分析。</p>
+<p><img src="13.png" alt=""></p>
 <p><img src="640.png" alt=""></p>
 ]]></content>
       <categories>
-        <category>Bluetooth</category>
+        <category>SIG MESH</category>
       </categories>
       <tags>
-        <tag>SweynTooth</tag>
-        <tag>蓝牙漏洞</tag>
-        <tag>ti</tag>
-        <tag>dialog</tag>
+        <tag>MESH</tag>
+        <tag>MESH技术</tag>
+        <tag>MESH市场</tag>
       </tags>
   </entry>
   <entry>
@@ -207,263 +166,44 @@
       </tags>
   </entry>
   <entry>
-    <title>细说蓝牙5三大新特性</title>
-    <url>/2020/05/30/%E7%BB%86%E8%AF%B4%E8%93%9D%E7%89%995%E4%B8%89%E5%A4%A7%E6%96%B0%E7%89%B9%E6%80%A7/</url>
-    <content><![CDATA[<h1 id="蓝牙5特性一-2X-数据吞吐量"><a href="#蓝牙5特性一-2X-数据吞吐量" class="headerlink" title="蓝牙5特性一  2X 数据吞吐量"></a>蓝牙5特性一  2X 数据吞吐量</h1><p>Bluetooth LE 4.2来说，蓝牙5的速率可以提升一倍是因为PHY层可以支持2Mbps数据传输率。在蓝牙5之前，LE只支持1Mbps PHY的速率。在此强调一点，PHY的速率只为蓝牙往空中丢数据的速率，并不等同于点对点设备的主端蓝牙芯片的应用层传到从端蓝牙芯片应用层的数据吞吐量。</p>
+    <title>SweynTooth爆出最新低功耗蓝牙漏洞，多家知名蓝牙芯片榜上有名</title>
+    <url>/2020/05/16/SweynTooth%E7%88%86%E5%87%BA%E6%9C%80%E6%96%B0%E4%BD%8E%E5%8A%9F%E8%80%97%E8%93%9D%E7%89%99%E6%BC%8F%E6%B4%9E%EF%BC%8C%E5%A4%9A%E5%AE%B6%E7%9F%A5%E5%90%8D%E8%93%9D%E7%89%99%E8%8A%AF%E7%89%87%E6%A6%9C%E4%B8%8A%E6%9C%89%E5%90%8D/</url>
+    <content><![CDATA[<p>SWEYNTOOTH机构最近发布一篇报告，该报告指出，针对BLE SOC芯片的SDK进行测试发现，攻击者可以根据情况触发BLE SOC芯片协议栈死锁，崩溃，缓冲区溢出，或者完全绕过安全性。根据原厂的授权，截止到今天为止，TI，NXP，Cypress，Dialog，ST和Telink半导体已全部在列，但绝非所有SoC供应商列表都受SWEYNTOOTH影响，我们一起来看一下。</p>
 <a id="more"></a>
-<p><img src="5.png" alt=""></p>
-<h2 id="蓝牙单包数据结构"><a href="#蓝牙单包数据结构" class="headerlink" title="蓝牙单包数据结构"></a>蓝牙单包数据结构</h2><h3 id="蓝牙4-2一下数据结构"><a href="#蓝牙4-2一下数据结构" class="headerlink" title="蓝牙4.2一下数据结构"></a>蓝牙4.2一下数据结构</h3><p>先看Bluetooth 4.0/4.1 BLE数据传输率数据推演，设置主机Master端传输20个字节数据，其需要用时328us，从机响应80us，加上发射机发完一包数据至少需要休息150us，一个完整周期为328us + 150us + 80us + 150us，有效数据20字节，数据传输率226kbps。</p>
-<p><img src="8.png" alt=""></p>
-<h3 id="蓝牙4-2数据结构"><a href="#蓝牙4-2数据结构" class="headerlink" title="蓝牙4.2数据结构"></a>蓝牙4.2数据结构</h3><p>Bluetooth 4.2 LE部分扩充了单包数据载荷，每包可传输244字节，同理可以算出蓝牙4.2的数据传输率为781kbps。</p>
-<p><img src="9.png" alt=""></p>
-<h3 id="蓝牙5数据结构"><a href="#蓝牙5数据结构" class="headerlink" title="蓝牙5数据结构"></a>蓝牙5数据结构</h3><p>Bluetooth 5 BLE增加了2M PHY，传输244字节数据时间从2120us将为1060us，从机响应时间也从80us下降到40us，数据传输率提升一倍，到1.39Mbps。</p>
-<p><img src="10.png" alt=""></p>
-<h2 id="蓝牙5大数据传输应用场景"><a href="#蓝牙5大数据传输应用场景" class="headerlink" title="蓝牙5大数据传输应用场景"></a>蓝牙5大数据传输应用场景</h2><p>蓝牙5 PHY层支持2M的速率可以说明两个问题 :<br><strong>单位时间内可传输的数据吞吐量提升一倍。</strong><br><strong>传输相同数据量的数据蓝牙5的时间可降低一倍，从而使得蓝牙芯片可以更长时间的处于休眠模式，以降低蓝牙整体功耗。</strong></p>
-<p><img src="6.png" alt=""></p>
-<p>更快的数据传输率可以用来做什么呢？<br><strong>OTA空中升级</strong>，想必大家都有尝试过自己的智能穿戴设备升级工具，那体验，真的是非常糟糕，现在数量提升了，肯定马上把该速率用在OTA上，另外，在测试市面手环产品的过程中我们自己也看到一个非常糟糕的设计，大多数客户都还停留在使用BLE4.1产品，即使 使用了BLE4.2也很少有客户用到大PDU来改善OTA升级，这里希望各位工程师好好考虑该如何优化自己的产品，合理利用大数据传输提升OTA速度。下面从蓝牙SPEC上摘录几代BLE的规范和计算得来极限数据传输率供大家参考使用。<br><strong>语音图片传输</strong>，2M PHY的应用方向还有大块加密数据的瞬时传输，语音数据的传输，图片传输。<br><strong>IOS SPP 透传</strong>，经典蓝牙与ISO通过SPP传输需要额外mfi芯片，有了2M PHY，无需MFI芯片支持可以提高手机和蓝牙的数据通讯速率。</p>
-<h1 id="蓝牙5特性一-8X-大广播包数据传输"><a href="#蓝牙5特性一-8X-大广播包数据传输" class="headerlink" title="蓝牙5特性一  8X 大广播包数据传输"></a>蓝牙5特性一  8X 大广播包数据传输</h1><h2 id="蓝牙4-x广播特性"><a href="#蓝牙4-x广播特性" class="headerlink" title="蓝牙4.x广播特性"></a>蓝牙4.x广播特性</h2><h3 id="蓝牙广播"><a href="#蓝牙广播" class="headerlink" title="蓝牙广播"></a>蓝牙广播</h3><p>蓝牙从机设备正常工作时会以一定频率发送广播包，告知周围设备可以来连接自己(connectable)，或者单纯发送广播数据(non-connectable)给到周围主设备。从机广播中可能包含设备的相关信息，设备名称，设备具有的服务uuid 等，SIG有明确规定。<br><strong>广播包类型</strong><br>广播包可以拆分为两种，一种是从机设备的广播的数据，一种是主机设备扫描到从机的广播包后响应返回给冲击设备的数据。<br><strong>广播包</strong> （Advertising Data):设备端主动发送的周期数据。<br><strong>响应包</strong> （Scan Response):主机主动扫描的情况下， 发送扫描请求给从机， 从机返回扫描响应数据。</p>
-<h3 id="4-x广播包格式"><a href="#4-x广播包格式" class="headerlink" title="4.x广播包格式"></a>4.x广播包格式</h3><p>有效数据（significant）和无效数据（non-significant）两部分。<br>有效数据部分包含若干个广播数据单元，称为 AD Structure 。如图所示，AD Structure 的组成是：<br>长度 Len ，表示这个 AD Structure 的长度（除去 Len本身 1）<br><strong>类型 AD Type</strong><br>标记这段广播数据代表什么， 比如设备名， uuid 等。<br><strong>数据 AD data</strong><br>无效数据部分广播包的长度必须是 31 个 byte，如果有效数据部分不到 31 自己，剩下的就用 0 补全。这部分的数据是无效的。</p>
-<p><img src="11.png" alt=""></p>
-<p>以一个例子说明广播包和他的作用：<br>下图为CC2540 BLE抓包工具抓包的截图，右边AdvData内的数据即为广播数据，该广播数据由工程师自己设计，最大支持的字节为31个直接，两横条之间Time的差值即为广播间隔。</p>
-<p><img src="12.jpg" alt=""></p>
-<h3 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h3><p>通常情况，广播包的作用如下：</p>
-<ul>
-<li>作为可连接设备时，广播包内带有产品信息，比如品牌logo，MAC地址等。</li>
-<li>作为beacon设备时，可能携带传感器数据上报给集中器，可以携带beacon编号信息，MAC地址，特殊编码数据。</li>
-<li>作为可连接设备的广播。<br>但对应Beacon应用来说，广播数据和可传输的数据长度就显得尤为重要。beacon广播结合Scan端集中器(Broadcaster and Observer)可以用于智能家具节点数据上报，工厂自动化设备数据上传，人员管控，冷链物流监控，特殊区域布防等多种应用场景；beacon广播结合地图亦可以作为室内导航定位的辅助工具，为室内定位提供良好的解决方案(目前已经相继出现好几家机场，医院，商城实现手机室内导航，其原理即依靠大量布置beacon点和手机地图匹配，利用手机扫描周围beacon广播信息，实现定位与导航，但定位精度存在偏差，不如UWB精度高)。<br>BLE的低功耗纽扣电池供电特性，小体积，可以和手机互联互通，使得beacon在上述应用呈爆发式增长。但其中会存在一个棘手的问题，31字节的广播包太短，每次广播能携带的有效数据太少，另外广播通道太少，只有37,38,39三个通道广播，可能存在多设备上报数据信道的干扰问题。</li>
-</ul>
-<h2 id="蓝牙5广播特性"><a href="#蓝牙5广播特性" class="headerlink" title="蓝牙5广播特性"></a>蓝牙5广播特性</h2><p>蓝牙5扩展了广播数据的有效载荷，提升了广播通道数，为上述应用和新的应用提供了更多技术储备。下面我们就来看看蓝牙5的8x 大广播包。</p>
-<h3 id="蓝牙5广播包格式"><a href="#蓝牙5广播包格式" class="headerlink" title="蓝牙5广播包格式"></a>蓝牙5广播包格式</h3><p>蓝牙4.x协议规定蓝牙广播数据包每包数据最大只支持31字节数据传输，广播信道限制在37,38,39三个信道。在原有的用于传输广播数据的PDU（ADV_IND、ADV_DIRECT_IND、ADV_NONCONN_IND以及ADV_SCAN_IND，称作legacy PDUs）的基础上，蓝牙5增加了扩展的PDU（ADV_EXT_IND、AUX_ADV_IND、AUX_SYNC_IND以及AUX_CHAIN_IND，称作extended advertising PDUs)，同时也允许蓝牙在除开37,38,39三个通道之外的其他37个信道上发送长度介于0-255字节的数据。</p>
-<p><img src="13.png" alt=""></p>
-<p>蓝牙5.0把广播信道抽象为两类，一种叫主广播信道(primary advertisement channels)，另一种叫次广播信道，或者第二广播信道（Secondary Advertising Packets）。<br>主广播信道只工作在37，38，39三个信道，最大广播字节为31字节，广播的数据类型增加了一个ADV_EXT_IND指令，ADV_EXT_IND指令即为告知监听设备，我要广播大数据包广播了。<br>ADV_EXT_IND指令包含要在第二类次广播信道上发送的内容，第二广播信道发送广播数据的信道，物理PHY层，1M PHY，Coded PHY，2M PHY 等。<br>其示意如下图所示，首先在主广播信道广播ADV_EXT_IND信息，然后利用次广播信道(0-36 channel)广播255byte 数据。</p>
-<p><img src="17.png" alt=""></p>
-<p>如果我们有大于255字节的数据需要发送，蓝牙5.0广播协议栈中已经定义了AUX_CHAIN_IND，用于在第二广播信道上连续传输255字节数据，这样我们可以利用它发送超过255字节的大数据包数据。</p>
-<p><img src="14.png" alt=""></p>
-<p>第二广播信道（Secondary Advertising Packets）中的 AUX_ADV_IND、以及AUX_CHAIN_IND已经介绍，下面再看看AUX_SYNC_IND指令。</p>
-<p><img src="15.png" alt=""></p>
-<p>AUX_SYNC_IND指令用于大广播包数据的周期发送，广播者可随时修改其广播数据，但其他监听者依然可以监听到其周期性的广播内容，AUX_SYNC_IND指令包含广播间隔，调频序列，广播数据，广播者MAC地址等信息。</p>
-<p><img src="16.png" alt=""></p>
-<p>主机扫描过程中会首先监听到37,38,39，如果为大广播包，广播数据帧会携带大广播信道，主机会调频到相应信道进行数据监听。</p>
-<p><img src="19.png" alt=""></p>
-<h2 id="蓝牙5大广播包应用场景"><a href="#蓝牙5大广播包应用场景" class="headerlink" title="蓝牙5大广播包应用场景"></a>蓝牙5大广播包应用场景</h2><p>蓝牙4.2的广播数据31字节，蓝牙5.0的广播数据255字节，提升了8倍之多，由于使用了更多的广播信道，多个设备上报数据的抗信道干扰能力得到提升，另外由于多信道的使用，可以同步广播多种不同制式的信息，比如同时广播ibeacon和eddstone。结合蓝牙5 long range mode远距离传输模式，蓝牙的远距离beacon可以用在冷链物流，gps追踪器，工业自动化等在之前距离场合。</p>
-<h1 id="蓝牙5特性一-4X-远距离数据传输"><a href="#蓝牙5特性一-4X-远距离数据传输" class="headerlink" title="蓝牙5特性一  4X 远距离数据传输"></a>蓝牙5特性一  4X 远距离数据传输</h1><h2 id="链结预算Link-Budget"><a href="#链结预算Link-Budget" class="headerlink" title="链结预算Link Budget"></a>链结预算Link Budget</h2><h3 id="传输距离理论"><a href="#传输距离理论" class="headerlink" title="传输距离理论"></a>传输距离理论</h3><p>在部署无线电通信时，链路预算(Link Budget)就是指从发射机开始通过射频媒介直到接收机之间的所有增益和衰减的总和。链路预算计算的目的是确保最终的接收信号强度处于接收机的接收灵敏阈值之上。简单来说，链路预算越大，发送端和接收端的距离越远。<br><code>Link budget [dB]= TX Power [dBm]- Sensitivity level [dBm]</code></p>
-<ul>
-<li>举例说明:<br>以TI CC2640R2F芯片为例，最大TX Power 5dbm, 最大接收灵敏度 -97dBm,根据上述公式，5 dBm - (-97 dBm) = 102 dB。<br>以Nordic Nrf52840芯片为例，最大TX Power 8dbm, 最大接收灵敏度 -96dBm,根据上述公式，8 dBm - (-96 dBm) = 104 dB。</li>
-<li>结论:<br>链结预算值越大，传输距离越远。</li>
-</ul>
-<h3 id="无线电传输损耗"><a href="#无线电传输损耗" class="headerlink" title="无线电传输损耗"></a>无线电传输损耗</h3><h4 id="自由空间损耗"><a href="#自由空间损耗" class="headerlink" title="自由空间损耗"></a>自由空间损耗</h4><p>顾名思义，即为无线信号在空气中传播的损耗，可以由以下公式得到</p>
-<p><img src="21.png" alt=""></p>
-<p>F为频率，单位为G hz,D为发射端与接收端距离，单位为千米。由该公式可知路损的相关因素分为以下两个:<br>1).发射天线与接收天线间的距离。<br>2).频率， 频率越高路损越大。</p>
-<h4 id="现实中无线电对地平面损失"><a href="#现实中无线电对地平面损失" class="headerlink" title="现实中无线电对地平面损失"></a>现实中无线电对地平面损失</h4><p>自由空间损耗是理想状态下无线电的损耗，实现当中还有两个考虑的因数，第一，天线损耗；第二，地表对无线的吸收和反射。<br>在考虑天线损耗和地表对无线的吸收和反射，我们可以概括得出下列公式。</p>
-<p><img src="22.png" alt=""></p>
-<p>h1和h2为发射端和接收端对地距离，k为自由空间波数，r是发射端和接收端的天线。<br>绘制自由空间损耗和地平面损失和距离关系的图如下所示：<br><img src="20.png" alt=""></p>
-<p>在外界条件一致的情况下可以简化得到下面非常有意义的公式：<br><img src="23.png" alt=""></p>
-<p>该公式的结论如下：<br>无线电传输距离和发射端，接收端对地距离成正比，距离地面越高，传输越远。</p>
-<h2 id="蓝牙5-4X-远距离"><a href="#蓝牙5-4X-远距离" class="headerlink" title="蓝牙5 4X 远距离"></a>蓝牙5 4X 远距离</h2><p>在4.2及以前的版本中蓝牙低功耗在信道传输中未使用纠错编码技术，标准规定的基准灵敏度为-70dBm(基本上每一家蓝牙芯片厂商都可以做到-90dBm)。 蓝牙5引入了卷积前向纠错编码(Convolutional Forward Error Correction Coding) 技术，提高了接收机的抗干扰能力，将接收机的参考灵敏度分别提高到-75dBm (S=2编码)和-82dBm (S=4编码), 同时提高了接收机的载干比(载干比：C/I=载波信号强度/干扰信号强度)性能。使得在保持TX相同功耗情况下，蓝牙的距离提升了4倍，下面来说说如何做到提高接收灵敏度,依靠的就是编码PHY。</p>
-<h3 id="BLE编码PHY"><a href="#BLE编码PHY" class="headerlink" title="BLE编码PHY"></a>BLE编码PHY</h3><p>蓝牙5除硬件支持1M,2M PHY，还支持两种编码方式的PHY，这两种编码方式的PHY是基于1M PHY的基础，使用1M PHY的物理通道。新的编码分为两种，一种编码PHY为500kbps(S=2)，另外一种编码PHY是125kbps(S=8)。<br>编码PHY的数据包类型和1M PHY/2M PHY 数据包类型略有不同，增加了CI(coding indicator)和TERM1和TERM2。CI和TERMx构成了FEC(Forward Error Correction)区块，利用FEC恢复在传输过程中的错误数据位，以提升接收灵敏度。</p>
-<p><img src="30.png" alt=""></p>
-<p>经过S=2或者S=8的编码，接收灵敏度可以提升4-6dBm，距离相应提升2-4被。但是进化出一种新的能力必然会牺牲自己一项能力，和1M PHY相比，传输的距离提升了，但传输相同数据包，编码PHY的功耗比1M PHY就要高出一节 (BLE 规定的包长一致，部分payload变为FEC data，实际有效的传输数据减少)。</p>
-<p><img src="29.png" alt=""></p>
-<h3 id="数据流传递方式"><a href="#数据流传递方式" class="headerlink" title="数据流传递方式"></a>数据流传递方式</h3><ul>
-<li><strong>1M/2M PHY</strong><br>在没有编码方式下，TX数据包数据bit流通过加密(可选项)，CRC效验，白化之后发送出去；RX端接收到数据流解调后校验CRC，解密，得到原始数据包数据。</li>
-</ul>
-<p><img src="25.png" alt=""></p>
-<ul>
-<li><strong>500kbps,125kbps 编码PHY</strong><br>相对 1M/2M 未编码PHY的数据流，500k PHY, 125K phy多出两个部分：FEC(前向错误纠错) 编码和模式映射，大家肯定要问如何实现FEC，我们以编码PHY的流程来完整讲述一下数据流的编码和传输过程。</li>
-</ul>
-<p><img src="26.png" alt=""></p>
-<ul>
-<li><p><strong>错误检验 — CRC效验错误</strong><br>接收机首先会检测接收到的Access Adrees是否正确，如果Access Adrees错误，丢弃该数据包，检测完Access Adrees，接收机会去效验整个数据包，判断24位CRC是否完全吻合。</p>
-</li>
-<li><p><strong>白化</strong><br>数据白化的目的是在传输数据遇到连续000000，或者连续111111序列时，进行合理编码，减少传输长串重复序列数据。</p>
-</li>
-<li><p><strong>编码 — 前向错误编码</strong><br>前向错误编码算法使得接收机有能比恢复该数据包中的传输错误数据位，通过把原始数据进行编码得到新的数据流，即使新的数据流在传输过程中有个别位数据错误，FEC解码也能恢复原始数据，从而提高了传输的误码率。BT5.0使用的如下编码算法:</p>
-</li>
-</ul>
-<p><img src="27.png" alt=""></p>
-<p>G0(a0)先进行传输，G1(a1)在G0传输完成之后传输。</p>
-<p><img src="28.png" alt=""></p>
-<ul>
-<li><strong>模式映射 — Pattern Mapper</strong><br>模式映射的目的是整理输出前向错误编码数据，输出的方式分为两种模式(P symbols)，一种P=1(S=2)，一种P=4(S=8)，两种模式下把前向错误编码数据进行加工，然后输出。由下面的表格所示，当P=1时，输出的data和输入保持不变，1位输入，1为输出；当P=4时，编码为4位再输出，所以可以看到P=4(S=8)时，输出的data数据量会更多，更进一部压缩实际可以传输的有效payload数据。</li>
-</ul>
-<h2 id="蓝牙远距离应用场景"><a href="#蓝牙远距离应用场景" class="headerlink" title="蓝牙远距离应用场景"></a>蓝牙远距离应用场景</h2><p>得益于前向错误编码和模式映射，使得蓝牙数据在传输过程中，RX端对整个payload数据包解码纠错能力有不同提升(简单说即为提高RX端接收灵敏度)，蓝牙5的传输距离才有显著的提升。125kbps使用S=8模式，传输距离相对传统BLE提升4倍，相应牺牲的数据传输率最多，500kbps使用S=2模式，传输距离相对传统BLE提升2倍。长距离模式可以有效可以支持到400-500米范围内BLE通讯。</p>
-<p><img src="640.png" alt=""></p>
-]]></content>
-      <categories>
-        <category>蓝牙协议</category>
-      </categories>
-      <tags>
-        <tag>蓝牙 5</tag>
-        <tag>远距离</tag>
-        <tag>大广播</tag>
-        <tag>2M PHY</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>蓝牙协议框架梳理</title>
-    <url>/2020/05/24/%E8%93%9D%E7%89%99%E5%8D%8F%E8%AE%AE%E6%A1%86%E6%9E%B6%E6%A2%B3%E7%90%86/</url>
-    <content><![CDATA[<h1 id="蓝牙基本概念"><a href="#蓝牙基本概念" class="headerlink" title="蓝牙基本概念"></a>蓝牙基本概念</h1><h2 id="Piconet"><a href="#Piconet" class="headerlink" title="Piconet"></a>Piconet</h2><p>在蓝牙设备没有跟其他蓝牙设备连线的时候，它自己属于一个piconet。当有连线后，piconet里有两种角色：master 和 slave。发起连线的一方是master，被连接的一方是slave。slave会以master的时钟为参照，以625us为时间单位，与master进行数据收发。每一个piconet里，一个master最多有7个slave。</p>
-<a id="more"></a>
-<p><img src="1.png" alt=""></p>
-<h2 id="PHY-Mode"><a href="#PHY-Mode" class="headerlink" title="PHY Mode"></a>PHY Mode</h2><p><strong>LE</strong>： LE采用频分多址（FDMA）和时分多址（TDMA），在FDMA中使用了40个（40）物理信道，相隔2 MHz。37,38,39用作主要广播，而另外37个通道用作数据渠道或者次要广播通道。</p>
-<p><strong>Basic Rate</strong>: 最基本的一种模式，采用GFSK，传输速率是 1Mb/s。</p>
-<p><img src="12.png" alt=""></p>
-<p><strong>Enhanced Data rate</strong>: 增强模式，传输速率是 2Mb/s （π/4-DQPSK）或 3Mb/s（8DPSK），这种模式有两种编码。</p>
-<h2 id="BT-clock"><a href="#BT-clock" class="headerlink" title="BT clock"></a>BT clock</h2><p>Clock是蓝牙通信最最基础的一个概念，clock定义了通信的时空范围，定义了这个Piconet时空的坐标系，只有在同一个坐标系里，网络内的各个角色才能相互了解对方的时间线，才知道什么时候发包，什么时候收包。<br>BT clock是个28bit的计数器，每tick一次是312.5us，所以总共有 (2^28 -1)个tick，算一下大约是(2^28-1)*312.5us/10^6/3600 = 23.3个小时后clock会翻转。</p>
-<p>针对Clock有几个重要概念：</p>
-<blockquote>
-<p>CLK0, 312.5us，是一个tick<br>CLK1, 625us, 是一个slot<br>CLK2, 1.25ms, 是一个frame（做一次TX 和 RX）<br>CLK12, 1.28s.<br>Clock的精确度要求为 +/-250ppm 和 +/-20ppm</p>
-</blockquote>
-<p>蓝牙tx,rx会按时隙为节拍通信，数据以625us一个时隙作为最小单元，有些数据包会超过一个时隙，最多可持续5个时隙。</p>
-<p><img src="11.png" alt=""></p>
-<p>对于一个连接中的两个设备中，对于主设备，slave_offset应为零，因为CLK与其自身的本地时钟CLKN相同。每个从机应在其CLKN上添加一个适当的slave_offset，以使CLK对应于主机的CLKN，使得主从时钟保持同步尽管设备中的所有CLKN均以相同的标称速率运行，但相互漂移会导致CLK不准确。因此，必须定期更新从机中的偏移，以使CLK大约等于主机的CLKN</p>
+
+<h1 id="漏洞类型"><a href="#漏洞类型" class="headerlink" title="漏洞类型"></a>漏洞类型</h1><p><strong>崩溃：</strong>此类漏洞可以通过故意触发硬故障中断使设备软件崩溃。这是由于SDK框架中某些不正确的代码行为或存储器溢出而造成，比如BLE接收缓冲区发生缓冲区溢出。崩溃发生时，软件通常会进行重新启动。但是，这种重启功能取决于BLE SoC的协议栈中是否考虑硬故障处理机制。</p>
+<p><strong>死锁：</strong>死锁是会影响BLE连接，不会引起硬故障或内存损坏的漏洞。通常，它们是由于用户APP代码与SoC SDK固件之间的某些不正确同步造成用户代码陷于某个死锁等待状态。如果正确不当，则可能会导致死锁。在大多数情况下，当发生死锁时，用户手动关闭设备电源并重新打开设备电源以重新建立正确的BLE通信。</p>
+<p><strong>配对安全：</strong>此漏洞是最严重的漏洞。该漏洞允许无攻击者设备绕过BLE的最新安全配对模式。绕过后，攻击者可以对设备功能进行任意读取或写入访问。而这些功能原来只能由正确交换密钥的授权用户访问。</p>
+<p><img src="2.jpeg" alt=""></p>
+<p>目前各大原厂已经公开发布各自的补丁修改问题。 部分终端产品也因该问题被陆续曝光，包括知名手环厂商FITBIT，北美智能锁制造商August等，但是只要产品支持BLE OTA升级功能，受影响的BLE SoC可通过软件升级方式更新原厂固件。</p>
+<h1 id="高风险设备"><a href="#高风险设备" class="headerlink" title="高风险设备"></a>高风险设备</h1><p><strong>可穿戴设备：</strong>Fitbit Inspire  FitBit 2018年最新智能手表使用赛普拉斯PSoC 6作为主处理器。通过测试，它们容易受到链路层溢出和LLID死锁的影响，为了验证利用这两个问题时可穿戴设备会发生什么，我们已通过BLE主设备将恶意数据包发送到Fitbit Inspire智能手表，恶意数据包发送到设备后，有可能触发设备内存中的缓冲区溢出或使蓝牙堆栈死锁。前者的攻击（利用链路层溢出）可立即重启设备，而后者的攻击（利用LLID死锁）可禁用蓝牙广告约27秒钟，然后使智能手表重启。</p>
+<p>总而言之，这些漏洞似乎只是暂时阻止了Fitbit手表的可用性。但是，链路层长度溢出本身就是一个威胁。特别是，一旦攻击者通过对固件进行反向工程来了解固件的内存布局，这种溢出就可能成为远程执行的潜在大门。在Fitbit Charge 3和Ace 2中预也会遇到同样问题(赛普拉斯PSoC 6处理器)。</p>
+<p><strong>智能家居：</strong>Eve Systems的许多智能家居产品由于依赖Dialog DA14680作为主处理器。例如，Eve电灯开关，Eve Motion MKII，Eve Aqua，Eve Thermo MKII，Eve Room，Eve Lock等都容易出现溢出攻击。具体来说，有可能通过发送溢出设备接收缓冲区的特定数据包来使此类设备崩溃。当发生攻击时，用户可以立即体验其智能产品重新启动或变得不稳定。例如，对Eve Energy进行溢出攻击，当智能插头的处理器崩溃并重新启动时，智能插头上的电源就会切断。因此，我们只需在智能插座的蓝牙接收范围内发送恶意数据包，就可以暂时切断与插座电源。此外，攻击者可以使用这种简单的攻击，通过间断地切断其电源，对连接到插头的某些设备造成物理损害。</p>
+<p><strong>智能锁：</strong>TheeGeeTouch是一种智能行李箱锁，可以通过手机APP进行远程锁定或解锁。该设备使用TI CC2540 SoC，在漏洞测试过程中，利用“无效连接请求”漏洞能将智能锁置于死锁状态。进行攻击时，设备会挂起，用户需要手动按下智能锁上的开机按钮才能与其进行交互，最严重的时，必须重新插入其电池以重新启动其处理器并使功能恢复正常。</p>
 <p><img src="4.png" alt=""></p>
-<h2 id="Physical-Channel（信道）"><a href="#Physical-Channel（信道）" class="headerlink" title="Physical Channel（信道）"></a>Physical Channel（信道）</h2><p>Spec总共有定义如下5种channel</p>
-<blockquote>
-<ul>
-<li>Basic piconet physical channel</li>
-<li>Adapted piconet physical channel</li>
-<li>Page scan physical channel</li>
-<li>Inquiry scan physical channel</li>
-<li>Synchronization scan physical channel</li>
-</ul>
-</blockquote>
-<p>以Basic piconet physical channel为例，在建立连线后，Slave会以Mater的clock为准。Master和Slave以一个slot为单位进行Tx和Rx，Master在clock为偶数时发包，Slave在clock为偶数时收包，如下图所示</p>
-<p><img src="3.png" alt=""></p>
-<h1 id="蓝牙核心框架"><a href="#蓝牙核心框架" class="headerlink" title="蓝牙核心框架"></a>蓝牙核心框架</h1><h2 id="核心架构"><a href="#核心架构" class="headerlink" title="核心架构"></a>核心架构</h2><p><img src="5.png" alt=""></p>
-<p>蓝牙核心框架信息量非常大，基本把蓝牙的构架和数据传输方向描述的非常清楚，绿色框图部分是Radio, 蓝牙射频，基带和链路管理放在该部分完成，红色部分称为Host端，俗称蓝牙协议。</p>
-<p>Radio分为经典蓝牙，低功耗蓝牙和AMP。我们主要看LE Controller，顺带提一下BR/EDR。</p>
-<p><strong>Controller和Host直接的数据传输有几种方式：C/E，SCO，ACL，ISO。</strong></p>
-<blockquote>
-<p>• Synchronous Connection-Oriented (SCO) logical transport<br>• Extended Synchronous Connection-Oriented (eSCO) logical transport<br>• Asynchronous Connection-Oriented (ACL) logical transport<br>• Active Slave Broadcast (ASB) logical transport<br>• Connectionless Slave Broadcast (CSB) logical transport.</p>
-</blockquote>
-<p>简单来说C/E是HOST和Controller通信方式之一，Command用于下发指令，Event是Host用于接收controller上报指令，SCO和eSCO是经典蓝牙下用于音频传输，ACL为异步数据传输（没有严格同步时间要求的数据传输方式），ISO是蓝牙5.2的最新规范的大数据传输通道，分为基于连接的数据流传输和基于广播的数据流传输。上图中灰色的箭头表示控制指令的传输路径，黑体箭头表示数据流向。</p>
-<blockquote>
-<p>Synchronous Connection Oriented (SCO)</p>
-<ul>
-<li>Circuit switched typically used for voice</li>
-<li>Symmetric, synchronous service</li>
-<li>Slot reservation at fixed intervals</li>
-<li>Point-to-point</li>
-</ul>
-<p>Asynchronous Connectionless Link (ACL)</p>
-<ul>
-<li>Packet switched</li>
-<li>Symmetric or asymmetric, asynchronous service<br>Polling mechanism between master and slave(s)</li>
-<li>Point-to-point and point-to-multipoint</li>
-</ul>
-</blockquote>
-<p>以设置LE设备广播为例，LE 设备上电后，host发送reset command重启蓝牙设备，发送广播参数command，配置广播内容，使能广播command，完成蓝牙设备的广播设置command。</p>
-<figure class="highlight kotlin"><table><tr><td class="code"><pre><span class="line">(```)</span><br><span class="line">########################################################</span><br><span class="line">## Legacy Adv Command</span><br><span class="line">########################################################</span><br><span class="line">#reset</span><br><span class="line">Send_HCI_Reset</span><br><span class="line">Wait_HCI_Command_Complete_Reset_Event <span class="number">5000</span>, any, HCI_Reset, <span class="number">0x00</span></span><br><span class="line"></span><br><span class="line"># <span class="keyword">set</span> Adv parameter</span><br><span class="line">Send_HCI_LE_Set_Advertising_Parameters <span class="number">800</span>, <span class="number">800</span>, <span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x00</span>, <span class="string">"01:02:03:04:05:06"</span>, <span class="string">"0x07"</span>, <span class="string">"0x00"</span></span><br><span class="line">Wait_HCI_Command_Complete_LE_Set_Advertising_Parameters_Event <span class="number">5000</span>, any, HCI_LE_Set_Advertising_Parameters, </span><br><span class="line"></span><br><span class="line"># <span class="keyword">set</span> Adv <span class="keyword">data</span> Payload</span><br><span class="line">Send_HCI_LE_Set_Advertising_Data <span class="number">0x10</span>, <span class="string">"00:01:02:03:04:05:06:07:08:09:0A:0B:0C:0D:0E:0F"</span></span><br><span class="line">Wait_HCI_Command_Complete_LE_Set_Advertising_Data_Event <span class="number">5000</span>, any, HCI_LE_Set_Advertising_Data, </span><br><span class="line"></span><br><span class="line"># <span class="keyword">set</span> Scan rsp <span class="keyword">data</span> Payload</span><br><span class="line">Send_HCI_LE_Set_Scan_Response_Data <span class="number">0x10</span>, <span class="string">"00:01:02:03:04:05:06:07:08:09:0A:0B:0C:0D:0E:0F"</span></span><br><span class="line">Wait_HCI_Command_Complete_LE_Set_Scan_Response_Data_Event <span class="number">5000</span>, any, HCI_LE_Set_Scan_Response_Data, </span><br><span class="line"></span><br><span class="line"># enable adv</span><br><span class="line">Send_HCI_LE_Set_Advertise_Enable <span class="number">0x01</span></span><br><span class="line">Wait_HCI_Command_Complete_LE_Set_Advertise_Enable_Event <span class="number">5000</span>, any, HCI_LE_Set_Advertise_Enable, </span><br><span class="line">(```)</span><br></pre></td></tr></table></figure>
-
-<p>完整的Command/Event交互LOG如下:</p>
-<blockquote>
-<p>20:23:26.378 <strong>* Script Started: “C:\Users\xcoder\Documents\Texas Instruments\HCI TESTER\hci_tester\controller scripts\adv.txt” *</strong><br>20:23:26.378 –<br>20:23:26.378 Packet “HCI_Reset”, Opcode 0x0c03<br>20:23:26.378 –<br>20:23:26.378 Outgoing Dump:<br>20:23:26.378     0000: 01 03 0c 00                                     ….<br>20:23:26.398 Incoming Dump:<br>20:23:26.398     0000: 04 0e 04 01 03 0c 00                            …….<br>20:23:26.398 –<br>20:23:26.398 Packet “HCI_Command_Complete_Reset_Event”, Opcode 0x0c03<br>20:23:26.398 Parameters:<br>20:23:26.398 | Number HCI commands : 0x01<br>20:23:26.398 | Command Opcode      : 0x0c03<br>20:23:26.398 | Status              : 0x00 (Success)<br>20:23:26.398 –<br>20:23:26.398 –<br>20:23:26.398 Packet “HCI_LE_Set_Advertising_Parameters”, Opcode 0x2006<br>20:23:26.398 Parameters:<br>20:23:26.398 | Advertise Min Interval    : 800<br>20:23:26.398 | Advertise Max Interval    : 800<br>20:23:26.398 | Advertising Type          : 0x00 (Connectable Undirected Event)<br>20:23:26.398 | Own Address Type          : 0x00 (Public Device Address)<br>20:23:26.398 | Direct Address Type       : 0x00 (Public Device Address)<br>20:23:26.398 | Direct Address            : “01:02:03:04:05:06”<br>20:23:26.398 | Advertising Channel Map   : 0x07<br>20:23:26.398 | Advertising Filter Policy : 0x00<br>20:23:26.398 –<br>20:23:26.398 Outgoing Dump:<br>20:23:26.398     0000: 01 06 20 0f 20 03 20 03 00 00 00 06 05 04 03 02 .. . . ………<br>20:23:26.398     0010: 01 07 00                                        …<br>20:23:26.418 Incoming Dump:<br>20:23:26.418     0000: 04 0e 04 01 06 20 00                            ….. .<br>20:23:26.418 –<br>20:23:26.418 Packet “HCI_Command_Complete_LE_Set_Advertising_Parameters_Event”, Opcode 0x2006<br>20:23:26.418 Parameters:<br>20:23:26.418 | Number HCI commands : 0x01<br>20:23:26.418 | Command Opcode      : 0x2006<br>20:23:26.418 | Status              : 0x00 (Success)<br>20:23:26.418 –<br>20:23:26.418 –<br>20:23:26.418 Packet “HCI_LE_Set_Advertising_Data”, Opcode 0x2008<br>20:23:26.418 Parameters:<br>20:23:26.418 | Data Length      : 0x10<br>20:23:26.418 | Advertising data : “00:01:02:03:04:05:06:07:08:09:0A:0B:0C:0D:0E:0F”<br>20:23:26.418 –<br>20:23:26.418 Outgoing Dump:<br>20:23:26.418     0000: 01 08 20 11 10 00 01 02 03 04 05 06 07 08 09 0a .. ………….<br>20:23:26.418     0010: 0b 0c 0d 0e 0f                                  …..<br>20:23:26.428 Incoming Dump:<br>20:23:26.428     0000: 04 0e 04 01 08 20 00                            ….. .<br>20:23:26.428 –<br>20:23:26.428 Packet “HCI_Command_Complete_LE_Set_Advertising_Data_Event”, Opcode 0x2008<br>20:23:26.428 Parameters:<br>20:23:26.428 | Number HCI commands : 0x01<br>20:23:26.428 | Command Opcode      : 0x2008<br>20:23:26.428 | Status              : 0x00 (Success)<br>20:23:26.428 –<br>20:23:26.428 –<br>20:23:26.428 Packet “HCI_LE_Set_Scan_Response_Data”, Opcode 0x2009<br>20:23:26.428 Parameters:<br>20:23:26.428 | Data Length : 0x10<br>20:23:26.428 | Data        : “00:01:02:03:04:05:06:07:08:09:0A:0B:0C:0D:0E:0F”<br>20:23:26.428 –<br>20:23:26.428 Outgoing Dump:<br>20:23:26.428     0000: 01 09 20 11 10 00 01 02 03 04 05 06 07 08 09 0a .. ………….<br>20:23:26.428     0010: 0b 0c 0d 0e 0f                                  …..<br>20:23:26.448 Incoming Dump:<br>20:23:26.448     0000: 04 0e 04 01 09 20 00                            ….. .<br>20:23:26.448 –<br>20:23:26.448 Packet “HCI_Command_Complete_LE_Set_Scan_Response_Data_Event”, Opcode 0x2009<br>20:23:26.448 Parameters:<br>20:23:26.448 | Number HCI commands : 0x01<br>20:23:26.448 | Command Opcode      : 0x2009<br>20:23:26.448 | Status              : 0x00 (Success)<br>20:23:26.448 –<br>20:23:26.448 –<br>20:23:26.448 Packet “HCI_LE_Set_Advertise_Enable”, Opcode 0x200a<br>20:23:26.448 Parameters:<br>20:23:26.448 | Advertise Enable : 0x01 (Enable)<br>20:23:26.448 –<br>20:23:26.448 Outgoing Dump:<br>20:23:26.448     0000: 01 0a 20 01 01                                  .. ..<br>20:23:26.468 Incoming Dump:<br>20:23:26.468     0000: 04 0e 04 01 0a 20 00                            ….. .<br>20:23:26.468 –<br>20:23:26.468 Packet “HCI_Command_Complete_LE_Set_Advertise_Enable_Event”, Opcode 0x200a<br>20:23:26.468 Parameters:<br>20:23:26.468 | Number HCI commands : 0x01<br>20:23:26.468 | Command Opcode      : 0x200a<br>20:23:26.468 | Status              : 0x00 (Success)<br>20:23:26.468 –<br>20:23:26.468 –<br>20:23:26.468 <strong>* Script End *</strong></p>
-</blockquote>
-<p>蓝牙Host和controller层通过HCI Command/Event交互数据，在早期的BR/EDR蓝牙中，Controller和Host会分开两颗芯片，再蓝牙4.x以后，芯片原厂已经把两颗芯片集成到一颗SOC中，hci层只有在蓝牙测试时候会单独用到，工程中，往往已经看不到hci层（已经打包在lib里），这一章有了一个层级间数据传输的感性认识，下面了解蓝牙协议的全貌。</p>
-<h2 id="蓝牙协议架构"><a href="#蓝牙协议架构" class="headerlink" title="蓝牙协议架构"></a>蓝牙协议架构</h2><p><img src="7.png" alt=""></p>
-<p>从OSI（Open System Interconnection）模型的角度看，蓝牙是一个比较简单的协议，它仅仅提供了物理层（Physical Layer）和数据链路层（Data Link Layer ）两个OSI层次，细化可分为如图所示的物理层（Physical Layer）、逻辑层（Logical Layer）、L2CAP Layer。</p>
-<blockquote>
-<p><strong>物理层</strong>，负责提供数据传输的物理通道（通常称为信道）。通常情况下，一个通信系统中存在几种不同类型的信道，如控制信道、数据信道、语音信道等等。<br><strong>逻辑层</strong>，在物理层的基础上，提供两个或多个设备之间、和物理无关的逻辑传输通道（也称作逻辑链路）。<br><strong>L2CAP层</strong>，L2CAP是逻辑链路控制和适配协议（Logical Link Control and Adaptation Protocol）的缩写，负责管理逻辑层提供的逻辑链路。基于该协议，不同Application可共享同一个逻辑链路。类似TCP/IP中端口（port）的概念。</p>
-</blockquote>
-<p>在l2cap之上还可以有profile层，理解蓝牙协议的profile，基于L2CAP提供的channel，实现各种各样的应用功能。Profile是蓝牙协议的特有概念，为了实现不同平台下的不同设备的互联互通，蓝牙协议不止规定了核心规范（称作Bluetooth core），也为各种不同的应用场景，定义了各种Application规范。</p>
-<p>数据和指令的传输通过C/E，SCO，ACL，ISO几个通道穿梭在不同层协议，既保证了蓝牙协议层级间的独立，又完成了蓝牙数据的交互。</p>
-<h2 id="蓝牙层级间的数据交互"><a href="#蓝牙层级间的数据交互" class="headerlink" title="蓝牙层级间的数据交互"></a>蓝牙层级间的数据交互</h2><p><img src="8.png" alt=""></p>
-<p>蓝牙协议层级间的指令数据传输需要靠通道相互连接，操作系统消息传递机制以及callback函承担了实现层级间的数据通信和交互的桥梁。</p>
-<p>我们以TI CC2541(真的很老了)的软件架构来讲述数据传输方式，工程内有多个线程同时工作：LL，HAL，HCI，L2CAP，GAP，SM，GATT，GAPROLE，GAPBondMgr，GATTServApp，SimpleBLEPeripheral。线程之间采用command/event方式交互数据。</p>
-<figure class="highlight go"><table><tr><td class="code"><pre><span class="line">(<span class="string">``</span><span class="string">`)</span></span><br><span class="line"><span class="string">void osalInitTasks( void )</span></span><br><span class="line"><span class="string">&#123;</span></span><br><span class="line"><span class="string">  uint8 taskID = 0;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">  tasksEvents = (uint16 *)osal_mem_alloc( sizeof( uint16 ) * tasksCnt);</span></span><br><span class="line"><span class="string">  osal_memset( tasksEvents, 0, (sizeof( uint16 ) * tasksCnt));</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">  /* LL Task */</span></span><br><span class="line"><span class="string">  LL_Init( taskID++ );</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">  /* Hal Task */</span></span><br><span class="line"><span class="string">  Hal_Init( taskID++ );</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">  /* HCI Task */</span></span><br><span class="line"><span class="string">  HCI_Init( taskID++ );</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">#if defined ( OSAL_CBTIMER_NUM_TASKS )</span></span><br><span class="line"><span class="string">  /* Callback Timer Tasks */</span></span><br><span class="line"><span class="string">  osal_CbTimerInit( taskID );</span></span><br><span class="line"><span class="string">  taskID += OSAL_CBTIMER_NUM_TASKS;</span></span><br><span class="line"><span class="string">#endif</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">  /* L2CAP Task */</span></span><br><span class="line"><span class="string">  L2CAP_Init( taskID++ );</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">  /* GAP Task */</span></span><br><span class="line"><span class="string">  GAP_Init( taskID++ );</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">  /* SM Task */</span></span><br><span class="line"><span class="string">  SM_Init( taskID++ );</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">  /* GATT Task */</span></span><br><span class="line"><span class="string">  GATT_Init( taskID++ );</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">  /* Profiles */</span></span><br><span class="line"><span class="string">  GAPRole_Init( taskID++ );</span></span><br><span class="line"><span class="string">  GAPBondMgr_Init( taskID++ );</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">  GATTServApp_Init( taskID++ );</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">  /* Application */</span></span><br><span class="line"><span class="string">  SimpleBLEPeripheral_Init( taskID );</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string">(`</span><span class="string">``</span>)</span><br></pre></td></tr></table></figure>
-
+<p><img src="1.jpeg" alt=""></p>
+<p>尽管很难确定存在漏洞风险的产品数量，但我们从SIG联盟的蓝牙认证清单上搜索到多款可能受影响的产品类型。下图记录了截至2020年2月8日使用受影响的产品列表总数。</p>
 <p><img src="9.png" alt=""></p>
-<p>HOST端层级之间数据交互通道</p>
+<p>物流，医疗，消费电子，智能家居，可穿戴设备和其他领域的产品也应该高度重视，我们概述了一些在SIG Bluetooth Listing上认证过的产品。</p>
 <p><img src="10.png" alt=""></p>
-<p>HCI下层和controller的部分逻辑和上层host一样，只是在hci层做了一层数据传输的task，HCI_task作为host和controller的衔接，进行发送，解析指令，传输数据。</p>
-<blockquote>
-<p>​HCI command packet format:  cmd</p>
-<ul>
-<li>Packet Type + Command opcode + lengh + command payload</li>
-<li>| 1 octet          |              2            |          1            |      n        |</li>
-</ul>
-<p>HCI data packet format:  eco acl</p>
-<ul>
-<li>Packet Type +   Conn Handle  + lengh +  data payload</li>
-<li>| 1 octet             |      2        |            2           |      n      |</li>
-</ul>
-</blockquote>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>弄清楚了基本概念，弄清楚了框架和数据流向和软件实施办法，就基本对蓝牙协议有了一个宏观认识，对于理解软件代码有一定帮助。</p>
-<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="https://wnnwoo.github.io/2019/07/27/bluetooth-baseband/" target="_blank" rel="noopener">蓝牙基带介绍</a><br><a href="http://www.wowotech.net/bluetooth/bt_protocol_arch.html" target="_blank" rel="noopener">蓝牙协议分析</a><br>蓝牙5.2规范</p>
-<p><img src="640.png" alt=""></p>
-]]></content>
-      <categories>
-        <category>蓝牙协议</category>
-      </categories>
-      <tags>
-        <tag>hci</tag>
-        <tag>蓝牙框架</tag>
-        <tag>acl</tag>
-        <tag>蓝牙基本概念</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>BLE Controller框架梳理</title>
-    <url>/2020/08/11/Controller%E6%A1%86%E6%9E%B6%E6%A2%B3%E7%90%86/</url>
-    <content><![CDATA[<h1 id="BLE-Controller基本概念"><a href="#BLE-Controller基本概念" class="headerlink" title="BLE Controller基本概念"></a>BLE Controller基本概念</h1><h2 id="Controller构成"><a href="#Controller构成" class="headerlink" title="Controller构成"></a>Controller构成</h2><p>蓝牙协议分host和controller两个部分，Host是正真意义的蓝牙协议，Controller为蓝牙底层，或者说是基带芯片。基带芯片又可以分为三个部分，Radio，Link Layer和HCI。</p>
-<a id="more"></a>
-
-<p><img src="1.png" alt=""></p>
-<h2 id="Radio"><a href="#Radio" class="headerlink" title="Radio"></a>Radio</h2><p>Radio可以理解为一个独立的协处理器，负责调制解调2.4G裸数据，完整的Radio功能应该包括，数据组包拆包，CRC校验，白话，调制解调等功能。</p>
-<p><img src="2.png" alt=""></p>
-<p>根据Controller的设计需要，Radio协处理器被设计为一个小型状态机，下图为Nordic 52810 Radio内核状态机状态，该状态机分为9种状态，Radio会输出下图9种状态给SOC芯片，SOC芯片根据相应状态机状态，进行处理，协处理器和SOC之间共用数据总线。</p>
-<p><img src="3.png" alt=""></p>
-<p><img src="4.png" alt=""></p>
-<h2 id="Link-layer架构"><a href="#Link-layer架构" class="headerlink" title="Link layer架构"></a>Link layer架构</h2><p>Link Layer决定蓝牙所处的状态，蓝牙可以分为idel（standby），adv，scan，init以及connection状态，connection又可分为master或者slave。状态之间可以相互转换。</p>
-<p><img src="5.png" alt=""></p>
-<p>Link Layer允许多种状态同时并存，一个piconet可以支持多种状态，即Combination States。Combination States并不是任意若干种状态的结合，其中有限制存在，比如一个piconet不可能同时支持master和slave状态，比如两个scan不能同时存在，下图多多状态的二维组合分布图。</p>
+<p>生产血糖仪的VivaCheck  Lab有很多产品都使用来DA14580。这些产品都可能容易受到L2CAP恶意数据攻击。更糟糕的是，Medtronic最新的起搏器相关的产品可能也会受到影响，为了避免使用任何可能对使用相应医疗产品的患者造成生命危险的情况，强烈建议此类公司更新固件。</p>
+<p>另外恩智浦半导体的SoC KW41Z 电池供电自动包裹储物柜，KW41Z LLID死锁漏洞非常容易复现，攻击者可以简单地阻止任何人连接到包裹储物柜（除非包裹储物柜自动重启）。恩智浦已经发布了影响KW41Z的两个漏洞的补丁程序。</p>
+<p>上表并不详尽，因此建议每个产品供应商将其产品的SDK固件更新到最新（如果有），或者联系其SoC供应商以查询补丁状态。</p>
+<p>大多数芯片厂家已为其SoC发布了补丁包，通过下载下表中引用的供应商的最新SDK，即可获得最新补丁。另一方面，每个SoC供应商都独立联系产品供应商（使用受影响的SoC），以告知有关安全补丁的信息 。</p>
+<p>在我们与Dialog联系期间，他们已经确认计划在下一个SDK版本中为受影响的SoC修补一个补丁。</p>
 <p><img src="6.png" alt=""></p>
-<h2 id="HCI架构"><a href="#HCI架构" class="headerlink" title="HCI架构"></a>HCI架构</h2><p>蓝牙和蓝牙WIFI二合一芯片HOST和Controller早期都是两类芯片厂家分开提供，两颗芯片交互需要采用统一标准，HCI层由此而来。Host蓝牙协议只需要按照蓝牙联盟规范的HCI指令即可控制蓝牙controller。</p>
-<p><img src="7.png" alt=""></p>
-<h1 id="Controller宏观认知"><a href="#Controller宏观认知" class="headerlink" title="Controller宏观认知"></a>Controller宏观认知</h1><h2 id="ADV广播"><a href="#ADV广播" class="headerlink" title="ADV广播"></a>ADV广播</h2><p><img src="8.png" alt=""></p>
-<h2 id="SCAN扫描"><a href="#SCAN扫描" class="headerlink" title="SCAN扫描"></a>SCAN扫描</h2><p><img src="9.png" alt=""></p>
-<h2 id="INIT初始化"><a href="#INIT初始化" class="headerlink" title="INIT初始化"></a>INIT初始化</h2><p><img src="10.png" alt=""></p>
-<h2 id="Connection连接"><a href="#Connection连接" class="headerlink" title="Connection连接"></a>Connection连接</h2><p><img src="11.png" alt=""></p>
-<h1 id="Controller核心框架"><a href="#Controller核心框架" class="headerlink" title="Controller核心框架"></a>Controller核心框架</h1><h2 id="核心架构"><a href="#核心架构" class="headerlink" title="核心架构"></a>核心架构</h2><p>Link Layer和芯片Radio设计相关度较大，根据与PYH（radio）传输接口的不一样，可以分为：</p>
-<ul>
-<li><p>Radio负责packet，即硬件只提供收或者发一个包的接口。</p>
-</li>
-<li><p>Radio负责frame，即硬件提供包含一个IFS的一组收发的接口。</p>
-</li>
-<li><p>Radio硬件负责event，即硬件提供控制整个event内，若干组收发的接口（CEVA BLE IP的实现采用的就是这种）。</p>
-</li>
-</ul>
-<p>三种方案数字设计的复杂度是递增的，灵活性是递减的，对CPU的处理能力需求是递减的。</p>
-<h2 id="LL调度机制-Radio负责packet"><a href="#LL调度机制-Radio负责packet" class="headerlink" title="LL调度机制-Radio负责packet"></a>LL调度机制-Radio负责packet</h2><p>以Radio负责packet的方案介绍LL的整体设计思路：</p>
-<p>根据Radio状态机的9种状态，设计Link Layer中的adv，scan，init，master，slave 事件，事件之间的存在如下相互转换关系：</p>
-<p><img src="12.png" alt=""></p>
-<p>每个事件结束后，调用任务调度机，决定ll下一个状态，下一个ll状态可能是当前状态的延续，可能是新的状态，也可能是当前状态和新的状态的Combination，所以ll调度机不光决定一个状态，还需要考虑多状态能否共存，Scheduler确定是否能执行下一个状态后，启动该任务，执行该任务。</p>
-<p>谈到状态共存，adv，scan，init必须给connection事件让步，在这个时间内，哪些事可以提前做，哪些事需要推迟做，这是Scheduler需要考虑的。</p>
-<p><img src="13.png" alt=""></p>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>LL事件，Scheduler任务调度，HCI组包解包是构成Radio的三大模块， 弄清楚整个控制框架，配合时间戳要求，才能把controller玩转起来，controller时间戳同步也是一个非常头疼的话题，特别是搅合在任务调度一起，到此了。</p>
-<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><h2 id="master-slave共存"><a href="#master-slave共存" class="headerlink" title="master/slave共存"></a>master/slave共存</h2><p>一个controller可以支持多个ll状态机，一个ll状态机的状态不允许master&amp;slave同时存在(上文已经说明)，但可以通过分别开启两个ll状态机（piconet的概念由来），一个在master状态，一个在slave状态，这样从使用者的角度上看，就是master和slave共存。</p>
-<h2 id="BT5-2-新状态"><a href="#BT5-2-新状态" class="headerlink" title="BT5.2 新状态"></a>BT5.2 新状态</h2><p>BT 5.2增加了两个新状态，一个isochronous broadcasting 一个synchronization。</p>
-<p><img src="14.png" alt=""></p>
-<p><strong>参考资料</strong></p>
-<ul>
-<li><p>Ble_101_frontline</p>
-</li>
-<li><p>Nordic52810 spec</p>
-</li>
-<li><p>蓝牙5.0 spec</p>
-</li>
-</ul>
+<h1 id="深入调查"><a href="#深入调查" class="headerlink" title="深入调查"></a>深入调查</h1><p>近年来，由于一些安全机制的考虑不周（例如KNOB，BlueBorne 和Invalid ECC Attack）蓝牙连接一直会受到不同程度攻击。每个SoC BLE SDK都必须先经过蓝牙认证，然后才能投放市场。但我们的发现表明，认证过程应该进行改进。我们按照Core Specification规范测试蓝牙SoC，往往会上收到了截然不同的响应，说明蓝牙芯片供应商并未严格遵循协议规范，比如，Telink的设备多次响应版本请求，这违反了核心规范[13]的[Vol 6] B部分第5.1.5节，该部分定义了HOST设备在接收主机发送的HCI指令中应仅响应一次版本请求。同样，我们测试过的所有设备都可以接受“ hopIncrement”字段值小于5的连接请求，此举违反了[Vol 6] B部分第2.3.3.1节的规定，该部分规定该字段的有效范围在5-16。此外，我们发现的所有漏洞都与[Vol 1] E部分的2.7节（对格式错误的响应）相关，该部分的说明其实已经提供了指令和一些示例来处理无效或格式错误的数据包。希望蓝牙SIG改进并显着扩展第2.7节，并向蓝牙认证中添加更多基本测试，以避免以上漏洞。</p>
+<h1 id="附录：蓝牙连接全过程"><a href="#附录：蓝牙连接全过程" class="headerlink" title="附录：蓝牙连接全过程"></a>附录：<strong>蓝牙连接全过程</strong></h1><p><img src="11.jpeg" alt=""></p>
 <p><img src="640.png" alt=""></p>
 ]]></content>
       <categories>
-        <category>蓝牙协议</category>
+        <category>Bluetooth</category>
       </categories>
       <tags>
-        <tag>蓝牙 controller</tag>
-        <tag>ll 状态机</tag>
-        <tag>蓝牙 radio</tag>
-        <tag>蓝牙 phy</tag>
+        <tag>SweynTooth</tag>
+        <tag>蓝牙漏洞</tag>
+        <tag>ti</tag>
+        <tag>dialog</tag>
       </tags>
   </entry>
   <entry>
@@ -586,6 +326,266 @@
         <tag>爬虫</tag>
         <tag>蓝牙厂家</tag>
         <tag>国产蓝牙</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>蓝牙协议框架梳理</title>
+    <url>/2020/05/24/%E8%93%9D%E7%89%99%E5%8D%8F%E8%AE%AE%E6%A1%86%E6%9E%B6%E6%A2%B3%E7%90%86/</url>
+    <content><![CDATA[<h1 id="蓝牙基本概念"><a href="#蓝牙基本概念" class="headerlink" title="蓝牙基本概念"></a>蓝牙基本概念</h1><h2 id="Piconet"><a href="#Piconet" class="headerlink" title="Piconet"></a>Piconet</h2><p>在蓝牙设备没有跟其他蓝牙设备连线的时候，它自己属于一个piconet。当有连线后，piconet里有两种角色：master 和 slave。发起连线的一方是master，被连接的一方是slave。slave会以master的时钟为参照，以625us为时间单位，与master进行数据收发。每一个piconet里，一个master最多有7个slave。</p>
+<a id="more"></a>
+<p><img src="1.png" alt=""></p>
+<h2 id="PHY-Mode"><a href="#PHY-Mode" class="headerlink" title="PHY Mode"></a>PHY Mode</h2><p><strong>LE</strong>： LE采用频分多址（FDMA）和时分多址（TDMA），在FDMA中使用了40个（40）物理信道，相隔2 MHz。37,38,39用作主要广播，而另外37个通道用作数据渠道或者次要广播通道。</p>
+<p><strong>Basic Rate</strong>: 最基本的一种模式，采用GFSK，传输速率是 1Mb/s。</p>
+<p><img src="12.png" alt=""></p>
+<p><strong>Enhanced Data rate</strong>: 增强模式，传输速率是 2Mb/s （π/4-DQPSK）或 3Mb/s（8DPSK），这种模式有两种编码。</p>
+<h2 id="BT-clock"><a href="#BT-clock" class="headerlink" title="BT clock"></a>BT clock</h2><p>Clock是蓝牙通信最最基础的一个概念，clock定义了通信的时空范围，定义了这个Piconet时空的坐标系，只有在同一个坐标系里，网络内的各个角色才能相互了解对方的时间线，才知道什么时候发包，什么时候收包。<br>BT clock是个28bit的计数器，每tick一次是312.5us，所以总共有 (2^28 -1)个tick，算一下大约是(2^28-1)*312.5us/10^6/3600 = 23.3个小时后clock会翻转。</p>
+<p>针对Clock有几个重要概念：</p>
+<blockquote>
+<p>CLK0, 312.5us，是一个tick<br>CLK1, 625us, 是一个slot<br>CLK2, 1.25ms, 是一个frame（做一次TX 和 RX）<br>CLK12, 1.28s.<br>Clock的精确度要求为 +/-250ppm 和 +/-20ppm</p>
+</blockquote>
+<p>蓝牙tx,rx会按时隙为节拍通信，数据以625us一个时隙作为最小单元，有些数据包会超过一个时隙，最多可持续5个时隙。</p>
+<p><img src="11.png" alt=""></p>
+<p>对于一个连接中的两个设备中，对于主设备，slave_offset应为零，因为CLK与其自身的本地时钟CLKN相同。每个从机应在其CLKN上添加一个适当的slave_offset，以使CLK对应于主机的CLKN，使得主从时钟保持同步尽管设备中的所有CLKN均以相同的标称速率运行，但相互漂移会导致CLK不准确。因此，必须定期更新从机中的偏移，以使CLK大约等于主机的CLKN</p>
+<p><img src="4.png" alt=""></p>
+<h2 id="Physical-Channel（信道）"><a href="#Physical-Channel（信道）" class="headerlink" title="Physical Channel（信道）"></a>Physical Channel（信道）</h2><p>Spec总共有定义如下5种channel</p>
+<blockquote>
+<ul>
+<li>Basic piconet physical channel</li>
+<li>Adapted piconet physical channel</li>
+<li>Page scan physical channel</li>
+<li>Inquiry scan physical channel</li>
+<li>Synchronization scan physical channel</li>
+</ul>
+</blockquote>
+<p>以Basic piconet physical channel为例，在建立连线后，Slave会以Mater的clock为准。Master和Slave以一个slot为单位进行Tx和Rx，Master在clock为偶数时发包，Slave在clock为偶数时收包，如下图所示</p>
+<p><img src="3.png" alt=""></p>
+<h1 id="蓝牙核心框架"><a href="#蓝牙核心框架" class="headerlink" title="蓝牙核心框架"></a>蓝牙核心框架</h1><h2 id="核心架构"><a href="#核心架构" class="headerlink" title="核心架构"></a>核心架构</h2><p><img src="5.png" alt=""></p>
+<p>蓝牙核心框架信息量非常大，基本把蓝牙的构架和数据传输方向描述的非常清楚，绿色框图部分是Radio, 蓝牙射频，基带和链路管理放在该部分完成，红色部分称为Host端，俗称蓝牙协议。</p>
+<p>Radio分为经典蓝牙，低功耗蓝牙和AMP。我们主要看LE Controller，顺带提一下BR/EDR。</p>
+<p><strong>Controller和Host直接的数据传输有几种方式：C/E，SCO，ACL，ISO。</strong></p>
+<blockquote>
+<p>• Synchronous Connection-Oriented (SCO) logical transport<br>• Extended Synchronous Connection-Oriented (eSCO) logical transport<br>• Asynchronous Connection-Oriented (ACL) logical transport<br>• Active Slave Broadcast (ASB) logical transport<br>• Connectionless Slave Broadcast (CSB) logical transport.</p>
+</blockquote>
+<p>简单来说C/E是HOST和Controller通信方式之一，Command用于下发指令，Event是Host用于接收controller上报指令，SCO和eSCO是经典蓝牙下用于音频传输，ACL为异步数据传输（没有严格同步时间要求的数据传输方式），ISO是蓝牙5.2的最新规范的大数据传输通道，分为基于连接的数据流传输和基于广播的数据流传输。上图中灰色的箭头表示控制指令的传输路径，黑体箭头表示数据流向。</p>
+<blockquote>
+<p>Synchronous Connection Oriented (SCO)</p>
+<ul>
+<li>Circuit switched typically used for voice</li>
+<li>Symmetric, synchronous service</li>
+<li>Slot reservation at fixed intervals</li>
+<li>Point-to-point</li>
+</ul>
+<p>Asynchronous Connectionless Link (ACL)</p>
+<ul>
+<li>Packet switched</li>
+<li>Symmetric or asymmetric, asynchronous service<br>Polling mechanism between master and slave(s)</li>
+<li>Point-to-point and point-to-multipoint</li>
+</ul>
+</blockquote>
+<p>以设置LE设备广播为例，LE 设备上电后，host发送reset command重启蓝牙设备，发送广播参数command，配置广播内容，使能广播command，完成蓝牙设备的广播设置command。</p>
+<figure class="highlight kotlin"><table><tr><td class="code"><pre><span class="line">(```)</span><br><span class="line">########################################################</span><br><span class="line">## Legacy Adv Command</span><br><span class="line">########################################################</span><br><span class="line">#reset</span><br><span class="line">Send_HCI_Reset</span><br><span class="line">Wait_HCI_Command_Complete_Reset_Event <span class="number">5000</span>, any, HCI_Reset, <span class="number">0x00</span></span><br><span class="line"></span><br><span class="line"># <span class="keyword">set</span> Adv parameter</span><br><span class="line">Send_HCI_LE_Set_Advertising_Parameters <span class="number">800</span>, <span class="number">800</span>, <span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x00</span>, <span class="string">"01:02:03:04:05:06"</span>, <span class="string">"0x07"</span>, <span class="string">"0x00"</span></span><br><span class="line">Wait_HCI_Command_Complete_LE_Set_Advertising_Parameters_Event <span class="number">5000</span>, any, HCI_LE_Set_Advertising_Parameters, </span><br><span class="line"></span><br><span class="line"># <span class="keyword">set</span> Adv <span class="keyword">data</span> Payload</span><br><span class="line">Send_HCI_LE_Set_Advertising_Data <span class="number">0x10</span>, <span class="string">"00:01:02:03:04:05:06:07:08:09:0A:0B:0C:0D:0E:0F"</span></span><br><span class="line">Wait_HCI_Command_Complete_LE_Set_Advertising_Data_Event <span class="number">5000</span>, any, HCI_LE_Set_Advertising_Data, </span><br><span class="line"></span><br><span class="line"># <span class="keyword">set</span> Scan rsp <span class="keyword">data</span> Payload</span><br><span class="line">Send_HCI_LE_Set_Scan_Response_Data <span class="number">0x10</span>, <span class="string">"00:01:02:03:04:05:06:07:08:09:0A:0B:0C:0D:0E:0F"</span></span><br><span class="line">Wait_HCI_Command_Complete_LE_Set_Scan_Response_Data_Event <span class="number">5000</span>, any, HCI_LE_Set_Scan_Response_Data, </span><br><span class="line"></span><br><span class="line"># enable adv</span><br><span class="line">Send_HCI_LE_Set_Advertise_Enable <span class="number">0x01</span></span><br><span class="line">Wait_HCI_Command_Complete_LE_Set_Advertise_Enable_Event <span class="number">5000</span>, any, HCI_LE_Set_Advertise_Enable, </span><br><span class="line">(```)</span><br></pre></td></tr></table></figure>
+
+<p>完整的Command/Event交互LOG如下:</p>
+<blockquote>
+<p>20:23:26.378 <strong>* Script Started: “C:\Users\xcoder\Documents\Texas Instruments\HCI TESTER\hci_tester\controller scripts\adv.txt” *</strong><br>20:23:26.378 –<br>20:23:26.378 Packet “HCI_Reset”, Opcode 0x0c03<br>20:23:26.378 –<br>20:23:26.378 Outgoing Dump:<br>20:23:26.378     0000: 01 03 0c 00                                     ….<br>20:23:26.398 Incoming Dump:<br>20:23:26.398     0000: 04 0e 04 01 03 0c 00                            …….<br>20:23:26.398 –<br>20:23:26.398 Packet “HCI_Command_Complete_Reset_Event”, Opcode 0x0c03<br>20:23:26.398 Parameters:<br>20:23:26.398 | Number HCI commands : 0x01<br>20:23:26.398 | Command Opcode      : 0x0c03<br>20:23:26.398 | Status              : 0x00 (Success)<br>20:23:26.398 –<br>20:23:26.398 –<br>20:23:26.398 Packet “HCI_LE_Set_Advertising_Parameters”, Opcode 0x2006<br>20:23:26.398 Parameters:<br>20:23:26.398 | Advertise Min Interval    : 800<br>20:23:26.398 | Advertise Max Interval    : 800<br>20:23:26.398 | Advertising Type          : 0x00 (Connectable Undirected Event)<br>20:23:26.398 | Own Address Type          : 0x00 (Public Device Address)<br>20:23:26.398 | Direct Address Type       : 0x00 (Public Device Address)<br>20:23:26.398 | Direct Address            : “01:02:03:04:05:06”<br>20:23:26.398 | Advertising Channel Map   : 0x07<br>20:23:26.398 | Advertising Filter Policy : 0x00<br>20:23:26.398 –<br>20:23:26.398 Outgoing Dump:<br>20:23:26.398     0000: 01 06 20 0f 20 03 20 03 00 00 00 06 05 04 03 02 .. . . ………<br>20:23:26.398     0010: 01 07 00                                        …<br>20:23:26.418 Incoming Dump:<br>20:23:26.418     0000: 04 0e 04 01 06 20 00                            ….. .<br>20:23:26.418 –<br>20:23:26.418 Packet “HCI_Command_Complete_LE_Set_Advertising_Parameters_Event”, Opcode 0x2006<br>20:23:26.418 Parameters:<br>20:23:26.418 | Number HCI commands : 0x01<br>20:23:26.418 | Command Opcode      : 0x2006<br>20:23:26.418 | Status              : 0x00 (Success)<br>20:23:26.418 –<br>20:23:26.418 –<br>20:23:26.418 Packet “HCI_LE_Set_Advertising_Data”, Opcode 0x2008<br>20:23:26.418 Parameters:<br>20:23:26.418 | Data Length      : 0x10<br>20:23:26.418 | Advertising data : “00:01:02:03:04:05:06:07:08:09:0A:0B:0C:0D:0E:0F”<br>20:23:26.418 –<br>20:23:26.418 Outgoing Dump:<br>20:23:26.418     0000: 01 08 20 11 10 00 01 02 03 04 05 06 07 08 09 0a .. ………….<br>20:23:26.418     0010: 0b 0c 0d 0e 0f                                  …..<br>20:23:26.428 Incoming Dump:<br>20:23:26.428     0000: 04 0e 04 01 08 20 00                            ….. .<br>20:23:26.428 –<br>20:23:26.428 Packet “HCI_Command_Complete_LE_Set_Advertising_Data_Event”, Opcode 0x2008<br>20:23:26.428 Parameters:<br>20:23:26.428 | Number HCI commands : 0x01<br>20:23:26.428 | Command Opcode      : 0x2008<br>20:23:26.428 | Status              : 0x00 (Success)<br>20:23:26.428 –<br>20:23:26.428 –<br>20:23:26.428 Packet “HCI_LE_Set_Scan_Response_Data”, Opcode 0x2009<br>20:23:26.428 Parameters:<br>20:23:26.428 | Data Length : 0x10<br>20:23:26.428 | Data        : “00:01:02:03:04:05:06:07:08:09:0A:0B:0C:0D:0E:0F”<br>20:23:26.428 –<br>20:23:26.428 Outgoing Dump:<br>20:23:26.428     0000: 01 09 20 11 10 00 01 02 03 04 05 06 07 08 09 0a .. ………….<br>20:23:26.428     0010: 0b 0c 0d 0e 0f                                  …..<br>20:23:26.448 Incoming Dump:<br>20:23:26.448     0000: 04 0e 04 01 09 20 00                            ….. .<br>20:23:26.448 –<br>20:23:26.448 Packet “HCI_Command_Complete_LE_Set_Scan_Response_Data_Event”, Opcode 0x2009<br>20:23:26.448 Parameters:<br>20:23:26.448 | Number HCI commands : 0x01<br>20:23:26.448 | Command Opcode      : 0x2009<br>20:23:26.448 | Status              : 0x00 (Success)<br>20:23:26.448 –<br>20:23:26.448 –<br>20:23:26.448 Packet “HCI_LE_Set_Advertise_Enable”, Opcode 0x200a<br>20:23:26.448 Parameters:<br>20:23:26.448 | Advertise Enable : 0x01 (Enable)<br>20:23:26.448 –<br>20:23:26.448 Outgoing Dump:<br>20:23:26.448     0000: 01 0a 20 01 01                                  .. ..<br>20:23:26.468 Incoming Dump:<br>20:23:26.468     0000: 04 0e 04 01 0a 20 00                            ….. .<br>20:23:26.468 –<br>20:23:26.468 Packet “HCI_Command_Complete_LE_Set_Advertise_Enable_Event”, Opcode 0x200a<br>20:23:26.468 Parameters:<br>20:23:26.468 | Number HCI commands : 0x01<br>20:23:26.468 | Command Opcode      : 0x200a<br>20:23:26.468 | Status              : 0x00 (Success)<br>20:23:26.468 –<br>20:23:26.468 –<br>20:23:26.468 <strong>* Script End *</strong></p>
+</blockquote>
+<p>蓝牙Host和controller层通过HCI Command/Event交互数据，在早期的BR/EDR蓝牙中，Controller和Host会分开两颗芯片，再蓝牙4.x以后，芯片原厂已经把两颗芯片集成到一颗SOC中，hci层只有在蓝牙测试时候会单独用到，工程中，往往已经看不到hci层（已经打包在lib里），这一章有了一个层级间数据传输的感性认识，下面了解蓝牙协议的全貌。</p>
+<h2 id="蓝牙协议架构"><a href="#蓝牙协议架构" class="headerlink" title="蓝牙协议架构"></a>蓝牙协议架构</h2><p><img src="7.png" alt=""></p>
+<p>从OSI（Open System Interconnection）模型的角度看，蓝牙是一个比较简单的协议，它仅仅提供了物理层（Physical Layer）和数据链路层（Data Link Layer ）两个OSI层次，细化可分为如图所示的物理层（Physical Layer）、逻辑层（Logical Layer）、L2CAP Layer。</p>
+<blockquote>
+<p><strong>物理层</strong>，负责提供数据传输的物理通道（通常称为信道）。通常情况下，一个通信系统中存在几种不同类型的信道，如控制信道、数据信道、语音信道等等。<br><strong>逻辑层</strong>，在物理层的基础上，提供两个或多个设备之间、和物理无关的逻辑传输通道（也称作逻辑链路）。<br><strong>L2CAP层</strong>，L2CAP是逻辑链路控制和适配协议（Logical Link Control and Adaptation Protocol）的缩写，负责管理逻辑层提供的逻辑链路。基于该协议，不同Application可共享同一个逻辑链路。类似TCP/IP中端口（port）的概念。</p>
+</blockquote>
+<p>在l2cap之上还可以有profile层，理解蓝牙协议的profile，基于L2CAP提供的channel，实现各种各样的应用功能。Profile是蓝牙协议的特有概念，为了实现不同平台下的不同设备的互联互通，蓝牙协议不止规定了核心规范（称作Bluetooth core），也为各种不同的应用场景，定义了各种Application规范。</p>
+<p>数据和指令的传输通过C/E，SCO，ACL，ISO几个通道穿梭在不同层协议，既保证了蓝牙协议层级间的独立，又完成了蓝牙数据的交互。</p>
+<h2 id="蓝牙层级间的数据交互"><a href="#蓝牙层级间的数据交互" class="headerlink" title="蓝牙层级间的数据交互"></a>蓝牙层级间的数据交互</h2><p><img src="8.png" alt=""></p>
+<p>蓝牙协议层级间的指令数据传输需要靠通道相互连接，操作系统消息传递机制以及callback函承担了实现层级间的数据通信和交互的桥梁。</p>
+<p>我们以TI CC2541(真的很老了)的软件架构来讲述数据传输方式，工程内有多个线程同时工作：LL，HAL，HCI，L2CAP，GAP，SM，GATT，GAPROLE，GAPBondMgr，GATTServApp，SimpleBLEPeripheral。线程之间采用command/event方式交互数据。</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line">(<span class="string">``</span><span class="string">`)</span></span><br><span class="line"><span class="string">void osalInitTasks( void )</span></span><br><span class="line"><span class="string">&#123;</span></span><br><span class="line"><span class="string">  uint8 taskID = 0;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">  tasksEvents = (uint16 *)osal_mem_alloc( sizeof( uint16 ) * tasksCnt);</span></span><br><span class="line"><span class="string">  osal_memset( tasksEvents, 0, (sizeof( uint16 ) * tasksCnt));</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">  /* LL Task */</span></span><br><span class="line"><span class="string">  LL_Init( taskID++ );</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">  /* Hal Task */</span></span><br><span class="line"><span class="string">  Hal_Init( taskID++ );</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">  /* HCI Task */</span></span><br><span class="line"><span class="string">  HCI_Init( taskID++ );</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">#if defined ( OSAL_CBTIMER_NUM_TASKS )</span></span><br><span class="line"><span class="string">  /* Callback Timer Tasks */</span></span><br><span class="line"><span class="string">  osal_CbTimerInit( taskID );</span></span><br><span class="line"><span class="string">  taskID += OSAL_CBTIMER_NUM_TASKS;</span></span><br><span class="line"><span class="string">#endif</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">  /* L2CAP Task */</span></span><br><span class="line"><span class="string">  L2CAP_Init( taskID++ );</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">  /* GAP Task */</span></span><br><span class="line"><span class="string">  GAP_Init( taskID++ );</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">  /* SM Task */</span></span><br><span class="line"><span class="string">  SM_Init( taskID++ );</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">  /* GATT Task */</span></span><br><span class="line"><span class="string">  GATT_Init( taskID++ );</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">  /* Profiles */</span></span><br><span class="line"><span class="string">  GAPRole_Init( taskID++ );</span></span><br><span class="line"><span class="string">  GAPBondMgr_Init( taskID++ );</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">  GATTServApp_Init( taskID++ );</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">  /* Application */</span></span><br><span class="line"><span class="string">  SimpleBLEPeripheral_Init( taskID );</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string">(`</span><span class="string">``</span>)</span><br></pre></td></tr></table></figure>
+
+<p><img src="9.png" alt=""></p>
+<p>HOST端层级之间数据交互通道</p>
+<p><img src="10.png" alt=""></p>
+<p>HCI下层和controller的部分逻辑和上层host一样，只是在hci层做了一层数据传输的task，HCI_task作为host和controller的衔接，进行发送，解析指令，传输数据。</p>
+<blockquote>
+<p>​HCI command packet format:  cmd</p>
+<ul>
+<li>Packet Type + Command opcode + lengh + command payload</li>
+<li>| 1 octet          |              2            |          1            |      n        |</li>
+</ul>
+<p>HCI data packet format:  eco acl</p>
+<ul>
+<li>Packet Type +   Conn Handle  + lengh +  data payload</li>
+<li>| 1 octet             |      2        |            2           |      n      |</li>
+</ul>
+</blockquote>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>弄清楚了基本概念，弄清楚了框架和数据流向和软件实施办法，就基本对蓝牙协议有了一个宏观认识，对于理解软件代码有一定帮助。</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="https://wnnwoo.github.io/2019/07/27/bluetooth-baseband/" target="_blank" rel="noopener">蓝牙基带介绍</a><br><a href="http://www.wowotech.net/bluetooth/bt_protocol_arch.html" target="_blank" rel="noopener">蓝牙协议分析</a><br>蓝牙5.2规范</p>
+<p><img src="640.png" alt=""></p>
+]]></content>
+      <categories>
+        <category>蓝牙协议</category>
+      </categories>
+      <tags>
+        <tag>hci</tag>
+        <tag>蓝牙框架</tag>
+        <tag>acl</tag>
+        <tag>蓝牙基本概念</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>细说蓝牙5三大新特性</title>
+    <url>/2020/05/30/%E7%BB%86%E8%AF%B4%E8%93%9D%E7%89%995%E4%B8%89%E5%A4%A7%E6%96%B0%E7%89%B9%E6%80%A7/</url>
+    <content><![CDATA[<h1 id="蓝牙5特性一-2X-数据吞吐量"><a href="#蓝牙5特性一-2X-数据吞吐量" class="headerlink" title="蓝牙5特性一  2X 数据吞吐量"></a>蓝牙5特性一  2X 数据吞吐量</h1><p>Bluetooth LE 4.2来说，蓝牙5的速率可以提升一倍是因为PHY层可以支持2Mbps数据传输率。在蓝牙5之前，LE只支持1Mbps PHY的速率。在此强调一点，PHY的速率只为蓝牙往空中丢数据的速率，并不等同于点对点设备的主端蓝牙芯片的应用层传到从端蓝牙芯片应用层的数据吞吐量。</p>
+<a id="more"></a>
+<p><img src="5.png" alt=""></p>
+<h2 id="蓝牙单包数据结构"><a href="#蓝牙单包数据结构" class="headerlink" title="蓝牙单包数据结构"></a>蓝牙单包数据结构</h2><h3 id="蓝牙4-2一下数据结构"><a href="#蓝牙4-2一下数据结构" class="headerlink" title="蓝牙4.2一下数据结构"></a>蓝牙4.2一下数据结构</h3><p>先看Bluetooth 4.0/4.1 BLE数据传输率数据推演，设置主机Master端传输20个字节数据，其需要用时328us，从机响应80us，加上发射机发完一包数据至少需要休息150us，一个完整周期为328us + 150us + 80us + 150us，有效数据20字节，数据传输率226kbps。</p>
+<p><img src="8.png" alt=""></p>
+<h3 id="蓝牙4-2数据结构"><a href="#蓝牙4-2数据结构" class="headerlink" title="蓝牙4.2数据结构"></a>蓝牙4.2数据结构</h3><p>Bluetooth 4.2 LE部分扩充了单包数据载荷，每包可传输244字节，同理可以算出蓝牙4.2的数据传输率为781kbps。</p>
+<p><img src="9.png" alt=""></p>
+<h3 id="蓝牙5数据结构"><a href="#蓝牙5数据结构" class="headerlink" title="蓝牙5数据结构"></a>蓝牙5数据结构</h3><p>Bluetooth 5 BLE增加了2M PHY，传输244字节数据时间从2120us将为1060us，从机响应时间也从80us下降到40us，数据传输率提升一倍，到1.39Mbps。</p>
+<p><img src="10.png" alt=""></p>
+<h2 id="蓝牙5大数据传输应用场景"><a href="#蓝牙5大数据传输应用场景" class="headerlink" title="蓝牙5大数据传输应用场景"></a>蓝牙5大数据传输应用场景</h2><p>蓝牙5 PHY层支持2M的速率可以说明两个问题 :<br><strong>单位时间内可传输的数据吞吐量提升一倍。</strong><br><strong>传输相同数据量的数据蓝牙5的时间可降低一倍，从而使得蓝牙芯片可以更长时间的处于休眠模式，以降低蓝牙整体功耗。</strong></p>
+<p><img src="6.png" alt=""></p>
+<p>更快的数据传输率可以用来做什么呢？<br><strong>OTA空中升级</strong>，想必大家都有尝试过自己的智能穿戴设备升级工具，那体验，真的是非常糟糕，现在数量提升了，肯定马上把该速率用在OTA上，另外，在测试市面手环产品的过程中我们自己也看到一个非常糟糕的设计，大多数客户都还停留在使用BLE4.1产品，即使 使用了BLE4.2也很少有客户用到大PDU来改善OTA升级，这里希望各位工程师好好考虑该如何优化自己的产品，合理利用大数据传输提升OTA速度。下面从蓝牙SPEC上摘录几代BLE的规范和计算得来极限数据传输率供大家参考使用。<br><strong>语音图片传输</strong>，2M PHY的应用方向还有大块加密数据的瞬时传输，语音数据的传输，图片传输。<br><strong>IOS SPP 透传</strong>，经典蓝牙与ISO通过SPP传输需要额外mfi芯片，有了2M PHY，无需MFI芯片支持可以提高手机和蓝牙的数据通讯速率。</p>
+<h1 id="蓝牙5特性一-8X-大广播包数据传输"><a href="#蓝牙5特性一-8X-大广播包数据传输" class="headerlink" title="蓝牙5特性一  8X 大广播包数据传输"></a>蓝牙5特性一  8X 大广播包数据传输</h1><h2 id="蓝牙4-x广播特性"><a href="#蓝牙4-x广播特性" class="headerlink" title="蓝牙4.x广播特性"></a>蓝牙4.x广播特性</h2><h3 id="蓝牙广播"><a href="#蓝牙广播" class="headerlink" title="蓝牙广播"></a>蓝牙广播</h3><p>蓝牙从机设备正常工作时会以一定频率发送广播包，告知周围设备可以来连接自己(connectable)，或者单纯发送广播数据(non-connectable)给到周围主设备。从机广播中可能包含设备的相关信息，设备名称，设备具有的服务uuid 等，SIG有明确规定。<br><strong>广播包类型</strong><br>广播包可以拆分为两种，一种是从机设备的广播的数据，一种是主机设备扫描到从机的广播包后响应返回给冲击设备的数据。<br><strong>广播包</strong> （Advertising Data):设备端主动发送的周期数据。<br><strong>响应包</strong> （Scan Response):主机主动扫描的情况下， 发送扫描请求给从机， 从机返回扫描响应数据。</p>
+<h3 id="4-x广播包格式"><a href="#4-x广播包格式" class="headerlink" title="4.x广播包格式"></a>4.x广播包格式</h3><p>有效数据（significant）和无效数据（non-significant）两部分。<br>有效数据部分包含若干个广播数据单元，称为 AD Structure 。如图所示，AD Structure 的组成是：<br>长度 Len ，表示这个 AD Structure 的长度（除去 Len本身 1）<br><strong>类型 AD Type</strong><br>标记这段广播数据代表什么， 比如设备名， uuid 等。<br><strong>数据 AD data</strong><br>无效数据部分广播包的长度必须是 31 个 byte，如果有效数据部分不到 31 自己，剩下的就用 0 补全。这部分的数据是无效的。</p>
+<p><img src="11.png" alt=""></p>
+<p>以一个例子说明广播包和他的作用：<br>下图为CC2540 BLE抓包工具抓包的截图，右边AdvData内的数据即为广播数据，该广播数据由工程师自己设计，最大支持的字节为31个直接，两横条之间Time的差值即为广播间隔。</p>
+<p><img src="12.jpg" alt=""></p>
+<h3 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h3><p>通常情况，广播包的作用如下：</p>
+<ul>
+<li>作为可连接设备时，广播包内带有产品信息，比如品牌logo，MAC地址等。</li>
+<li>作为beacon设备时，可能携带传感器数据上报给集中器，可以携带beacon编号信息，MAC地址，特殊编码数据。</li>
+<li>作为可连接设备的广播。<br>但对应Beacon应用来说，广播数据和可传输的数据长度就显得尤为重要。beacon广播结合Scan端集中器(Broadcaster and Observer)可以用于智能家具节点数据上报，工厂自动化设备数据上传，人员管控，冷链物流监控，特殊区域布防等多种应用场景；beacon广播结合地图亦可以作为室内导航定位的辅助工具，为室内定位提供良好的解决方案(目前已经相继出现好几家机场，医院，商城实现手机室内导航，其原理即依靠大量布置beacon点和手机地图匹配，利用手机扫描周围beacon广播信息，实现定位与导航，但定位精度存在偏差，不如UWB精度高)。<br>BLE的低功耗纽扣电池供电特性，小体积，可以和手机互联互通，使得beacon在上述应用呈爆发式增长。但其中会存在一个棘手的问题，31字节的广播包太短，每次广播能携带的有效数据太少，另外广播通道太少，只有37,38,39三个通道广播，可能存在多设备上报数据信道的干扰问题。</li>
+</ul>
+<h2 id="蓝牙5广播特性"><a href="#蓝牙5广播特性" class="headerlink" title="蓝牙5广播特性"></a>蓝牙5广播特性</h2><p>蓝牙5扩展了广播数据的有效载荷，提升了广播通道数，为上述应用和新的应用提供了更多技术储备。下面我们就来看看蓝牙5的8x 大广播包。</p>
+<h3 id="蓝牙5广播包格式"><a href="#蓝牙5广播包格式" class="headerlink" title="蓝牙5广播包格式"></a>蓝牙5广播包格式</h3><p>蓝牙4.x协议规定蓝牙广播数据包每包数据最大只支持31字节数据传输，广播信道限制在37,38,39三个信道。在原有的用于传输广播数据的PDU（ADV_IND、ADV_DIRECT_IND、ADV_NONCONN_IND以及ADV_SCAN_IND，称作legacy PDUs）的基础上，蓝牙5增加了扩展的PDU（ADV_EXT_IND、AUX_ADV_IND、AUX_SYNC_IND以及AUX_CHAIN_IND，称作extended advertising PDUs)，同时也允许蓝牙在除开37,38,39三个通道之外的其他37个信道上发送长度介于0-255字节的数据。</p>
+<p><img src="13.png" alt=""></p>
+<p>蓝牙5.0把广播信道抽象为两类，一种叫主广播信道(primary advertisement channels)，另一种叫次广播信道，或者第二广播信道（Secondary Advertising Packets）。<br>主广播信道只工作在37，38，39三个信道，最大广播字节为31字节，广播的数据类型增加了一个ADV_EXT_IND指令，ADV_EXT_IND指令即为告知监听设备，我要广播大数据包广播了。<br>ADV_EXT_IND指令包含要在第二类次广播信道上发送的内容，第二广播信道发送广播数据的信道，物理PHY层，1M PHY，Coded PHY，2M PHY 等。<br>其示意如下图所示，首先在主广播信道广播ADV_EXT_IND信息，然后利用次广播信道(0-36 channel)广播255byte 数据。</p>
+<p><img src="17.png" alt=""></p>
+<p>如果我们有大于255字节的数据需要发送，蓝牙5.0广播协议栈中已经定义了AUX_CHAIN_IND，用于在第二广播信道上连续传输255字节数据，这样我们可以利用它发送超过255字节的大数据包数据。</p>
+<p><img src="14.png" alt=""></p>
+<p>第二广播信道（Secondary Advertising Packets）中的 AUX_ADV_IND、以及AUX_CHAIN_IND已经介绍，下面再看看AUX_SYNC_IND指令。</p>
+<p><img src="15.png" alt=""></p>
+<p>AUX_SYNC_IND指令用于大广播包数据的周期发送，广播者可随时修改其广播数据，但其他监听者依然可以监听到其周期性的广播内容，AUX_SYNC_IND指令包含广播间隔，调频序列，广播数据，广播者MAC地址等信息。</p>
+<p><img src="16.png" alt=""></p>
+<p>主机扫描过程中会首先监听到37,38,39，如果为大广播包，广播数据帧会携带大广播信道，主机会调频到相应信道进行数据监听。</p>
+<p><img src="19.png" alt=""></p>
+<h2 id="蓝牙5大广播包应用场景"><a href="#蓝牙5大广播包应用场景" class="headerlink" title="蓝牙5大广播包应用场景"></a>蓝牙5大广播包应用场景</h2><p>蓝牙4.2的广播数据31字节，蓝牙5.0的广播数据255字节，提升了8倍之多，由于使用了更多的广播信道，多个设备上报数据的抗信道干扰能力得到提升，另外由于多信道的使用，可以同步广播多种不同制式的信息，比如同时广播ibeacon和eddstone。结合蓝牙5 long range mode远距离传输模式，蓝牙的远距离beacon可以用在冷链物流，gps追踪器，工业自动化等在之前距离场合。</p>
+<h1 id="蓝牙5特性一-4X-远距离数据传输"><a href="#蓝牙5特性一-4X-远距离数据传输" class="headerlink" title="蓝牙5特性一  4X 远距离数据传输"></a>蓝牙5特性一  4X 远距离数据传输</h1><h2 id="链结预算Link-Budget"><a href="#链结预算Link-Budget" class="headerlink" title="链结预算Link Budget"></a>链结预算Link Budget</h2><h3 id="传输距离理论"><a href="#传输距离理论" class="headerlink" title="传输距离理论"></a>传输距离理论</h3><p>在部署无线电通信时，链路预算(Link Budget)就是指从发射机开始通过射频媒介直到接收机之间的所有增益和衰减的总和。链路预算计算的目的是确保最终的接收信号强度处于接收机的接收灵敏阈值之上。简单来说，链路预算越大，发送端和接收端的距离越远。<br><code>Link budget [dB]= TX Power [dBm]- Sensitivity level [dBm]</code></p>
+<ul>
+<li>举例说明:<br>以TI CC2640R2F芯片为例，最大TX Power 5dbm, 最大接收灵敏度 -97dBm,根据上述公式，5 dBm - (-97 dBm) = 102 dB。<br>以Nordic Nrf52840芯片为例，最大TX Power 8dbm, 最大接收灵敏度 -96dBm,根据上述公式，8 dBm - (-96 dBm) = 104 dB。</li>
+<li>结论:<br>链结预算值越大，传输距离越远。</li>
+</ul>
+<h3 id="无线电传输损耗"><a href="#无线电传输损耗" class="headerlink" title="无线电传输损耗"></a>无线电传输损耗</h3><h4 id="自由空间损耗"><a href="#自由空间损耗" class="headerlink" title="自由空间损耗"></a>自由空间损耗</h4><p>顾名思义，即为无线信号在空气中传播的损耗，可以由以下公式得到</p>
+<p><img src="21.png" alt=""></p>
+<p>F为频率，单位为G hz,D为发射端与接收端距离，单位为千米。由该公式可知路损的相关因素分为以下两个:<br>1).发射天线与接收天线间的距离。<br>2).频率， 频率越高路损越大。</p>
+<h4 id="现实中无线电对地平面损失"><a href="#现实中无线电对地平面损失" class="headerlink" title="现实中无线电对地平面损失"></a>现实中无线电对地平面损失</h4><p>自由空间损耗是理想状态下无线电的损耗，实现当中还有两个考虑的因数，第一，天线损耗；第二，地表对无线的吸收和反射。<br>在考虑天线损耗和地表对无线的吸收和反射，我们可以概括得出下列公式。</p>
+<p><img src="22.png" alt=""></p>
+<p>h1和h2为发射端和接收端对地距离，k为自由空间波数，r是发射端和接收端的天线。<br>绘制自由空间损耗和地平面损失和距离关系的图如下所示：<br><img src="20.png" alt=""></p>
+<p>在外界条件一致的情况下可以简化得到下面非常有意义的公式：<br><img src="23.png" alt=""></p>
+<p>该公式的结论如下：<br>无线电传输距离和发射端，接收端对地距离成正比，距离地面越高，传输越远。</p>
+<h2 id="蓝牙5-4X-远距离"><a href="#蓝牙5-4X-远距离" class="headerlink" title="蓝牙5 4X 远距离"></a>蓝牙5 4X 远距离</h2><p>在4.2及以前的版本中蓝牙低功耗在信道传输中未使用纠错编码技术，标准规定的基准灵敏度为-70dBm(基本上每一家蓝牙芯片厂商都可以做到-90dBm)。 蓝牙5引入了卷积前向纠错编码(Convolutional Forward Error Correction Coding) 技术，提高了接收机的抗干扰能力，将接收机的参考灵敏度分别提高到-75dBm (S=2编码)和-82dBm (S=4编码), 同时提高了接收机的载干比(载干比：C/I=载波信号强度/干扰信号强度)性能。使得在保持TX相同功耗情况下，蓝牙的距离提升了4倍，下面来说说如何做到提高接收灵敏度,依靠的就是编码PHY。</p>
+<h3 id="BLE编码PHY"><a href="#BLE编码PHY" class="headerlink" title="BLE编码PHY"></a>BLE编码PHY</h3><p>蓝牙5除硬件支持1M,2M PHY，还支持两种编码方式的PHY，这两种编码方式的PHY是基于1M PHY的基础，使用1M PHY的物理通道。新的编码分为两种，一种编码PHY为500kbps(S=2)，另外一种编码PHY是125kbps(S=8)。<br>编码PHY的数据包类型和1M PHY/2M PHY 数据包类型略有不同，增加了CI(coding indicator)和TERM1和TERM2。CI和TERMx构成了FEC(Forward Error Correction)区块，利用FEC恢复在传输过程中的错误数据位，以提升接收灵敏度。</p>
+<p><img src="30.png" alt=""></p>
+<p>经过S=2或者S=8的编码，接收灵敏度可以提升4-6dBm，距离相应提升2-4被。但是进化出一种新的能力必然会牺牲自己一项能力，和1M PHY相比，传输的距离提升了，但传输相同数据包，编码PHY的功耗比1M PHY就要高出一节 (BLE 规定的包长一致，部分payload变为FEC data，实际有效的传输数据减少)。</p>
+<p><img src="29.png" alt=""></p>
+<h3 id="数据流传递方式"><a href="#数据流传递方式" class="headerlink" title="数据流传递方式"></a>数据流传递方式</h3><ul>
+<li><strong>1M/2M PHY</strong><br>在没有编码方式下，TX数据包数据bit流通过加密(可选项)，CRC效验，白化之后发送出去；RX端接收到数据流解调后校验CRC，解密，得到原始数据包数据。</li>
+</ul>
+<p><img src="25.png" alt=""></p>
+<ul>
+<li><strong>500kbps,125kbps 编码PHY</strong><br>相对 1M/2M 未编码PHY的数据流，500k PHY, 125K phy多出两个部分：FEC(前向错误纠错) 编码和模式映射，大家肯定要问如何实现FEC，我们以编码PHY的流程来完整讲述一下数据流的编码和传输过程。</li>
+</ul>
+<p><img src="26.png" alt=""></p>
+<ul>
+<li><p><strong>错误检验 — CRC效验错误</strong><br>接收机首先会检测接收到的Access Adrees是否正确，如果Access Adrees错误，丢弃该数据包，检测完Access Adrees，接收机会去效验整个数据包，判断24位CRC是否完全吻合。</p>
+</li>
+<li><p><strong>白化</strong><br>数据白化的目的是在传输数据遇到连续000000，或者连续111111序列时，进行合理编码，减少传输长串重复序列数据。</p>
+</li>
+<li><p><strong>编码 — 前向错误编码</strong><br>前向错误编码算法使得接收机有能比恢复该数据包中的传输错误数据位，通过把原始数据进行编码得到新的数据流，即使新的数据流在传输过程中有个别位数据错误，FEC解码也能恢复原始数据，从而提高了传输的误码率。BT5.0使用的如下编码算法:</p>
+</li>
+</ul>
+<p><img src="27.png" alt=""></p>
+<p>G0(a0)先进行传输，G1(a1)在G0传输完成之后传输。</p>
+<p><img src="28.png" alt=""></p>
+<ul>
+<li><strong>模式映射 — Pattern Mapper</strong><br>模式映射的目的是整理输出前向错误编码数据，输出的方式分为两种模式(P symbols)，一种P=1(S=2)，一种P=4(S=8)，两种模式下把前向错误编码数据进行加工，然后输出。由下面的表格所示，当P=1时，输出的data和输入保持不变，1位输入，1为输出；当P=4时，编码为4位再输出，所以可以看到P=4(S=8)时，输出的data数据量会更多，更进一部压缩实际可以传输的有效payload数据。</li>
+</ul>
+<h2 id="蓝牙远距离应用场景"><a href="#蓝牙远距离应用场景" class="headerlink" title="蓝牙远距离应用场景"></a>蓝牙远距离应用场景</h2><p>得益于前向错误编码和模式映射，使得蓝牙数据在传输过程中，RX端对整个payload数据包解码纠错能力有不同提升(简单说即为提高RX端接收灵敏度)，蓝牙5的传输距离才有显著的提升。125kbps使用S=8模式，传输距离相对传统BLE提升4倍，相应牺牲的数据传输率最多，500kbps使用S=2模式，传输距离相对传统BLE提升2倍。长距离模式可以有效可以支持到400-500米范围内BLE通讯。</p>
+<p><img src="640.png" alt=""></p>
+]]></content>
+      <categories>
+        <category>蓝牙协议</category>
+      </categories>
+      <tags>
+        <tag>蓝牙 5</tag>
+        <tag>远距离</tag>
+        <tag>大广播</tag>
+        <tag>2M PHY</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>BLE Controller框架梳理</title>
+    <url>/2020/08/11/Controller%E6%A1%86%E6%9E%B6%E6%A2%B3%E7%90%86/</url>
+    <content><![CDATA[<h1 id="BLE-Controller基本概念"><a href="#BLE-Controller基本概念" class="headerlink" title="BLE Controller基本概念"></a>BLE Controller基本概念</h1><h2 id="Controller构成"><a href="#Controller构成" class="headerlink" title="Controller构成"></a>Controller构成</h2><p>蓝牙协议分host和controller两个部分，Host是正真意义的蓝牙协议，Controller为蓝牙底层，或者说是基带芯片。基带芯片又可以分为三个部分，Radio，Link Layer和HCI。</p>
+<a id="more"></a>
+
+<p><img src="1.png" alt=""></p>
+<h2 id="Radio"><a href="#Radio" class="headerlink" title="Radio"></a>Radio</h2><p>Radio可以理解为一个独立的协处理器，负责调制解调2.4G裸数据，完整的Radio功能应该包括，数据组包拆包，CRC校验，白话，调制解调等功能。</p>
+<p><img src="2.png" alt=""></p>
+<p>根据Controller的设计需要，Radio协处理器被设计为一个小型状态机，下图为Nordic 52810 Radio内核状态机状态，该状态机分为9种状态，Radio会输出下图9种状态给SOC芯片，SOC芯片根据相应状态机状态，进行处理，协处理器和SOC之间共用数据总线。</p>
+<p><img src="3.png" alt=""></p>
+<p><img src="4.png" alt=""></p>
+<h2 id="Link-layer架构"><a href="#Link-layer架构" class="headerlink" title="Link layer架构"></a>Link layer架构</h2><p>Link Layer决定蓝牙所处的状态，蓝牙可以分为idel（standby），adv，scan，init以及connection状态，connection又可分为master或者slave。状态之间可以相互转换。</p>
+<p><img src="5.png" alt=""></p>
+<p>Link Layer允许多种状态同时并存，一个piconet可以支持多种状态，即Combination States。Combination States并不是任意若干种状态的结合，其中有限制存在，比如一个piconet不可能同时支持master和slave状态，比如两个scan不能同时存在，下图多多状态的二维组合分布图。</p>
+<p><img src="6.png" alt=""></p>
+<h2 id="HCI架构"><a href="#HCI架构" class="headerlink" title="HCI架构"></a>HCI架构</h2><p>蓝牙和蓝牙WIFI二合一芯片HOST和Controller早期都是两类芯片厂家分开提供，两颗芯片交互需要采用统一标准，HCI层由此而来。Host蓝牙协议只需要按照蓝牙联盟规范的HCI指令即可控制蓝牙controller。</p>
+<p><img src="7.png" alt=""></p>
+<h1 id="Controller宏观认知"><a href="#Controller宏观认知" class="headerlink" title="Controller宏观认知"></a>Controller宏观认知</h1><h2 id="ADV广播"><a href="#ADV广播" class="headerlink" title="ADV广播"></a>ADV广播</h2><p><img src="8.png" alt=""></p>
+<h2 id="SCAN扫描"><a href="#SCAN扫描" class="headerlink" title="SCAN扫描"></a>SCAN扫描</h2><p><img src="9.png" alt=""></p>
+<h2 id="INIT初始化"><a href="#INIT初始化" class="headerlink" title="INIT初始化"></a>INIT初始化</h2><p><img src="10.png" alt=""></p>
+<h2 id="Connection连接"><a href="#Connection连接" class="headerlink" title="Connection连接"></a>Connection连接</h2><p><img src="11.png" alt=""></p>
+<h1 id="Controller核心框架"><a href="#Controller核心框架" class="headerlink" title="Controller核心框架"></a>Controller核心框架</h1><h2 id="核心架构"><a href="#核心架构" class="headerlink" title="核心架构"></a>核心架构</h2><p>Link Layer和芯片Radio设计相关度较大，根据与PYH（radio）传输接口的不一样，可以分为：</p>
+<ul>
+<li><p>Radio负责packet，即硬件只提供收或者发一个包的接口。</p>
+</li>
+<li><p>Radio负责frame，即硬件提供包含一个IFS的一组收发的接口。</p>
+</li>
+<li><p>Radio硬件负责event，即硬件提供控制整个event内，若干组收发的接口（CEVA BLE IP的实现采用的就是这种）。</p>
+</li>
+</ul>
+<p>三种方案数字设计的复杂度是递增的，灵活性是递减的，对CPU的处理能力需求是递减的。</p>
+<h2 id="LL调度机制-Radio负责packet"><a href="#LL调度机制-Radio负责packet" class="headerlink" title="LL调度机制-Radio负责packet"></a>LL调度机制-Radio负责packet</h2><p>以Radio负责packet的方案介绍LL的整体设计思路：</p>
+<p>根据Radio状态机的9种状态，设计Link Layer中的adv，scan，init，master，slave 事件，事件之间的存在如下相互转换关系：</p>
+<p><img src="12.png" alt=""></p>
+<p>每个事件结束后，调用任务调度机，决定ll下一个状态，下一个ll状态可能是当前状态的延续，可能是新的状态，也可能是当前状态和新的状态的Combination，所以ll调度机不光决定一个状态，还需要考虑多状态能否共存，Scheduler确定是否能执行下一个状态后，启动该任务，执行该任务。</p>
+<p>谈到状态共存，adv，scan，init必须给connection事件让步，在这个时间内，哪些事可以提前做，哪些事需要推迟做，这是Scheduler需要考虑的。</p>
+<p><img src="13.png" alt=""></p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>LL事件，Scheduler任务调度，HCI组包解包是构成Radio的三大模块， 弄清楚整个控制框架，配合时间戳要求，才能把controller玩转起来，controller时间戳同步也是一个非常头疼的话题，特别是搅合在任务调度一起，到此了。</p>
+<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><h2 id="master-slave共存"><a href="#master-slave共存" class="headerlink" title="master/slave共存"></a>master/slave共存</h2><p>一个controller可以支持多个ll状态机，一个ll状态机的状态不允许master&amp;slave同时存在(上文已经说明)，但可以通过分别开启两个ll状态机（piconet的概念由来），一个在master状态，一个在slave状态，这样从使用者的角度上看，就是master和slave共存。</p>
+<h2 id="BT5-2-新状态"><a href="#BT5-2-新状态" class="headerlink" title="BT5.2 新状态"></a>BT5.2 新状态</h2><p>BT 5.2增加了两个新状态，一个isochronous broadcasting 一个synchronization。</p>
+<p><img src="14.png" alt=""></p>
+<p><strong>参考资料</strong></p>
+<ul>
+<li><p>Ble_101_frontline</p>
+</li>
+<li><p>Nordic52810 spec</p>
+</li>
+<li><p>蓝牙5.0 spec</p>
+</li>
+</ul>
+<p><img src="640.png" alt=""></p>
+]]></content>
+      <categories>
+        <category>蓝牙协议</category>
+      </categories>
+      <tags>
+        <tag>蓝牙 controller</tag>
+        <tag>ll 状态机</tag>
+        <tag>蓝牙 radio</tag>
+        <tag>蓝牙 phy</tag>
       </tags>
   </entry>
 </search>
