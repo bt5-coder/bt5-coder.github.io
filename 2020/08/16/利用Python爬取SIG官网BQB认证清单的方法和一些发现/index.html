@@ -437,25 +437,25 @@
 <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">payload = &#123;<span class="string">"searchString"</span>:<span class="string">''</span>,</span><br><span class="line">           <span class="string">"searchQualificationsAndDesigns"</span>:<span class="string">'true'</span>,</span><br><span class="line">           <span class="string">"searchDeclarationOnly"</span>:<span class="string">'true'</span>,</span><br><span class="line">           <span class="string">"searchEndProductList"</span>:<span class="string">'false'</span>,</span><br><span class="line">           <span class="string">"searchPRDProductList"</span>:<span class="string">'true'</span>,</span><br><span class="line">           <span class="string">"searchMyCompany"</span>:<span class="string">'false'</span>,</span><br><span class="line">           <span class="string">"productTypeId"</span>:<span class="number">0</span>,</span><br><span class="line">           <span class="string">"specName"</span>:<span class="number">0</span>,</span><br><span class="line">           <span class="string">"bqaApprovalStatusId"</span>:-<span class="number">1</span>,</span><br><span class="line">           <span class="string">"bqaLockStatusId"</span>:-<span class="number">1</span>,</span><br><span class="line">           <span class="string">"listingDateEarliest"</span>:<span class="string">""</span>,</span><br><span class="line">           <span class="string">"listingDateLatest"</span>:<span class="string">""</span>,</span><br><span class="line">           <span class="string">"userId"</span>:<span class="number">0</span>,</span><br><span class="line">           <span class="string">"memberId"</span>:<span class="string">''</span>,</span><br><span class="line">           <span class="string">"layers"</span>:[],</span><br><span class="line">           <span class="string">"maxResults"</span>:<span class="number">15000</span> &#125;</span><br><span class="line"></span><br><span class="line">URL = <span class="string">"https://launchstudio.bluetooth.com/Listings/Search"</span></span><br><span class="line">r = requests.post(URL,<span class="keyword">data</span> = payload)</span><br></pre></td></tr></table></figure>
 
 <p>SIG BQB Listing网页采用前后端框架，一次搜索后前端Web已经拿到5000条数据内容，但Web做了处理分页显示，所以爬虫时不需要在前端浪费时间。在爬虫处理上，只需要按Payload格式要求REQUEST后台获取数据。</p>
-<p><img src="xn.png" alt=""></p>
 <h2 id="数据清洗"><a href="#数据清洗" class="headerlink" title="数据清洗"></a>数据清洗</h2><p>5000条到手数据经过数据清洗，按照Jason格式转换为Pandas认识的DataFrame，得到DataFrame数据后就可以开启数据处理和数据分析。数据包含下图12类信息，第三章的数据分析依据该12类中的某几类聚合以及一定条件过滤和计算进行数据提取。</p>
-<p><img src="4.png" alt=""></p>
+<p><img src="5.png" alt=""></p>
 <h1 id="3-BQB-Listing-数据分析"><a href="#3-BQB-Listing-数据分析" class="headerlink" title="3. BQB Listing 数据分析"></a>3. BQB Listing 数据分析</h1><p>根据第一小节讲到的内容，一个DID是一家SIG会员公司(Associate级别会员，Adopter级别会员)购买的唯一序列号，该公司利用DID和引用QDID声明自己产品符合蓝牙技术规范，作为公开出售的证明，该DID可以List一个或者多个同类终端产品。因为SIG官网限制了获取后台数据的数量，爬到的5000条DID信息涉及2019年3月19日至2020年5月4日，总共List的终端产品共有47788款产品，该数据包含蓝牙终端产品和蓝牙芯片软硬件的认证总和。</p>
 <h2 id="蓝牙版本"><a href="#蓝牙版本" class="headerlink" title="蓝牙版本"></a>蓝牙版本</h2><p>过去一年5000个DID认证号中蓝牙版本以5.0居多，排名前三位的认证版本是蓝牙5.0，蓝牙4.2以及蓝牙5.1。值得一提的是已经有部分芯片原厂公司拿到蓝牙5.2的认证，认证类型主要分布在PYH，HOST与软件SDK，涉及Qualcomm, ARM, Nordic, SilconLab, PixArt, Realtek, HiSilicon(Hi1105C20)等公司产品，HiSilicon的Hi1105C20这颗蓝牙5.2芯片值得关注。</p>
-<p><img src="5.png" alt=""></p>
-<h2 id="公司类型"><a href="#公司类型" class="headerlink" title="公司类型"></a>公司类型</h2><p>过去一年共计2264家公司认证了蓝牙产品（购买DID序列号）。根据统计，购买超过10个DID序列号的公司共计有52家，三星作为购买DID最多的公司，总计购买230个DID，其次是Haiwei共计购买88个DID，小米共计购买79个DID，排在第四名哈曼，共计购买69个DID号。第一章节中介绍，一个DID可以List多个终端产品，根据这一规则统计，去年一年共计47788个产品拥有蓝牙认证，在市场进行销售（实际认证数量会少于47788，因为部分认证来至芯片原厂，不属于终端产品）。但是，实际市场流通的蓝牙产品种类应该远远多于47788，因为有很多产品是没有通过认证，直接在市场进行销售。</p>
 <p><img src="6.png" alt=""></p>
-<h2 id="产品类型"><a href="#产品类型" class="headerlink" title="产品类型"></a>产品类型</h2><p>我们聚合认证清单超过200个的公司和申报名字的列表，华为名列前茅。通过产品认证的Name可以大致推断，手机类产品是蓝牙认证数量最多，其次手机配件产品，第三是TV产品，比较意外的是灯控认证的数量非常可观，Zumtobel是一家欧洲有名的灯光公司，Aurora Lighting是一家本土灯光布置公司，查找详细信息发现两家公司在灯控上使用的蓝牙技术并不是Mesh协议，而是传统的BT4.2协议。</p>
-<p>在上一张直观图，华为认证List的产品数量占了半壁江山，结合DID数据分析可以发现一个有趣的现象，华为直接购买的DID数并不是最多，但是华为引用QDID，LIST产品数量远远高于三星，可以看出华为的两个现象，1.最大化利用已购买的DID 2. 产品形态丰富，种类繁多。</p>
+<h2 id="公司类型"><a href="#公司类型" class="headerlink" title="公司类型"></a>公司类型</h2><p>过去一年共计2264家公司认证了蓝牙产品（购买DID序列号）。根据统计，购买超过10个DID序列号的公司共计有52家，三星作为购买DID最多的公司，总计购买230个DID，其次是Haiwei共计购买88个DID，小米共计购买79个DID，排在第四名哈曼，共计购买69个DID号。第一章节中介绍，一个DID可以List多个终端产品，根据这一规则统计，去年一年共计47788个产品拥有蓝牙认证，在市场进行销售（实际认证数量会少于47788，因为部分认证来至芯片原厂，不属于终端产品）。但是，实际市场流通的蓝牙产品种类应该远远多于47788，因为有很多产品是没有通过认证，直接在市场进行销售。</p>
 <p><img src="7.png" alt=""></p>
-<h2 id="音频原厂动向"><a href="#音频原厂动向" class="headerlink" title="音频原厂动向"></a>音频原厂动向</h2><p>根据网上整理的一份2019年TWS耳机芯片原厂报告，跟踪了这些公司在2019年度蓝牙的研发认证进展情况，高通(CSR)全系列产品升级至5.1或者5.2，Huawei芯片拭目以待，Cypress产品包含了部分BLE产品认证，其他原厂中不乏蓝牙5.2认证芯片。需要说明的是，Apple认证的产品并不是TWS耳机，有两个属于在Macbook和IOS HOST端协议的认证，另个一个Mesh属于手表上的认证。</p>
+<h2 id="产品类型"><a href="#产品类型" class="headerlink" title="产品类型"></a>产品类型</h2><p>我们聚合认证清单超过200个的公司和申报名字的列表，华为名列前茅。通过产品认证的Name可以大致推断，手机类产品是蓝牙认证数量最多，其次手机配件产品，第三是TV产品，比较意外的是灯控认证的数量非常可观，Zumtobel是一家欧洲有名的灯光公司，Aurora Lighting是一家本土灯光布置公司，查找详细信息发现两家公司在灯控上使用的蓝牙技术并不是Mesh协议，而是传统的BT4.2协议。</p>
 <p><img src="8.png" alt=""></p>
-<h2 id="外资Bluetooth-LE原厂动向"><a href="#外资Bluetooth-LE原厂动向" class="headerlink" title="外资Bluetooth LE原厂动向"></a>外资Bluetooth LE原厂动向</h2><p>Nordic全线产品升级SDK，认证蓝牙5.1，5.2协议，但是没有看到关于新芯片52820的相关认证信息。NXP第二，认证数据包括刚刚收购Marvell的产品。Dialog 14531已经完成controll和host认证，应该很快会投放市场。</p>
+<p>在上一张直观图，华为认证List的产品数量占了半壁江山，结合DID数据分析可以发现一个有趣的现象，华为直接购买的DID数并不是最多，但是华为引用QDID，LIST产品数量远远高于三星，可以看出华为的两个现象，1.最大化利用已购买的DID 2. 产品形态丰富，种类繁多。</p>
 <p><img src="9.png" alt=""></p>
-<h2 id="国产蓝牙原厂动向"><a href="#国产蓝牙原厂动向" class="headerlink" title="国产蓝牙原厂动向"></a>国产蓝牙原厂动向</h2><p>共计17家国产半导体在过去的一年中提交芯片认证相关DID，每家公司认证的产品数量不多，涉及芯片个数相比外资企业有一定差距，但是有这么多的公司还是让我感受到了国产半导体的力量。比较意外Telink去年一年新产品认证不多，只有三个，一个模块认证，一个controller和一个host的5.0升级认证，没有新产品以及新的协议栈认证。</p>
+<h2 id="音频原厂动向"><a href="#音频原厂动向" class="headerlink" title="音频原厂动向"></a>音频原厂动向</h2><p>根据网上整理的一份2019年TWS耳机芯片原厂报告，跟踪了这些公司在2019年度蓝牙的研发认证进展情况，高通(CSR)全系列产品升级至5.1或者5.2，Huawei芯片拭目以待，Cypress产品包含了部分BLE产品认证，其他原厂中不乏蓝牙5.2认证芯片。需要说明的是，Apple认证的产品并不是TWS耳机，有两个属于在Macbook和IOS HOST端协议的认证，另个一个Mesh属于手表上的认证。</p>
 <p><img src="10.png" alt=""></p>
-<h2 id="蓝牙芯片原厂动向"><a href="#蓝牙芯片原厂动向" class="headerlink" title="蓝牙芯片原厂动向"></a>蓝牙芯片原厂动向</h2><p>芯片原厂正在积极升级新的协议标准以及给新的芯片做认证。从数据分析来看，认证蓝牙5.1版本共计57个，排名第一；5.0版本的芯片认证排名第二，共计30个；排名第三的是蓝牙5.2版本，共计22个。目前尚不清楚已认证的蓝牙5.2版本芯片是否支持LE Audio和LC3音频编解码。</p>
+<h2 id="外资Bluetooth-LE原厂动向"><a href="#外资Bluetooth-LE原厂动向" class="headerlink" title="外资Bluetooth LE原厂动向"></a>外资Bluetooth LE原厂动向</h2><p>Nordic全线产品升级SDK，认证蓝牙5.1，5.2协议，但是没有看到关于新芯片52820的相关认证信息。NXP第二，认证数据包括刚刚收购Marvell的产品。Dialog 14531已经完成controll和host认证，应该很快会投放市场。</p>
 <p><img src="11.png" alt=""></p>
+<h2 id="国产蓝牙原厂动向"><a href="#国产蓝牙原厂动向" class="headerlink" title="国产蓝牙原厂动向"></a>国产蓝牙原厂动向</h2><p>共计17家国产半导体在过去的一年中提交芯片认证相关DID，每家公司认证的产品数量不多，涉及芯片个数相比外资企业有一定差距，但是有这么多的公司还是让我感受到了国产半导体的力量。比较意外Telink去年一年新产品认证不多，只有三个，一个模块认证，一个controller和一个host的5.0升级认证，没有新产品以及新的协议栈认证。</p>
+<p><img src="12.png" alt=""></p>
+<h2 id="蓝牙芯片原厂动向"><a href="#蓝牙芯片原厂动向" class="headerlink" title="蓝牙芯片原厂动向"></a>蓝牙芯片原厂动向</h2><p>芯片原厂正在积极升级新的协议标准以及给新的芯片做认证。从数据分析来看，认证蓝牙5.1版本共计57个，排名第一；5.0版本的芯片认证排名第二，共计30个；排名第三的是蓝牙5.2版本，共计22个。目前尚不清楚已认证的蓝牙5.2版本芯片是否支持LE Audio和LC3音频编解码。</p>
+<p><img src="13.png" alt=""></p>
 <h1 id="4-几点感悟"><a href="#4-几点感悟" class="headerlink" title="4. 几点感悟"></a>4. 几点感悟</h1><ul>
 <li><p>蓝牙联盟的商业模式和运营模式值得国内科技公司学习。</p>
 </li>
@@ -468,7 +468,7 @@
 <li><p>人生苦短，我用PYTHON，274行代码完成爬虫+数据分析。</p>
 </li>
 </ul>
-<p><img src="C:/website/source/_posts/640.png" alt=""></p>
+<p><img src="640.png" alt=""></p>
 
       
     </div>
