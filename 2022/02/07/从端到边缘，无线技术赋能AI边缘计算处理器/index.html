@@ -1,0 +1,1137 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.0.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.0.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.0.0" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Ltb8raiwAk">
+<meta property="og:type" content="website">
+<meta property="og:title" content="IoT Wireless Inside">
+<meta property="og:url" content="http://www.iotbzw.com/baidu_verify_Ltb8raiwAk.html">
+<meta property="og:site_name" content="IoT Wireless Inside">
+<meta property="og:description" content="Ltb8raiwAk">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-05-30T17:22:44.008Z">
+<meta property="article:modified_time" content="2020-05-30T17:22:44.008Z">
+<meta property="article:author" content="Xcoder">
+<meta property="article:tag" content="ble 无线 蓝牙 zigbee">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '6.0.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.iotbzw.com/baidu_verify_Ltb8raiwAk.html"/>
+
+
+
+
+
+  <title>从端到边缘，无线技术赋能AI边缘计算处理器 | IoT Wireless Inside</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">IoT Wireless Inside</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description"></h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.iotbzw.com/2022/02/07/%E4%BB%8E%E7%AB%AF%E5%88%B0%E8%BE%B9%E7%BC%98%EF%BC%8C%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E8%B5%8B%E8%83%BDAI%E8%BE%B9%E7%BC%98%E8%AE%A1%E7%AE%97%E5%A4%84%E7%90%86%E5%99%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Xcoder">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/20140820.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="IoT Wireless Inside">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">从端到边缘，无线技术赋能AI边缘计算处理器</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建时间" itemprop="dateCreated datePublished" datetime="2022-02-07T22:37:18+08:00">2022-02-07</time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CV/" itemprop="url" rel="index">
+                    <span itemprop="name">CV</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><img src="1.png" alt=""></p>
+<p>无线技术赋能边缘计算处理器，本文不一定讲的清楚，本人视野有一定产业局限性，故有些问题可能存在以偏概全的嫌疑。文章以项目为起点，试图以点带线，其实是项目过程中的思考和与同行交流的思想碰撞。</p>
+<a id="more"></a>
+
+
+<h1 id="AI视觉云台实现逻辑"><a href="#AI视觉云台实现逻辑" class="headerlink" title="AI视觉云台实现逻辑"></a>AI视觉云台实现逻辑</h1><p>因甲方要求，需要搭建一个视觉跟踪云台，涉及视觉跟踪，手上现有SoC运算能力有限，加上片上硬件资源没有支持MIPI-CSI接口，没办法直接挂摄像头，手边正好有块树莓派板子，直接用上。</p>
+<p>Raspberry Pi 树莓派目前已经出到第四代4B版本，我使用的为第四代4B版本。项目上使用到树莓派如下几个部分：CPU，Wi-Fi图传和SSH，MIPI-CSI接口，GPIO控制。</p>
+<p>![](2.png，”Raspberry Pi 4b”)</p>
+<p>相对于树莓派3，树莓派4的CPU性能已经得到极大提升（3x），考虑到人脸跟踪，730P@30Fps的图像采集，顺手加上手边的算力棒加速人脸识别推理工作，算力棒为Intel neural compute stick 2，算力大概在4T。</p>
+<p><img src="3.png," alt="" title="Intel Nerual Compute Stick 2"></p>
+<p>下一步需要做摄像头跟踪，此阶段需要搭建云台系统，根据识别的人脸位置与图片中心位置差值，调整云台对准人脸，所使用的云台为两个SG-90舵机组成(不要买大功率舵机，树莓派驱动电流有限，带不动)。</p>
+<p>整个项目先是在树莓派上使用PYTHON3调试，OpenCV +Intel OpenVINO 来做视频数据采集和人脸识别（人脸识别模型库采用OpenVINO已经训练好的模型，不需要自己再训练），另起两个线程来做云台pan，tilt差值和pid调节。</p>
+<p>调试过程中，发现伺服电机PID调节和控制非常棘手，树莓派输出的pwm不稳，其他Python任务执行过程会影响pwm的输出，抖动严重，PID调参抖动大，图像差值和pan，tilt无法形成闭环回路，错误的pid输出，导致云台输出位置错误，位置错误反过来又影响摄像头人脸捕捉。</p>
+<p><img src="4.png," alt="" title="pid 调节器"></p>
+<p>解决办法是拿一个MCU，TI TM4C Launchpad开发板处理伺服电机的驱动和PID调节。在实时控制方面，MCU的优势非常明显，硬件pwm，精准设置，调整方便，输出实时。反应在舵机上的表现为给定目标占空比，舵机移动到该坐标位置不抖动，在电机驱动调试完毕之后利用串口调试助手调节x轴y轴的PID参数，一切准备就绪后指定串口数据包格式，准备接收树莓派发送过来的pan tilt位置差值。（Demo中加了一个电池包，用来给树莓派系统供电，省去Type C有线供电）。</p>
+<p><img src="5.png," alt="" title="云台实物"></p>
+<p>硬件上，树莓派CPU负责视频采集，Intel Movidius 算力棒负责每帧图片的人脸推理，MCU协处理器负责云台伺服电机控制，树莓派4B片上 Wi-Fi模块负责图传到云端显示以及SSH。</p>
+<p>软件上，在linux 系统用python3完成整个控制逻辑，cv模块负责视频数据采集，人脸推理，计算人脸位置差值，uart发送云台位置指令给MCU；MCU采用C编程，设置PWM频率及占空比，编程增量PID控制程序，调试x轴，y轴PID 参数Kp，Ki，Kd，等待串口终端树莓派的指令。</p>
+<h1 id="边缘计算需求"><a href="#边缘计算需求" class="headerlink" title="边缘计算需求"></a>边缘计算需求</h1><p>云台搭建并不算复杂，但该视觉项目需求具有AIoT产品代表性：对物理世界进行数据采集，AI深度学习推理&amp;挖掘，GPIO，PWM实时控制，毫秒级微秒级定时器设置，Wi-Fi 蓝牙无线传输。场景落地例如，人脸识别考勤机，门禁系统，停车系统轧机，视频监控，门铃等。本地端的处理器完成视频&amp;音频采集+处理，MCU控制输出，HMI显示，以及AI，深度学习，推理（训练一般不会放在边缘计算节点），此类应用均可以归纳称为边缘计算应用行列。</p>
+<h1 id="边缘计算-物联网无线"><a href="#边缘计算-物联网无线" class="headerlink" title="边缘计算 + 物联网无线"></a>边缘计算 + 物联网无线</h1><p>科学技术在AI，算法，集成芯片领域的发展迅猛，呈几何形增长。为适应市场需要，ARM阵营在处理器内核上推新不断，A35，A53，A55，A72，A73，RISC-V也不甘示弱。芯片厂家结合自身需求，推出单核，双核，三核处理器以提高整体运算速度，在通用ARM/RISC-V内核无法满足深度学习，神经网络计算时，AIoT应用下的ARM/MIPS + GPU/NPU（0.5T-10T）的边缘计算处理器孕育而生。</p>
+<p><img src="6.png," alt="" title="不同处理器单元能效比"></p>
+<p>当技术不再成为思想的桎梏，出现了很多企业迅猛发展的现象级案例，下面从三个方向举例说明：</p>
+<h2 id="大音频"><a href="#大音频" class="headerlink" title="大音频"></a>大音频</h2><p>智能音响算大音频市场的代表产品之一，以阿里，百度，小米互联网公司为代表。功能需求包括麦克风阵列识音，TTS，ASR，AEC，Codec编解码，经典蓝牙播放，Wi-Fi云播放等。内核处理器统筹任务调度，控制数据流向，驱动WiFi,BT协议，协处理器DSP用来处理音频相关算法和音频编解码，Wifi BT COMBO芯片负责无线数据传输。</p>
+<p><img src="7.png," alt="" title="Amlogic 113l A35 + DSP"></p>
+<p>TWS耳机系统架构和智能音箱有差异，TWS耳机通常以单颗SoC解决方案完成，（相比于智能音箱以Processor + Wifi/BT COMBO + Linux），片上SoC运行RTOS系统，内部架构可细分为 MCU + DSP + RF Radio。</p>
+<p><img src="8.png," alt="" title="QCC300x 内部框图"></p>
+<h2 id="大视频"><a href="#大视频" class="headerlink" title="大视频"></a>大视频</h2><p>网络摄像机算是近两年视频监控行业出彩的产品。处理器负责视频采集，ISP对图像信号优化处理，视频经过H.264，H.265 1080p@30fps编码后，通过有线或者无线进行图传。在AI算法的驱使下，单目，双目人脸识别，3D结构光姿态识别等应用要求处理器能在本地完成图像比对，推理，NPU AI深度学习推理，控制执行单元。</p>
+<p><img src="9.png," alt="" title="Hi3518ev300 A53 + GPU"></p>
+<p>低功耗门铃产品侧重强调处理器毫秒级快速唤醒进行视频抓拍，微安级低待机功耗，微安级别WiFi长连接的功耗，ISP图像处理等，但目前主流几家低功耗摄像机芯片厂家在原有架构上加上NPU单元，努力适应AI行业新的发展方向，君正的T40更是加上了一颗RISC-V，可以作为一颗实时MCU，管理整个系统。</p>
+<p><img src="10.png," alt="" title="Ingenic T40  MIPS CPU + NPU + RISC-V"></p>
+<h2 id="大感知"><a href="#大感知" class="headerlink" title="大感知"></a>大感知</h2><p>手表，温控器，门锁，各类传感器，门磁，烟雾探测器，定位器，胎心监都可算做大感知类产品，所涉及的系统已经由采用MCU + RF Radio 的SoC满足，Nordic，NXP，Siliconlab，TI 等。</p>
+<p><img src="11.png," alt="" title="Nordic 5340 2 x M33"></p>
+<p>AIoT处理器厂家不断在性能，晶片面积，功耗三方面进行权衡，优化与迭代，随之而来是需要更合适的无线产品与之匹配，多协议，低功耗，高集成，易开发，SoC或者COMBO。</p>
+<h1 id="从端到边缘，无线技术赋能AI处理器"><a href="#从端到边缘，无线技术赋能AI处理器" class="headerlink" title="从端到边缘，无线技术赋能AI处理器"></a>从端到边缘，无线技术赋能AI处理器</h1><p><img src="12.png," alt="" title="端 - 边缘计算 - 云"></p>
+<p>Bluetooth, Zigbee, 2.4G私有协议，Sub 1G私有协议，Lora为代表的无线网络典型应用集中在端上，在边缘多以Gateway的产品形态呈现；Wi-Fi SoC和Wi-Fi BT COMBO芯片可在端或者边缘呈现，在端处，以视频类应用为主；在边缘计算产品中，多与Linux，安卓系统配合，Wifi起到联网数据传输和蓝牙起到音频传输作用。</p>
+<p>AIoT边缘计算芯片 片上系统继续在RTOS和Linux系统的博弈中，新的架构和更强的性能对无线产品提出更高的要求：Wi-Fi 和主控间的适配采用SDIO还是SPI；协议栈在主控还是在SoC上；Wifi 5G 频段支持与否；IoT WI-FI 6的应用场景在哪里落地；COMBO芯片能否支持CHIP（Alliance，Zigbee）；COMBO芯片是否能释放内部内核给用户二次开发；如何支持LE AUDIO等等。在AIoT SoC芯片更迭百花齐放的同时，无线芯片亦在架构之争当中；新的产品将孕育新的无线模块生意模式以及新的IDH，产业链在内卷中升级。</p>
+<h1 id="「Bluetooth5-堂-微信交流群」"><a href="#「Bluetooth5-堂-微信交流群」" class="headerlink" title="「Bluetooth5 堂 微信交流群」"></a>「Bluetooth5 堂 微信交流群」</h1><p>助力行业内朋友打通无线圈子,构建一个物联网无线生态。<br>集高通，Nordic，Dialog，ST，Silicon lab, NXP, AMBIQ等蓝牙芯片原厂技术，市场，销售<br>集华为，MTK，泰凌微，凌思微，盛源达，ASR，华普微，中颖电子芯片原厂<br>集Arrow，北高智，迅通，世强，利尔达等一线原厂代理FAE和业务<br>集小米，华米，绿米，涂鸦，雅观，百度，出门问问，京东互联网公司及方案公司研发<br>集蓝牙认证机构，被动器件，射频公司，以及SIG大佬<br>申请流程：<br>① 因群人数已超过限制人，请先微信扫描我微信二维码，添加Xcoder微信号（blecoder），添加微信时请将您的个人信息进行备注，以便登记，同时也欢迎同行和我进行交流。<br>② 由于需要我逐个邀请入群，所以请大家耐心等待！谢谢理解与支持！</p>
+<p><img src="640.png" alt=""></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    Xcoder
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://www.iotbzw.com/2022/02/07/%E4%BB%8E%E7%AB%AF%E5%88%B0%E8%BE%B9%E7%BC%98%EF%BC%8C%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E8%B5%8B%E8%83%BDAI%E8%BE%B9%E7%BC%98%E8%AE%A1%E7%AE%97%E5%A4%84%E7%90%86%E5%99%A8/" title="从端到边缘，无线技术赋能AI边缘计算处理器">http://www.iotbzw.com/2022/02/07/%E4%BB%8E%E7%AB%AF%E5%88%B0%E8%BE%B9%E7%BC%98%EF%BC%8C%E6%97%A0%E7%BA%BF%E6%8A%80%E6%9C%AF%E8%B5%8B%E8%83%BDAI%E8%BE%B9%E7%BC%98%E8%AE%A1%E7%AE%97%E5%A4%84%E7%90%86%E5%99%A8/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 https://creativecommons.org/licenses/by-nc-sa/3.0/ 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/AI/" rel="tag"># AI</a>
+          
+            <a href="/tags/%E4%B8%BB%E6%8E%A7/" rel="tag"># 主控</a>
+          
+            <a href="/tags/PID/" rel="tag"># PID</a>
+          
+            <a href="/tags/CV/" rel="tag"># CV</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2022/02/07/%E4%BB%8E%E5%8D%8E%E5%BC%BA%E5%8C%97GT7-%E6%99%BA%E8%83%BD%E6%89%8B%E8%A1%A8%E7%9C%8B%E6%99%BA%E8%83%BD%E7%A9%BF%E6%88%B4%E5%B8%82%E5%9C%BA%E7%9A%84%E8%BF%9B%E9%98%B6/" rel="next" title="从华强北GT7+智能手表看智能穿戴市场的进阶">
+                <i class="fa fa-chevron-left"></i> 从华强北GT7+智能手表看智能穿戴市场的进阶
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/20140820.jpg"
+                alt="Xcoder" />
+            
+              <p class="site-author-name" itemprop="name">Xcoder</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">43</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:k-xcoder@qq.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#AI视觉云台实现逻辑"><span class="nav-text">AI视觉云台实现逻辑</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#边缘计算需求"><span class="nav-text">边缘计算需求</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#边缘计算-物联网无线"><span class="nav-text">边缘计算 + 物联网无线</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#大音频"><span class="nav-text">大音频</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#大视频"><span class="nav-text">大视频</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#大感知"><span class="nav-text">大感知</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#从端到边缘，无线技术赋能AI处理器"><span class="nav-text">从端到边缘，无线技术赋能AI处理器</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#「Bluetooth5-堂-微信交流群」"><span class="nav-text">「Bluetooth5 堂 微信交流群」</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2017 &mdash; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Xcoder</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+  <div class="footer-custom">typedef struct low_power_iot { char bluetooth; char sig mesh; char zigbee; char wifi } tech_t, *tech_ptr;</div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.0.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.0.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.0.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.0.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.0.0"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
