@@ -241,9 +241,11 @@
 <li>The Matter Alliance Could Finally FixThe Smart Home from hitechglitz.com</li>
 <li>Matter Gets Everybody “Talking”fromqorvo.com</li>
 </ol>
-<h1 id="「Bluetooth5-堂-微信交流群」"><a href="#「Bluetooth5-堂-微信交流群」" class="headerlink" title="「Bluetooth5 堂 微信交流群」"></a>「Bluetooth5 堂 微信交流群」</h1><p>助力行业圈内朋友打通无线相关圈子，Guanxi。<br>集高通，Nordic，Dialog，ST，Silicon lab, NXP, AMBIQ等蓝牙芯片原厂技术，市场，销售<br>集华为，MTK，泰凌微，凌思微，盛源达，ASR，华普微，中颖电子芯片原厂<br>集Arrow，北高智，迅通，世强，利尔达等一线原厂代理FAE和业务<br>集小米，华米，绿米，涂鸦，雅观，百度，出门问问，京东互联网公司及方案公司研发<br>集蓝牙认证机构，被动器件，射频公司，以及SIG大佬<br>申请流程：<br>① 因群人数已超过限制人，请先微信扫描以下微信二维码或添加Xcoder微信号（blecoder），添加微信时请将您的个人信息进行备注，以便登记，同时也欢迎同行和我进行交流。<br>② 由于需要我逐个邀请入群，所以请大家耐心等待！谢谢理解与支持！</p>
-<p><img src="640.png" alt=""></p>
-]]></content>
+<h1 id="「Wireless-Inside-微信交流群」"><a href="#「Wireless-Inside-微信交流群」" class="headerlink" title="「Wireless Inside 微信交流群」"></a>「Wireless Inside 微信交流群」</h1><div align=center>![](640.png)
+
+<p>助力IoT行业圈内朋友打通短距离无线通信相关圈子的行业小社区。<br>集高通，Nordic，Dialog，ST，Silicon lab, NXP, AMBIQ等蓝牙芯片原厂技术，市场，销售<br>集华为，MTK，泰凌微，凌思微，盛源达，ASR，华普微，中颖电子芯片原厂<br>集Arrow，北高智，迅通，世强，利尔达等一线原厂代理FAE和业务<br>集小米，华米，绿米，涂鸦，雅观，百度，出门问问，京东互联网公司及方案公司研发<br>集蓝牙认证机构，被动器件，射频公司，以及SIG大佬</p>
+<p>申请流程：<br>① 因群人数已超过限制人，请先微信扫描以下微信二维码或添加Xcoder微信号（blecoder），添加微信时请将您的个人信息进行备注（名字 公司 职位），以便登记，同时也欢迎同行和我进行交流。<br>② 由于需要我逐个邀请入群，所以请大家耐心等待！谢谢理解与支持！</p>
+<div align=center>![](641.jpg)]]></content>
       <categories>
         <category>Matter</category>
       </categories>
@@ -806,8 +808,12 @@
 <li><strong>模式映射 — Pattern Mapper</strong><br>模式映射的目的是整理输出前向错误编码数据，输出的方式分为两种模式(P symbols)，一种P=1(S=2)，一种P=4(S=8)，两种模式下把前向错误编码数据进行加工，然后输出。由下面的表格所示，当P=1时，输出的data和输入保持不变，1位输入，1为输出；当P=4时，编码为4位再输出，所以可以看到P=4(S=8)时，输出的data数据量会更多，更进一部压缩实际可以传输的有效payload数据。</li>
 </ul>
 <h2 id="蓝牙远距离应用场景"><a href="#蓝牙远距离应用场景" class="headerlink" title="蓝牙远距离应用场景"></a>蓝牙远距离应用场景</h2><p>得益于前向错误编码和模式映射，使得蓝牙数据在传输过程中，RX端对整个payload数据包解码纠错能力有不同提升(简单说即为提高RX端接收灵敏度)，蓝牙5的传输距离才有显著的提升。125kbps使用S=8模式，传输距离相对传统BLE提升4倍，相应牺牲的数据传输率最多，500kbps使用S=2模式，传输距离相对传统BLE提升2倍。长距离模式可以有效可以支持到400-500米范围内BLE通讯。</p>
-<h2 id="「Bluetooth5-堂-微信交流群」"><a href="#「Bluetooth5-堂-微信交流群」" class="headerlink" title="「Bluetooth5 堂 微信交流群」"></a>「Bluetooth5 堂 微信交流群」</h2><p>助力行业圈内朋友打通无线相关圈子，Guanxi。<br>集高通，Nordic，Dialog，ST，Silicon lab, NXP, AMBIQ等蓝牙芯片原厂技术，市场，销售<br>集华为，MTK，泰凌微，凌思微，盛源达，ASR，华普微，中颖电子芯片原厂<br>集Arrow，北高智，迅通，世强，利尔达等一线原厂代理FAE和业务<br>集小米，华米，绿米，涂鸦，雅观，百度，出门问问，京东互联网公司及方案公司研发<br>集蓝牙认证机构，被动器件，射频公司，以及SIG大佬<br>申请流程：<br>① 因群人数已超过限制人，请先微信扫描以下微信二维码或添加Xcoder微信号（blecoder），添加微信时请将您的个人信息进行备注，以便登记，同时也欢迎同行和我进行交流。<br>② 由于需要我逐个邀请入群，所以请大家耐心等待！谢谢理解与支持！</p>
-<p><img src="640.png" alt=""></p>
+<h2 id="「Wireless-Inside-微信交流群」"><a href="#「Wireless-Inside-微信交流群」" class="headerlink" title="「Wireless Inside 微信交流群」"></a>「Wireless Inside 微信交流群」</h2><div align=center>![](640.png)
+
+<p>助力IoT行业圈内朋友打通短距离无线通信相关圈子的行业小社区。<br>集高通，Nordic，Dialog，ST，Silicon lab, NXP, AMBIQ等蓝牙芯片原厂技术，市场，销售<br>集华为，MTK，泰凌微，凌思微，盛源达，ASR，华普微，中颖电子芯片原厂<br>集Arrow，北高智，迅通，世强，利尔达等一线原厂代理FAE和业务<br>集小米，华米，绿米，涂鸦，雅观，百度，出门问问，京东互联网公司及方案公司研发<br>集蓝牙认证机构，被动器件，射频公司，以及SIG大佬</p>
+<p>申请流程：<br>① 因群人数已超过限制人，请先微信扫描以下微信二维码或添加Xcoder微信号（blecoder），添加微信时请将您的个人信息进行备注（名字 公司 职位），以便登记，同时也欢迎同行和我进行交流。<br>② 由于需要我逐个邀请入群，所以请大家耐心等待！谢谢理解与支持！</p>
+<div align=center>![](641.jpg)
+
 ]]></content>
       <categories>
         <category>蓝牙协议</category>
