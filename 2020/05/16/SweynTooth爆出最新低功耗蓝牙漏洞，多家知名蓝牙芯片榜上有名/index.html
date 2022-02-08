@@ -388,8 +388,11 @@
 <p><img src="6.png" alt=""></p>
 <h1 id="深入调查"><a href="#深入调查" class="headerlink" title="深入调查"></a>深入调查</h1><p>近年来，由于一些安全机制的考虑不周（例如KNOB，BlueBorne 和Invalid ECC Attack）蓝牙连接一直会受到不同程度攻击。每个SoC BLE SDK都必须先经过蓝牙认证，然后才能投放市场。但我们的发现表明，认证过程应该进行改进。我们按照Core Specification规范测试蓝牙SoC，往往会上收到了截然不同的响应，说明蓝牙芯片供应商并未严格遵循协议规范，比如，Telink的设备多次响应版本请求，这违反了核心规范[13]的[Vol 6] B部分第5.1.5节，该部分定义了HOST设备在接收主机发送的HCI指令中应仅响应一次版本请求。同样，我们测试过的所有设备都可以接受“ hopIncrement”字段值小于5的连接请求，此举违反了[Vol 6] B部分第2.3.3.1节的规定，该部分规定该字段的有效范围在5-16。此外，我们发现的所有漏洞都与[Vol 1] E部分的2.7节（对格式错误的响应）相关，该部分的说明其实已经提供了指令和一些示例来处理无效或格式错误的数据包。希望蓝牙SIG改进并显着扩展第2.7节，并向蓝牙认证中添加更多基本测试，以避免以上漏洞。</p>
 <h1 id="附录：蓝牙连接全过程"><a href="#附录：蓝牙连接全过程" class="headerlink" title="附录：蓝牙连接全过程"></a>附录：<strong>蓝牙连接全过程</strong></h1><p><img src="11.jpeg" alt=""></p>
-<h2 id="「Bluetooth5-堂-微信交流群」"><a href="#「Bluetooth5-堂-微信交流群」" class="headerlink" title="「Bluetooth5 堂 微信交流群」"></a>「Bluetooth5 堂 微信交流群」</h2><p>助力行业圈内朋友打通无线相关圈子，Guanxi。<br>集高通，Nordic，Dialog，ST，Silicon lab, NXP, AMBIQ等蓝牙芯片原厂技术，市场，销售<br>集华为，MTK，泰凌微，凌思微，盛源达，ASR，华普微，中颖电子芯片原厂<br>集Arrow，北高智，迅通，世强，利尔达等一线原厂代理FAE和业务<br>集小米，华米，绿米，涂鸦，雅观，百度，出门问问，京东互联网公司及方案公司研发<br>集蓝牙认证机构，被动器件，射频公司，以及SIG大佬<br>申请流程：<br>① 因群人数已超过限制人，请先微信扫描以下微信二维码或添加Xcoder微信号（blecoder），添加微信时请将您的个人信息进行备注，以便登记，同时也欢迎同行和我进行交流。<br>② 由于需要我逐个邀请入群，所以请大家耐心等待！谢谢理解与支持！</p>
 <p><img src="640.png" alt=""></p>
+<p>#「Wireless Inside 微信公众号 (原无线技术联盟微信公众号) 微信交流群」</p>
+<p>助力IoT行业朋友打通短距离无线通信圈的行业小社区。<br>集高通，Broadcom，TI，Nordic，Dialog，ST，Silicon lab, NXP, AMBIQ等蓝牙芯片原厂技术，市场，销售<br>集华为，MTK，泰凌微，凌思微，盛源达，ASR，华普微，中颖电子，百瑞互联，Realtek 国产芯片原厂技术，市场，销售<br>集Arrow，北高智，迅通，世强，利尔达，科通，全科等一线原厂代理商技术，市场，销售<br>集小米，华米，绿米，涂鸦，雅观，百度，阿里，Oppo，Vivo，京东互联网公司，品牌客户，方案公司技术，市场，销售，创始人<br>集蓝牙认证机构，被动器件，射频公司，以及SIG大佬</p>
+<p>申请流程：<br>① 因群人数已超过限制人，请先微信扫描以下微信二维码或添加Xcoder微信号（blecoder），添加微信时请将您的个人信息进行备注（名字 公司 职位），以便登记，同时也欢迎同行和我进行交流。<br>② 由于需要我逐个邀请入群，所以请大家耐心等待！谢谢理解与支持！</p>
+<p><img src="641.jpg" alt=""></p>
 
       
     </div>
@@ -605,7 +608,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#漏洞类型"><span class="nav-text">漏洞类型</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#高风险设备"><span class="nav-text">高风险设备</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#深入调查"><span class="nav-text">深入调查</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#附录：蓝牙连接全过程"><span class="nav-text">附录：蓝牙连接全过程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#「Bluetooth5-堂-微信交流群」"><span class="nav-text">「Bluetooth5 堂 微信交流群」</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#漏洞类型"><span class="nav-text">漏洞类型</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#高风险设备"><span class="nav-text">高风险设备</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#深入调查"><span class="nav-text">深入调查</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#附录：蓝牙连接全过程"><span class="nav-text">附录：蓝牙连接全过程</span></a></li></ol></div>
             
 
           </div>
